@@ -6,4 +6,8 @@
     </style>
 
     <style name="Theme.TeaBreak_App" parent="Base.Theme.TeaBreak_App" />
+        <style name="Widget.BottomNavigationView" parent="Widget.Design.BottomNavigationView">
+            <item name="android:background">@drawable/curveshape</item>
+        </style>
+
 </resources>

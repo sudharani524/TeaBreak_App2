@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">TeaBreak_App</string>
+    <string name="nav_open">nav_open</string>
+    <string name="nav_close">nav_close\n\n</string>
+    <string name="categories">Categories</string>
+    <string name="view_all"><![CDATA[View All >>]]></string>
+    <string name="coffee_powder">Coffee Powder</string>
 </resources>
