@@ -13,13 +13,31 @@
         android:theme="@style/Theme.TeaBreak_App"
         tools:targetApi="31">
         <activity
+            android:name=".Ui.Checkout"
+            android:exported="false" />
+        <activity
+            android:name=".Ui.Faqs"
+            android:exported="false" />
+        <activity
+            android:name=".Ui.Aboutus"
+            android:exported="false" />
+        <activity
+            android:name=".Ui.Cart"
+            android:exported="false" />
+        <activity
+            android:name=".Ui.Mywallet"
+            android:exported="false" />
+        <activity
+            android:name=".Ui.Myorders"
+            android:exported="false" />
+        <activity
             android:name=".Ui.SplashScreen"
-            android:exported="true" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".Ui.Orders_List_Activity"
@@ -32,11 +50,10 @@
             android:exported="false" />
         <activity
             android:name=".Ui.DashboardActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".Ui.MainActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
     </application>
 
 </manifest>
