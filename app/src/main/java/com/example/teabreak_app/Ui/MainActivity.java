@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, DashboardActivity.class));
+                startActivity(new Intent(MainActivity.this, ListItems_Activity.class));
 
 
             }
