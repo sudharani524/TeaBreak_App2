@@ -12,4 +12,8 @@ public interface ApiInterface {
     @GET(" login/line_items")
     Call<JsonObject> list_items();
 
+    @Headers("Content-Type: application/json")
+    @GET("login/user_roles_list")
+    Call<JsonObject> roles_list();
+
 }

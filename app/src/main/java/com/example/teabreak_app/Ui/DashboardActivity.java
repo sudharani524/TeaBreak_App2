@@ -205,10 +205,22 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                        // listItemsAdapter=new ListItemsAdapter(DashboardActivity.this,list);
                         listItemsAdapter=new ListItemsAdapter(DashboardActivity.this, list, new ListItemInterface() {
                             @Override
-                            public void OnItemClick(int position, View v) {
-                                if()
+                            public void OnItemClick(int position, View v,String s) {
+                                if(s.equalsIgnoreCase("card")){
+                                    Intent intent=new Intent(DashboardActivity.this, SingleList_Item.class);
+                                    intent.putExtra("img",list.get(position).getImage());
+                                    intent.putExtra("name",list.get(position).getLineItems());
+                                    intent.putExtra("price",list.get(position).getPrice());
+                                    intent.putExtra("qty",list.get(position).getPackQty());
+                                    startActivity(intent);
+                                }
+
+                                if(s.equalsIgnoreCase("cart")){
+                                    startActivity(new Intent(DashboardActivity.this,Cartlist_Activity.class));
+                                }
+
                             }
-                        }I);
+                        });
                         binding.newDashboarddd.rvListItems.setAdapter(listItemsAdapter);
                         listItemsAdapter.notifyDataSetChanged();
 

@@ -51,14 +51,14 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsAdapter.View
         holder.binding.listCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listItemInterface.OnItemClick(position,getItemId(position));
+                listItemInterface.OnItemClick(position,v,"card");
             }
         });
 
         holder.binding.cartDashboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listItemInterface.OnItemClick(position,getItemId(position));
+                listItemInterface.OnItemClick(position,v,"cart");
             }
         });
 
