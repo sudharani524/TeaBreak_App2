@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.teabreak_app.ModelClass.ListItemsModel;
+import com.example.teabreak_app.Utils.Constant;
 import com.example.teabreak_app.databinding.DashboardListItemsBinding;
 import com.squareup.picasso.Picasso;
 
@@ -37,9 +38,10 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsAdapter.View
 
         holder.binding.price.setText("₹"+lim.get(position).getPrice());
         holder.binding.listItemName.setText(lim.get(position).getLineItems());
+        holder.binding.quantity.setText(lim.get(position).getPackQty());
 
-        String img=lim.get(position).getImage();
-        Log.e("img",img);
+        String img= Constant.SERVER_BASE_URL+lim.get(position).getImage();
+//        Log.e("img",img);
         Picasso.get().load(img).fit().centerInside().into(holder.binding.dashboardImg);
 
     }

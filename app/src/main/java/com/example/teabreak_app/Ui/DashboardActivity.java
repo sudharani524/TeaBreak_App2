@@ -133,13 +133,13 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         binding.navView.setItemIconTintList(null);
         View navHeaderView = binding.navView.getHeaderView(0);
         TextView nav_name = (TextView) navHeaderView.findViewById(R.id.nav_name);
-       /* binding.newDashboard.view.setOnClickListener(new View.OnClickListener() {
+        binding.newDashboarddd.viewAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(DashboardActivity.this, ListItems_Activity.class));
 
             }
-        });*/
+        });
         binding.newDashboarddd.bottomNavigation.setSelectedItemId(R.id.home);
         binding.newDashboarddd.bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @SuppressLint("NonConstantResourceId")
