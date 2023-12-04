@@ -3,26 +3,50 @@ package com.example.teabreak_app.Ui;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.teabreak_app.Adapter.ListItemsAdapter;
+import com.example.teabreak_app.ModelClass.ListItemsModel;
 import com.example.teabreak_app.R;
+import com.example.teabreak_app.ViewModel.TeaBreakViewModel;
 import com.example.teabreak_app.databinding.ActivityDashboardBinding;
 import com.example.teabreak_app.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +57,10 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     private ActivityDashboardBinding binding;
     ProgressDialog progressDialog;
     List<Integer> images_list = new ArrayList<>();
+    private TeaBreakViewModel viewModel;
+    ListItemsAdapter listItemsAdapter;
+
+    ArrayList<ListItemsModel> list=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +72,42 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         progressDialog=new ProgressDialog(this);
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
+
+
+        if (ContextCompat.checkSelfPermission(DashboardActivity.this,
+                Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED)  {
+            // Give first an explanation, if needed.
+            if (ActivityCompat.shouldShowRequestPermissionRationale(DashboardActivity.this,
+                    Manifest.permission.READ_MEDIA_IMAGES)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(DashboardActivity.this,
+                        new String[]{Manifest.permission.READ_MEDIA_IMAGES},
+                        1);
+            }
+        }
+
+
+        viewModel = ViewModelProviders.of(DashboardActivity.this).get(TeaBreakViewModel.class);
+        list_items_api_call();
+
+        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        binding.newDashboarddd.rvListItems.setLayoutManager(linearLayoutManager);
+
         images_list.add(R.drawable.img);
         images_list.add(R.drawable.img_1);
         images_list.add(R.drawable.tea_break_img);
-        binding.viewPager.setAdapter(new SliderAdapter(this, images_list));
-        binding.tabs.setupWithViewPager(binding.viewPager);
+        binding.newDashboarddd.viewPager.setAdapter(new SliderAdapter(this, images_list));
+        binding.newDashboarddd.tabs.setupWithViewPager(binding.newDashboarddd.viewPager);
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new SliderTimer(), 3000, 5000);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle((Activity) this, binding.drawerLayout, (Toolbar)binding.toolbar, R.string.nav_open, R.string.nav_close);
@@ -60,24 +119,29 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             }
         });
 
-       toggle.setHomeAsUpIndicator(R.drawable.menu);
-       binding.drawerLayout.addDrawerListener(toggle);
+
+
+
+        toggle.setHomeAsUpIndicator(R.drawable.menu);
+        binding.drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+
+
 
 
         binding.navView.setNavigationItemSelectedListener(DashboardActivity.this);
         binding.navView.setItemIconTintList(null);
         View navHeaderView = binding.navView.getHeaderView(0);
         TextView nav_name = (TextView) navHeaderView.findViewById(R.id.nav_name);
-        binding.view.setOnClickListener(new View.OnClickListener() {
+       /* binding.newDashboard.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(DashboardActivity.this, ListItems_Activity.class));
 
             }
-        });
-       binding.bottomNavigation.setSelectedItemId(R.id.home);
-        binding.bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        });*/
+        binding.newDashboarddd.bottomNavigation.setSelectedItemId(R.id.home);
+        binding.newDashboarddd.bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @SuppressLint("NonConstantResourceId")
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -90,7 +154,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
                 }
                 else if (id == R.id.cart) {
-                    startActivity(new Intent(DashboardActivity.this, Cart.class));
+                    startActivity(new Intent(DashboardActivity.this, Cartlist_Activity.class));
 
                 }
                 else if(id ==R.id.logout){
@@ -104,6 +168,60 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
 
     }
+
+    private void list_items_api_call() {
+
+        viewModel.get_list_items().observe(DashboardActivity.this, new Observer<JsonObject>() {
+            @Override
+            public void onChanged(JsonObject jsonObject) {
+
+                if (jsonObject != null){
+
+                    Log.d("TAG","complaint_names "+jsonObject);
+
+                    try {
+                        JSONObject jsonObject1=new JSONObject(jsonObject.toString());
+                        String message=jsonObject1.getString("message");
+                        String text=jsonObject1.getString("text");
+
+                        JSONArray jsonArray=new JSONArray();
+                        jsonArray=jsonObject1.getJSONArray("data");
+
+
+                        Toast.makeText(DashboardActivity.this, ""+text, Toast.LENGTH_SHORT).show();
+
+                        if(message.equalsIgnoreCase("success")){
+                            for(int i=0;i<jsonArray.length();i++){
+                                ListItemsModel listItemsModel = new Gson().fromJson(jsonArray.get(i).toString(), new TypeToken<ListItemsModel>() {
+                                }.getType());
+                                list.add(listItemsModel);
+                            }
+                        }
+
+                        listItemsAdapter=new ListItemsAdapter(DashboardActivity.this,list);
+                        binding.newDashboarddd.rvListItems.setAdapter(listItemsAdapter);
+                        listItemsAdapter.notifyDataSetChanged();
+
+
+
+
+
+
+                    } catch (JSONException e) {
+                        //throw new RuntimeException(e);
+                        Toast.makeText(DashboardActivity.this, ""+e, Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }else{
+
+                    Toast.makeText(DashboardActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+    }
+
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
@@ -117,7 +235,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         else if (id == R.id.wallet) {
             startActivity(new Intent(DashboardActivity.this, Mywallet.class));
         } else if (id == R.id.cart) {
-            startActivity(new Intent(DashboardActivity.this, Cart.class));
+            startActivity(new Intent(DashboardActivity.this, Cartlist_Activity.class));
 
         }else if (id == R.id.AboutUs) {
             startActivity(new Intent(DashboardActivity.this, Aboutus.class));
@@ -139,10 +257,10 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             DashboardActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (binding.viewPager.getCurrentItem() < images_list.size() - 1) {
-                        binding.viewPager.setCurrentItem(binding.viewPager.getCurrentItem() + 1);
+                    if (binding.newDashboarddd.viewPager.getCurrentItem() < images_list.size() - 1) {
+                        binding.newDashboarddd.viewPager.setCurrentItem(binding.newDashboarddd.viewPager.getCurrentItem() + 1);
                     } else {
-                        binding.viewPager.setCurrentItem(0);
+                        binding.newDashboarddd.viewPager.setCurrentItem(0);
                     }
                 }
             });

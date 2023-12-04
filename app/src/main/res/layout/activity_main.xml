@@ -6,28 +6,53 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="10"
+    android:background="@drawable/bg_with_cup"
     tools:context=".Ui.MainActivity">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
         android:layout_marginBottom="10dp"
         android:orientation="vertical">
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:scaleType="fitXY"
-
+            android:layout_marginTop="80dp"
             android:padding="10dp"
-            />
+            android:scaleType="fitXY"
+            android:src="@drawable/logo" />
+
+        <LinearLayout
+            android:id="@+id/ll_category"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/bg2"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <Spinner
+                android:id="@+id/userlist_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingStart="5dp"
+                android:textColorHint="@color/black"
+                android:textColor="@color/black"
+                />
+
+
+        </LinearLayout>
+
         <LinearLayout
             android:id="@+id/ll1"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/bg2"
             android:orientation="horizontal"
@@ -45,20 +70,20 @@
                 android:paddingLeft="10dp"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black"
-                android:textSize="18sp"/>
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:scaleType="fitXY"
-                    android:layout_gravity="center"
-                    android:src="@drawable/username"/>
+                android:textSize="15sp"/>
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:scaleType="fitXY"
+                android:layout_gravity="center"
+                android:src="@drawable/username"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/ll2"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/bg2"
@@ -76,7 +101,7 @@
                 android:paddingLeft="10dp"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black"
-                android:textSize="18sp"/>
+                android:textSize="15sp"/>
             <ImageView
                 android:id="@+id/iv_invisible"
                 android:layout_width="30dp"
@@ -99,7 +124,7 @@
             android:layout_height="30dp"
             android:layout_marginTop="20dp"
             android:layout_gravity="end"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="20dp"
             android:textColor="@color/white"
             android:background="@drawable/bg2"
             android:backgroundTint="@color/red"
