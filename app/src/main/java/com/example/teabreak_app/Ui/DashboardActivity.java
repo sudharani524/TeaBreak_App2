@@ -40,6 +40,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         binding=ActivityDashboardBinding.inflate(getLayoutInflater());
         View view=binding.getRoot();
         setContentView(view);
+
         progressDialog=new ProgressDialog(this);
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
