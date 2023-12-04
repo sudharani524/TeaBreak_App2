@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+
 import android.view.View;
 import android.widget.Toast;
 
@@ -19,6 +19,7 @@ import com.example.teabreak_app.ModelClass.ListItemsModel;
 
 import com.example.teabreak_app.ViewModel.TeaBreakViewModel;
 import com.example.teabreak_app.databinding.ActivityListItemsBinding;
+import com.example.teabreak_app.repository.ListItemInterface;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -59,6 +60,13 @@ public class ListItems_Activity extends AppCompatActivity {
 
             }
         });
+        binding.Proceed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ListItems_Activity.this, Checkout.class));
+
+            }
+        });
 
     }
 
@@ -69,8 +77,6 @@ public class ListItems_Activity extends AppCompatActivity {
             public void onChanged(JsonObject jsonObject) {
 
                 if (jsonObject != null){
-
-                    Log.d("TAG","complaint_names "+jsonObject);
 
                     try {
                         JSONObject jsonObject1=new JSONObject(jsonObject.toString());
@@ -91,7 +97,12 @@ public class ListItems_Activity extends AppCompatActivity {
                             }
                         }
 
-                        ItemslistAdapter= new ItemslistAdapter(ListItems_Activity.this,list);
+                        ItemslistAdapter= new ItemslistAdapter(ListItems_Activity.this, list, new ListItemInterface() {
+                            @Override
+                            public void OnItemClick(int position, View v) {
+
+                            }
+                        });
                         binding.rvListItems.setAdapter(ItemslistAdapter);
                         ItemslistAdapter.notifyDataSetChanged();
 
@@ -114,5 +125,6 @@ public class ListItems_Activity extends AppCompatActivity {
             }
         });
     }
+
 
 }

@@ -18,7 +18,7 @@
             android:layout_height="56dp"
             android:id="@+id/toolbar"
             android:elevation="4dp"
-            android:background="@color/purple"
+            android:background="@color/red"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
             <LinearLayout
                 android:layout_width="match_parent"
@@ -69,21 +69,20 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:orientation="horizontal">
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:text="subtotal" />
+                    android:text="Subtotal"
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -98,46 +97,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:textColor="@color/black"
+                    android:textStyle="bold"
                     android:text="310.0" />
 
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:text="shipping" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=":"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/shipping"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:textColor="@color/black"
-                    android:text="10" />
-
-            </LinearLayout>
-        </LinearLayout>
-        <TextView
-            android:id="@+id/total"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="100dp"
-            android:gravity="center"
-            android:textColor="@color/black"
-            android:text="310.00" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -154,7 +117,7 @@
             android:layout_marginTop="10dp"
             android:layout_gravity="start"
             android:layout_marginStart="10dp"
-            android:textColor="@color/purple"
+            android:textColor="@color/red"
             android:background="@drawable/bg2"
             android:textAllCaps="false"
             android:textStyle="bold"
@@ -168,7 +131,7 @@
             android:layout_gravity="end"
             android:layout_marginStart="30dp"
             android:background="@drawable/bg2"
-            android:textColor="@color/purple"
+            android:textColor="@color/red"
             android:textAllCaps="false"
             android:textStyle="bold"
             android:textSize="18sp"

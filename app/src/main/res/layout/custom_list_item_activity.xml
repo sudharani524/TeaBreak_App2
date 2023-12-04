@@ -89,23 +89,24 @@
                         android:layout_marginStart="10dp"
                         android:background="@drawable/bg2"
                         android:gravity="center"
-                        android:backgroundTint="#057070"
+                        android:backgroundTint="#fd5c63"
                         android:weightSum="3"
                         android:orientation="horizontal">
                         <TextView
                             android:id="@+id/minus"
-                            android:layout_width="0dp"
+                            android:layout_width="31dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="-"
                             android:textSize="20sp"
+                            android:textStyle="bold"
                             android:textColor="@color/white"
                             android:layout_gravity="center"
                             android:gravity="center"
                             />
 
                         <TextView
-                            android:id="@+id/quantity"
+                            android:id="@+id/txtQuantity"
                             android:layout_width="31dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -116,7 +117,7 @@
                             android:textSize="20sp" />
                         <TextView
                             android:id="@+id/add"
-                            android:layout_width="0dp"
+                            android:layout_width="31dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="+"
