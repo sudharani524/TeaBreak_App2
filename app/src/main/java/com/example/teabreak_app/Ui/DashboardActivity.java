@@ -37,6 +37,7 @@ import com.example.teabreak_app.R;
 import com.example.teabreak_app.ViewModel.TeaBreakViewModel;
 import com.example.teabreak_app.databinding.ActivityDashboardBinding;
 import com.example.teabreak_app.databinding.ActivityMainBinding;
+import com.example.teabreak_app.repository.ListItemInterface;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
@@ -103,9 +104,10 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         binding.newDashboarddd.rvListItems.setLayoutManager(linearLayoutManager);
 
+        images_list.add(R.drawable.slider_img);
         images_list.add(R.drawable.img);
         images_list.add(R.drawable.img_1);
-        images_list.add(R.drawable.tea_break_img);
+
 
         binding.newDashboarddd.viewPager.setAdapter(new SliderAdapter(this, images_list));
         binding.newDashboarddd.tabs.setupWithViewPager(binding.newDashboarddd.viewPager);
@@ -200,7 +202,13 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                             }
                         }
 
-                        listItemsAdapter=new ListItemsAdapter(DashboardActivity.this,list);
+                       // listItemsAdapter=new ListItemsAdapter(DashboardActivity.this,list);
+                        listItemsAdapter=new ListItemsAdapter(DashboardActivity.this, list, new ListItemInterface() {
+                            @Override
+                            public void OnItemClick(int position, View v) {
+                                if()
+                            }
+                        }I);
                         binding.newDashboarddd.rvListItems.setAdapter(listItemsAdapter);
                         listItemsAdapter.notifyDataSetChanged();
 

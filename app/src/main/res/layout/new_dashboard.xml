@@ -60,7 +60,7 @@
                android:layout_weight="1"
                android:text="Categories"
                android:gravity="left|center"
-               android:textSize="20sp"
+               android:textSize="18sp"
                android:textStyle="bold"
                android:layout_gravity="left|center"/>
            <TextView
@@ -69,7 +69,7 @@
                android:layout_height="wrap_content"
                android:layout_weight="1"
                android:text="ViewAll >>"
-               android:textSize="20sp"
+               android:textSize="18sp"
                android:textStyle="bold"
                android:gravity="right|center"
                android:layout_gravity="right|center"/>
@@ -90,7 +90,7 @@
            android:id="@+id/rv_list_items"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           android:layout_marginRight="5dp"
+           android:layout_margin="5dp"
            android:scrollbars="horizontal" />
 
 
