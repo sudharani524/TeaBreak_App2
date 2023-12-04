@@ -99,7 +99,7 @@ public class ListItems_Activity extends AppCompatActivity {
 
                         ItemslistAdapter= new ItemslistAdapter(ListItems_Activity.this, list, new ListItemInterface() {
                             @Override
-                            public void OnItemClick(int position, View v) {
+                            public void OnItemClick(int position, View v, String s) {
 
                             }
                         });
