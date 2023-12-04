@@ -16,30 +16,30 @@
        android:orientation="vertical">
 
        <androidx.recyclerview.widget.RecyclerView
+           android:id="@+id/rv"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           android:id="@+id/rv"/>
+          />
 
        <LinearLayout
            android:id="@id/ll"
            android:layout_width="match_parent"
-           android:layout_height="150dp"
+           android:layout_height="wrap_content"
            android:orientation="vertical">
            <androidx.viewpager.widget.ViewPager
                android:id="@+id/viewPager"
                android:layout_width="match_parent"
-               android:layout_height="match_parent"
+               android:layout_height="150dp"
                />
            <com.google.android.material.tabs.TabLayout
                android:id="@+id/tabs"
                android:layout_width="match_parent"
-               android:layout_height="20dp"
-               android:layout_alignParentBottom="true"
-               android:layout_gravity="bottom"
-               android:background="@android:color/transparent"
+               android:layout_height="30dp"
                app:tabBackground="@drawable/slider_dot_selecter"
                app:tabGravity="center"
+               android:layout_gravity="bottom"
                app:tabIndicatorHeight="0dp"
+               android:background="@android:color/transparent"
                />
        </LinearLayout>
 

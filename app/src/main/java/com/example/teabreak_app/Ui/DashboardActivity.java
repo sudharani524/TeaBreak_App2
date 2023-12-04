@@ -106,8 +106,10 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         images_list.add(R.drawable.img);
         images_list.add(R.drawable.img_1);
         images_list.add(R.drawable.tea_break_img);
+
         binding.newDashboarddd.viewPager.setAdapter(new SliderAdapter(this, images_list));
         binding.newDashboarddd.tabs.setupWithViewPager(binding.newDashboarddd.viewPager);
+
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new SliderTimer(), 3000, 5000);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle((Activity) this, binding.drawerLayout, (Toolbar)binding.toolbar, R.string.nav_open, R.string.nav_close);
