@@ -5,12 +5,32 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.teabreak_app.R;
+import com.example.teabreak_app.Utils.Constant;
+import com.example.teabreak_app.databinding.ActivitySingleListItemBinding;
+import com.squareup.picasso.Picasso;
 
 public class SingleList_Item extends AppCompatActivity {
+    String img,name,price,qty;
+    private ActivitySingleListItemBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_single_list_item);
+        binding=ActivitySingleListItemBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        img=getIntent().getStringExtra("img");
+        name=getIntent().getStringExtra("name");
+        price=getIntent().getStringExtra("price");
+        qty=getIntent().getStringExtra("qty");
+
+        binding.singleItemName.setText(name);
+        binding.singleItemPrice.setText("₹"+price);
+        binding.singleItemQty.setText(qty);
+
+        String img2= Constant.SERVER_BASE_URL+img;
+//        Log.e("img",img);
+        Picasso.get().load(img2).fit().centerInside().into(binding.singleListImg);
+
     }
 }

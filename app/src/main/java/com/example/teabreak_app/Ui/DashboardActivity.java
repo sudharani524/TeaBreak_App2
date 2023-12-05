@@ -11,6 +11,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -102,7 +103,11 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
-        binding.newDashboarddd.rvListItems.setLayoutManager(linearLayoutManager);
+
+
+
+        GridLayoutManager gridLayoutManager=new GridLayoutManager(this,2,RecyclerView.HORIZONTAL,false);
+        binding.newDashboarddd.rvListItems.setLayoutManager(gridLayoutManager);
 
         images_list.add(R.drawable.slider_img);
         images_list.add(R.drawable.img);
@@ -209,9 +214,9 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                                 if(s.equalsIgnoreCase("card")){
                                     Intent intent=new Intent(DashboardActivity.this, SingleList_Item.class);
                                     intent.putExtra("img",list.get(position).getImage());
-                                    intent.putExtra("name",list.get(position).getLineItems());
+                                    intent.putExtra("name",list.get(position).getLine_item_name());
                                     intent.putExtra("price",list.get(position).getPrice());
-                                    intent.putExtra("qty",list.get(position).getPackQty());
+                                    intent.putExtra("qty",list.get(position).getPack_of_qty());
                                     startActivity(intent);
                                 }
 

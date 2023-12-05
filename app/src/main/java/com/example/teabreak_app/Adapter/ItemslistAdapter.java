@@ -41,8 +41,8 @@ public class ItemslistAdapter extends RecyclerView.Adapter<ItemslistAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ItemslistAdapter.ViewHolder holder, int position) {
-        holder.Productname.setText(slm.get(position).getLineItems());
-        holder.quantity.setText(slm.get(position).getPackQty());
+        holder.Productname.setText(slm.get(position).getLine_item_name());
+        holder.quantity.setText(slm.get(position).getPack_of_qty());
         holder.price.setText( "₹"+slm.get(position).getPrice());
         String img= Constant.SERVER_BASE_URL+slm.get(position).getImage();
 

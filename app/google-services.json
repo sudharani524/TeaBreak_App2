@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "231373320548",
+    "project_id": "tea-break-ecd77",
+    "storage_bucket": "tea-break-ecd77.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:231373320548:android:8310992318731ac5c24a71",
+        "android_client_info": {
+          "package_name": "com.example.teabreak_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmsH_o_BlxCyUshicqy1PTCjlx-96HmiY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

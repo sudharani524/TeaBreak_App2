@@ -41,8 +41,8 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         holder.binding.price.setText("₹"+lim.get(position).getPrice());
-        holder.binding.listItemName.setText(lim.get(position).getLineItems());
-        holder.binding.quantity.setText(lim.get(position).getPackQty());
+        holder.binding.listItemName.setText(lim.get(position).getLine_item_name());
+        holder.binding.quantity.setText(lim.get(position).getPack_of_qty());
 
         String img= Constant.SERVER_BASE_URL+lim.get(position).getImage();
 //        Log.e("img",img);

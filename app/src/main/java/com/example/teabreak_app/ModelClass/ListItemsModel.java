@@ -7,89 +7,88 @@ import java.io.Serializable;
 
 public class ListItemsModel implements Serializable {
 
-    @SerializedName("LineItemId")
+    @SerializedName("line_item_id")
     @Expose
-    public String LineItemId;
+    public String line_item_id;
 
 
-    @SerializedName("LineItems")
+    @SerializedName("line_item_name")
     @Expose
-    public String LineItems;
+    public String line_item_name;
 
-    @SerializedName("Price")
+    @SerializedName("price")
     @Expose
-    public String Price;
+    public String price;
 
-    @SerializedName("PackQty")
+    @SerializedName("pack_of_qty")
     @Expose
-    public String PackQty;
+    public String pack_of_qty;
 
-    @SerializedName("Image")
+    @SerializedName("image")
     @Expose
-    public String Image;
+    public String image;
 
-    @SerializedName("Status")
+    @SerializedName("status")
     @Expose
-    public String Status;
+    public String status;
 
-    @SerializedName("DateCreated")
+    @SerializedName("date_created")
     @Expose
-    public String DateCreated;
+    public String date_created;
 
-
-    public String getLineItemId() {
-        return LineItemId;
+    public String getLine_item_id() {
+        return line_item_id;
     }
 
-    public void setLineItemId(String lineItemId) {
-        LineItemId = lineItemId;
+    public void setLine_item_id(String line_item_id) {
+        this.line_item_id = line_item_id;
     }
 
-    public String getLineItems() {
-        return LineItems;
+    public String getLine_item_name() {
+        return line_item_name;
     }
 
-    public void setLineItems(String lineItems) {
-        LineItems = lineItems;
+    public void setLine_item_name(String line_item_name) {
+        this.line_item_name = line_item_name;
     }
 
     public String getPrice() {
-        return Price;
+        return price;
     }
 
     public void setPrice(String price) {
-        Price = price;
+        this.price = price;
     }
 
-    public String getPackQty() {
-        return PackQty;
+    public String getPack_of_qty() {
+        return pack_of_qty;
     }
 
-    public void setPackQty(String packQty) {
-        PackQty = packQty;
+    public void setPack_of_qty(String pack_of_qty) {
+        this.pack_of_qty = pack_of_qty;
     }
 
     public String getImage() {
-        return Image;
+        return image;
     }
 
     public void setImage(String image) {
-        Image = image;
+        this.image = image;
     }
 
     public String getStatus() {
-        return Status;
+        return status;
     }
 
     public void setStatus(String status) {
-        Status = status;
+        this.status = status;
     }
 
-    public String getDateCreated() {
-        return DateCreated;
+    public String getDate_created() {
+        return date_created;
     }
 
-    public void setDateCreated(String dateCreated) {
-        DateCreated = dateCreated;
+    public void setDate_created(String date_created) {
+        this.date_created = date_created;
     }
 }
