@@ -19,6 +19,8 @@ public class TeaBreakViewModel extends ViewModel {
 
     private MutableLiveData<JsonObject> list_items_status;
     private MutableLiveData<JsonObject> roles_list_status;
+    private MutableLiveData<JsonObject> cart_list_status;
+    private MutableLiveData<JsonObject> add_cart_status;
 
 
     public LiveData<JsonObject> get_list_items() {
@@ -33,6 +35,60 @@ public class TeaBreakViewModel extends ViewModel {
         return roles_list_status;
     }
 
+    public LiveData<JsonObject> get_cart_list(JsonObject jsonObject) {
+        cart_list_status = new MutableLiveData<JsonObject>(jsonObject);
+        cart_list_api_call(jsonObject);
+        return cart_list_status;
+    }
+
+    public LiveData<JsonObject> add_cart_api(JsonObject jsonObject) {
+        add_cart_status = new MutableLiveData<JsonObject>(jsonObject);
+        add_cart_api_call(jsonObject);
+        return add_cart_status;
+    }
+
+
+
+
+    private void add_cart_api_call(JsonObject jsonObject) {
+        ApiInterface apiInterface = ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
+        Call<JsonObject> add_cart = apiInterface.add_cart(jsonObject);
+        add_cart.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                if (response.body()!= null){
+                    add_cart_status.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("TAG_NAME", t.toString());
+            }
+        });
+    }
+
+
+
+    private void cart_list_api_call(JsonObject jsonObject) {
+        ApiInterface apiInterface = ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
+        Call<JsonObject> cart_list = apiInterface.cart_list(jsonObject);
+        cart_list.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                if (response.body()!= null){
+                    cart_list_status.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("TAG_NAME", t.toString());
+            }
+        });
+    }
 
     private void roles_list_api_call() {
         ApiInterface apiInterface = ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);

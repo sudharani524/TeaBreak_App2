@@ -34,6 +34,7 @@
             android:layout_height="wrap_content"
             android:text="Name"
             android:textSize="20sp"
+            android:textStyle="bold"
             android:gravity="center"
             android:layout_marginTop="10dp"/>
 
@@ -62,6 +63,7 @@
                 android:layout_weight="1"
                 android:textSize="18sp"
                 android:gravity="center|end"
+                android:textColor="@color/green"
                 android:text="Price"/>
 
 
@@ -75,41 +77,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:orientation="horizontal">
-       <!-- <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_weight="1"
-            android:layout_alignParentBottom="true"
-            android:gravity="bottom"
-            android:layout_margin="10dp">
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/previous"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_gravity="start"
-                android:layout_marginStart="10dp"
-                android:textColor="@color/purple"
-                android:background="@drawable/bg2"
-                android:textAllCaps="false"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:text="Back"/>
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/Proceed"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_gravity="end"
-                android:layout_marginStart="30dp"
-                android:background="@drawable/bg2"
-                android:textColor="@color/purple"
-                android:textAllCaps="false"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:text="Proceed"/>
-        </LinearLayout>-->
+
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/previous"

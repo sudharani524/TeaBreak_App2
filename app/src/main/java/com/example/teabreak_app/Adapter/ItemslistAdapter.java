@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,12 +25,15 @@ public class ItemslistAdapter extends RecyclerView.Adapter<ItemslistAdapter.View
     Context context;
     int quantity;
     List<ListItemsModel> slm=new ArrayList<>();
+    String item_type;
+
 
     private ListItemInterface listItemInterface;
-    public ItemslistAdapter(Context context, List<ListItemsModel> slm,ListItemInterface listItemInterface) {
+    public ItemslistAdapter(Context context, List<ListItemsModel> slm,String item_type,ListItemInterface listItemInterface) {
         this.context = context;
         this.slm = slm;
         this.listItemInterface = listItemInterface;
+        this.item_type = item_type;
     }
 
     @NonNull
@@ -49,10 +53,10 @@ public class ItemslistAdapter extends RecyclerView.Adapter<ItemslistAdapter.View
         Log.d("img",img);
         Picasso.get().load(img).fit().centerInside().into(holder.sample_image);
 
-        if (quantity == 0) {
+      /*  if (quantity == 0) {
             holder.txtQuantity.setText(String.valueOf(quantity));
-        }
-        holder.btnIncrease.setOnClickListener(new View.OnClickListener() {
+        }*/
+      /*  holder.btnIncrease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int count= Integer.parseInt(String.valueOf(holder.txtQuantity.getText()));
@@ -72,7 +76,35 @@ public class ItemslistAdapter extends RecyclerView.Adapter<ItemslistAdapter.View
                     holder.txtQuantity.setText("" + count);
                 }
             }
-        });
+        });*/
+        if(item_type.equalsIgnoreCase("list_items")){
+            holder.add_cart.setVisibility(View.VISIBLE);
+            holder.card.setVisibility(View.GONE);
+            holder.add_cart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listItemInterface.OnItemClick(position,v,"cart");
+                }
+            });
+        }else{
+            holder.add_cart.setVisibility(View.GONE);
+            holder.card.setVisibility(View.VISIBLE);
+            holder.btnIncrease.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listItemInterface.OnItemClick(position,v,"increase");
+                }
+            });
+            holder.btnDecrease.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listItemInterface.OnItemClick(position,v,"decrease");
+                }
+            });
+        }
+
+
+
     }
 
     @Override
@@ -83,15 +115,19 @@ public class ItemslistAdapter extends RecyclerView.Adapter<ItemslistAdapter.View
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView sample_image;
         TextView Productname,quantity,price,txtQuantity,btnIncrease,btnDecrease;
+        LinearLayout add_cart,card;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             Productname=itemView.findViewById(R.id.name);
             quantity=itemView.findViewById(R.id.packquantity);
             price=itemView.findViewById(R.id.price);
-            sample_image=itemView.findViewById(R.id.listimage);
             txtQuantity=itemView.findViewById(R.id.txtQuantity);
             btnIncrease=itemView.findViewById(R.id.add);
             btnDecrease=itemView.findViewById(R.id.minus);
+            sample_image=itemView.findViewById(R.id.listimage);
+            add_cart=itemView.findViewById(R.id.add_cart);
+            card=itemView.findViewById(R.id.card);
+
         }
     }
 }

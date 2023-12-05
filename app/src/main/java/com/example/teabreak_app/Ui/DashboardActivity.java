@@ -35,6 +35,7 @@ import android.widget.Toast;
 import com.example.teabreak_app.Adapter.ListItemsAdapter;
 import com.example.teabreak_app.ModelClass.ListItemsModel;
 import com.example.teabreak_app.R;
+import com.example.teabreak_app.Utils.SaveAppData;
 import com.example.teabreak_app.ViewModel.TeaBreakViewModel;
 import com.example.teabreak_app.databinding.ActivityDashboardBinding;
 import com.example.teabreak_app.databinding.ActivityMainBinding;
@@ -63,6 +64,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     ListItemsAdapter listItemsAdapter;
 
     ArrayList<ListItemsModel> list=new ArrayList<>();
+    String selected_line_item_id="",selected_price="",selected_qty="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -211,6 +213,9 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                         listItemsAdapter=new ListItemsAdapter(DashboardActivity.this, list, new ListItemInterface() {
                             @Override
                             public void OnItemClick(int position, View v,String s) {
+                                selected_line_item_id=list.get(position).getLine_item_id();
+                                selected_price=list.get(position).getPrice();
+                                selected_qty=list.get(position).getPack_of_qty();
                                 if(s.equalsIgnoreCase("card")){
                                     Intent intent=new Intent(DashboardActivity.this, SingleList_Item.class);
                                     intent.putExtra("img",list.get(position).getImage());
@@ -221,7 +226,8 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                                 }
 
                                 if(s.equalsIgnoreCase("cart")){
-                                    startActivity(new Intent(DashboardActivity.this,Cartlist_Activity.class));
+                                    //startActivity(new Intent(DashboardActivity.this,Cartlist_Activity.class));
+                                    add_cart_api_call();
                                 }
 
                             }
@@ -233,6 +239,45 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
 
 
+
+                    } catch (JSONException e) {
+                        //throw new RuntimeException(e);
+                        Toast.makeText(DashboardActivity.this, ""+e, Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }else{
+
+                    Toast.makeText(DashboardActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+    }
+
+    private void add_cart_api_call() {
+        JsonObject object = new JsonObject();
+
+        object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
+        object.addProperty("user_token",SaveAppData.getLoginData().getToken());
+        object.addProperty("line_item_id",selected_line_item_id);
+        object.addProperty("quantity",selected_qty);
+        object.addProperty("price",selected_price);
+
+        viewModel.add_cart_api(object).observe(DashboardActivity.this, new Observer<JsonObject>() {
+            @Override
+            public void onChanged(JsonObject jsonObject) {
+
+                if (jsonObject != null){
+
+                    Log.d("TAG","add_cart "+jsonObject);
+
+                    try {
+                        JSONObject jsonObject1=new JSONObject(jsonObject.toString());
+                        String message=jsonObject1.getString("message");
+                        String text=jsonObject1.getString("text");
+
+                        Toast.makeText(DashboardActivity.this, ""+text, Toast.LENGTH_SHORT).show();
 
                     } catch (JSONException e) {
                         //throw new RuntimeException(e);

@@ -10,7 +10,7 @@
         android:id="@+id/toolbar"
         android:elevation="4dp"
         android:layout_gravity="start|center"
-        android:background="@color/purple"
+        android:background="@color/red"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
         <TextView
             android:id="@+id/tlbar_title"
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="start|center"
-            android:text="Dashboard"
+            android:text=""
             android:layout_marginStart="10dp"
             android:textColor="@color/white"
             android:textSize="18sp" />

@@ -5,4 +5,6 @@
     <string name="categories">Categories</string>
     <string name="view_all"><![CDATA[View All >>]]></string>
     <string name="coffee_powder">Coffee Powder</string>
+
+    <string name="default_notification_channel_id">TeaBreak</string>
 </resources>

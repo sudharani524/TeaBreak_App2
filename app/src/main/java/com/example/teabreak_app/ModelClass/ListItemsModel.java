@@ -36,6 +36,58 @@ public class ListItemsModel implements Serializable {
     @Expose
     public String date_created;
 
+
+
+    @SerializedName("cart_id")
+    @Expose
+    public String cart_id;
+
+    @SerializedName("user_id")
+    @Expose
+    public String user_id;
+
+
+    @SerializedName("quantity")
+    @Expose
+    public String quantity;
+
+    @SerializedName("update_date_time")
+    @Expose
+    public String update_date_time;
+
+
+    public String getCart_id() {
+        return cart_id;
+    }
+
+    public void setCart_id(String cart_id) {
+        this.cart_id = cart_id;
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getUpdate_date_time() {
+        return update_date_time;
+    }
+
+    public void setUpdate_date_time(String update_date_time) {
+        this.update_date_time = update_date_time;
+    }
+
     public String getLine_item_id() {
         return line_item_id;
     }
