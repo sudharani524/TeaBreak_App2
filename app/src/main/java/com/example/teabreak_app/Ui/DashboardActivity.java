@@ -2,6 +2,7 @@ package com.example.teabreak_app.Ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.appcompat.widget.Toolbar;
@@ -20,6 +21,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -129,17 +131,9 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 binding.drawerLayout.openDrawer(GravityCompat.START);
             }
         });
-
-
-
-
         toggle.setHomeAsUpIndicator(R.drawable.menu);
         binding.drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-
-
-
-
         binding.navView.setNavigationItemSelectedListener(DashboardActivity.this);
         binding.navView.setItemIconTintList(null);
         View navHeaderView = binding.navView.getHeaderView(0);
@@ -169,7 +163,22 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
                 }
                 else if(id ==R.id.logout){
-                    logout_api_call();
+                    AlertDialog logoutDialog = new AlertDialog.Builder(DashboardActivity.this).setTitle("logout")
+                            .setMessage("Are you really want to logout")
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    logout_api_call();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert).setCancelable(false).show();
                 }
 
                 return true;
@@ -316,7 +325,22 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             startActivity(new Intent(DashboardActivity.this, Faqs.class));
         }
         else if(id ==R.id.logout){
-            logout_api_call();
+            AlertDialog logoutDialog = new AlertDialog.Builder(DashboardActivity.this).setTitle("logout")
+                    .setMessage("Are you really want to logout")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            logout_api_call();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert).setCancelable(false).show();
         }
 
         return true;
