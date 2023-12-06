@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -18,6 +19,7 @@ public class Checkout extends AppCompatActivity {
     LinearLayout paymentdetails;
     ImageView close_btn;
     AlertDialog alertDialog;
+    String Selected_deliverymode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,24 @@ public class Checkout extends AppCompatActivity {
                 dialog.setCancelable(true);
                 alertDialog = dialog.create();
                 alertDialog.show();
+            }
+        });
+        binding.deliverymode.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Selected_deliverymode  = binding.deliverymode.getSelectedItem().toString();
+                if(Selected_deliverymode.equalsIgnoreCase("Courier")){
+                    binding.type.setVisibility(View.VISIBLE);
+                }
+                else {
+                    binding.type.setVisibility(View.GONE);
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
 

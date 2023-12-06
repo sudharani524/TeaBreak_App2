@@ -40,6 +40,9 @@
             android:name=".Ui.Aboutus"
             android:exported="false" />
         <activity
+            android:name=".Ui.Orderdetails"
+            android:exported="false" />
+        <activity
             android:name=".Ui.Cart"
             android:exported="false" />
         <activity

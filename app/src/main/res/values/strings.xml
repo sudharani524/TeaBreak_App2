@@ -5,6 +5,17 @@
     <string name="categories">Categories</string>
     <string name="view_all"><![CDATA[View All >>]]></string>
     <string name="coffee_powder">Coffee Powder</string>
-
     <string name="default_notification_channel_id">TeaBreak</string>
+    <array name="Deliverymode">
+        <item>Select</item>
+        <item>Pick Up</item>
+        <item>Vehicle Delivery</item>
+        <item>Courier</item>
+    </array>
+    <array name="Deliverytype">
+        <item>Select</item>
+        <item>APSTRC</item>
+        <item>TSRTC</item>
+        <item>RAILWAYS</item>
+    </array>
 </resources>

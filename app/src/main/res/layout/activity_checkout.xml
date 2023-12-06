@@ -93,17 +93,19 @@
             <Spinner
                 android:id="@+id/deliverymode"
                 android:layout_width="match_parent"
+                android:entries="@array/Deliverymode"
                 android:layout_height="30dp" />
 
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="2"
         android:layout_marginTop="10dp"
         android:orientation="horizontal"
-        android:visibility="visible">
+        android:visibility="gone">
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -124,6 +126,7 @@
             <Spinner
                 android:id="@+id/deliverytype"
                 android:layout_width="match_parent"
+                android:entries="@array/Deliverytype"
                 android:layout_height="30dp" />
 
         </LinearLayout>
@@ -135,7 +138,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:gravity="center"
-        android:layout_weight="1.5"
+        android:layout_weight="1.2"
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
