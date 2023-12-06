@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="176dp"
     android:gravity="bottom"
-    android:background="@color/purple"
+    android:background="@color/red"
     android:padding="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
     <androidx.cardview.widget.CardView

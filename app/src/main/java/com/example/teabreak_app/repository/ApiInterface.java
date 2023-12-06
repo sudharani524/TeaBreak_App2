@@ -29,5 +29,8 @@ public interface ApiInterface {
     @Headers("Content-Type: application/json")
     @POST("login")
     Call<JsonObject> login(@Body JsonObject jsonObject);
+    @Headers("Content-Type: application/json")
+    @POST("login/user_logout")
+    Call<JsonObject>logout (@Body JsonObject jsonObject);
 
 }

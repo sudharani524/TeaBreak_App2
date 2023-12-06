@@ -169,7 +169,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
                 }
                 else if(id ==R.id.logout){
-
+                    logout_api_call();
                 }
 
                 return true;
@@ -316,12 +316,48 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             startActivity(new Intent(DashboardActivity.this, Faqs.class));
         }
         else if(id ==R.id.logout){
-
+            logout_api_call();
         }
 
         return true;
 
     }
+
+    private void logout_api_call() {
+        progressDialog.show();
+        JsonObject object = new JsonObject();
+
+        object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
+        object.addProperty("user_token",SaveAppData.getLoginData().getToken());
+
+        viewModel.logout_api(object).observe(DashboardActivity.this, new Observer<JsonObject>() {
+            @Override
+            public void onChanged(JsonObject jsonObject) {
+
+                if (jsonObject != null){
+                    if(progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
+                    Log.d("Logout","logout"+jsonObject);
+
+
+                    if (jsonObject.get("message").getAsString().equalsIgnoreCase("Successfully Logout")){
+                        SaveAppData.saveOperatorLoginData(null);
+                        startActivity(new Intent(DashboardActivity.this, MainActivity.class));
+                        finish();
+                    }
+                }else{
+                    if(progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
+                    Toast.makeText(DashboardActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
+    }
+
 
     private class SliderTimer extends TimerTask {
         @Override
