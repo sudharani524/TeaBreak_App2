@@ -270,7 +270,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
         object.addProperty("user_token",SaveAppData.getLoginData().getToken());
         object.addProperty("line_item_id",selected_line_item_id);
-        object.addProperty("quantity",selected_qty);
+        object.addProperty("quantity","1");
         object.addProperty("price",selected_price);
 
         viewModel.add_cart_api(object).observe(DashboardActivity.this, new Observer<JsonObject>() {

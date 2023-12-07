@@ -6,9 +6,12 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.teabreak_app.Adapter.ItemslistAdapter;
@@ -17,6 +20,7 @@ import com.example.teabreak_app.R;
 import com.example.teabreak_app.Utils.SaveAppData;
 import com.example.teabreak_app.ViewModel.TeaBreakViewModel;
 import com.example.teabreak_app.databinding.ActivityCartlistBinding;
+import com.example.teabreak_app.repository.CartInterface;
 import com.example.teabreak_app.repository.ListItemInterface;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -35,6 +39,7 @@ public class Cartlist_Activity extends AppCompatActivity {
     private TeaBreakViewModel viewModel;
     ArrayList<ListItemsModel> cart_list=new ArrayList<>();
     ItemslistAdapter itemslistAdapter;
+    String selected_line_item_id="",selected_price="",selected_qty="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,10 +52,11 @@ public class Cartlist_Activity extends AppCompatActivity {
         viewModel = ViewModelProviders.of(Cartlist_Activity.this).get(TeaBreakViewModel.class);
 
 
+
+
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(linearLayoutManager.VERTICAL);
-        binding.rvCartList.setLayoutManager(linearLayoutManager
-        );
+        binding.rvCartList.setLayoutManager(linearLayoutManager);
 
         cart_list_api_call();
 
@@ -84,12 +90,45 @@ public class Cartlist_Activity extends AppCompatActivity {
                             }.getType());
                             cart_list.add(listItemsModel);
                         }
-                        itemslistAdapter=new ItemslistAdapter(Cartlist_Activity.this, cart_list,"cart_items", new ListItemInterface() {
+
+                        itemslistAdapter=new ItemslistAdapter(cart_list, Cartlist_Activity.this, "cart_items", new CartInterface() {
                             @Override
-                            public void OnItemClick(int position, View v, String s) {
+                            public void OnItemClick(int position, ItemslistAdapter.ViewHolder holder, String s) {
+                                selected_line_item_id=cart_list.get(position).getLine_item_id();
+                                selected_price=cart_list.get(position).getPrice();
+
+                                errorMessage(holder.itemView.findViewById(R.id.sp_qty),s);
+                                TextView textView=holder.itemView.findViewById(R.id.price);
+                                textView.setText(""+Float.parseFloat(cart_list.get(position).getPrice())*Float.parseFloat(s));
+
+                                if(s.equalsIgnoreCase("Select")){
+                                    Toast.makeText(Cartlist_Activity.this, "Please select the quantity", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }else{
+                                     add_cart_api_call(s,holder.itemView.findViewById(R.id.price),position);
+                                }
 
                             }
                         });
+
+                      /*  itemslistAdapter=new ItemslistAdapter(Cartlist_Activity.this, cart_list,"cart_items", new ListItemInterface() {
+                            @Override
+                            public void OnItemClick(int position, View v, String s) {
+
+                                selected_line_item_id=cart_list.get(position).getLine_item_id();
+                                selected_price=cart_list.get(position).getPrice();
+
+                                errorMessage((Spinner) v,s);
+                                if(s.equalsIgnoreCase("Select")){
+                                    Toast.makeText(Cartlist_Activity.this, "Please select the quantity", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }else{
+                                   // add_cart_api_call(s,v,position);
+                                }
+
+
+                            }
+                        });*/
                         binding.rvCartList.setAdapter(itemslistAdapter);
                         itemslistAdapter.notifyDataSetChanged();
 
@@ -108,4 +147,65 @@ public class Cartlist_Activity extends AppCompatActivity {
             }
         });
     }
+
+
+    public void errorMessage(Spinner spinner, String s){
+
+        TextView error = (TextView) spinner.getSelectedView();
+        error.setText(s);
+        error.requestFocus();
+
+
+    }
+
+    private void add_cart_api_call(String s, View v, int position) {
+        JsonObject object = new JsonObject();
+
+        object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
+        object.addProperty("user_token",SaveAppData.getLoginData().getToken());
+        object.addProperty("line_item_id",selected_line_item_id);
+        object.addProperty("quantity",s);
+        object.addProperty("price",selected_price);
+
+        viewModel.add_cart_api(object).observe(Cartlist_Activity.this, new Observer<JsonObject>() {
+            @Override
+            public void onChanged(JsonObject jsonObject) {
+
+                if (jsonObject != null){
+
+                    Log.d("TAG","add_cart "+jsonObject);
+
+                    try {
+                        JSONObject jsonObject1=new JSONObject(jsonObject.toString());
+                        String message=jsonObject1.getString("message");
+                        String text=jsonObject1.getString("text");
+
+                        Toast.makeText(Cartlist_Activity.this, ""+text, Toast.LENGTH_SHORT).show();
+
+                        if(message.equalsIgnoreCase("success")){
+
+                            TextView textView= (TextView) v;
+                            Log.e("s_qty",cart_list.get(position).getPrice());
+                            Log.e("price",s);
+                            textView.setText(""+Float.parseFloat(cart_list.get(position).getPrice())*Float.parseFloat(s));
+                            Log.e("t_price",""+Float.parseFloat(cart_list.get(position).getPrice())*Float.parseFloat(s));
+
+                            //cart_list_api_call();
+                        }
+
+                    } catch (JSONException e) {
+                        //throw new RuntimeException(e);
+                        Toast.makeText(Cartlist_Activity.this, ""+e, Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }else{
+
+                    Toast.makeText(Cartlist_Activity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+    }
+
 }

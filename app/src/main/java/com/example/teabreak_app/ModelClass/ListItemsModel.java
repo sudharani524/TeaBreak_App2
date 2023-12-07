@@ -11,6 +11,9 @@ public class ListItemsModel implements Serializable {
     @Expose
     public String line_item_id;
 
+    @SerializedName("quantity")
+    @Expose
+    public String quantity;
 
     @SerializedName("line_item_name")
     @Expose
@@ -47,14 +50,21 @@ public class ListItemsModel implements Serializable {
     public String user_id;
 
 
-    @SerializedName("quantity")
-    @Expose
-    public String quantity;
-
     @SerializedName("update_date_time")
     @Expose
     public String update_date_time;
 
+    @SerializedName("available_quantity")
+    @Expose
+    public String available_quantity;
+
+    public String getAvailable_quantity() {
+        return available_quantity;
+    }
+
+    public void setAvailable_quantity(String available_quantity) {
+        this.available_quantity = available_quantity;
+    }
 
     public String getCart_id() {
         return cart_id;
