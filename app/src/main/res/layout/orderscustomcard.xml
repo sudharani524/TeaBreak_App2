@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/customcard"
+    android:background="@drawable/bg"
+    android:padding="5dp"
+    android:layout_marginBottom="10dp"
     android:orientation="vertical">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
         android:elevation="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
@@ -26,6 +29,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/order_number"/>
             <TextView
+                android:id="@+id/ordernumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/_9812479373"
@@ -54,7 +58,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/Deliverytype"
+                    android:id="@+id/DeliveryType"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.5"
@@ -85,7 +89,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/Total"
+                    android:id="@+id/Totalamount"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.5"

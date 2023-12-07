@@ -155,7 +155,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                     startActivity(new Intent(DashboardActivity.this, DashboardActivity.class));
                 }
                 else if (id == R.id.orders){
-                    startActivity(new Intent(DashboardActivity.this, Myorders.class));
+                    startActivity(new Intent(DashboardActivity.this,Orders_List_Activity.class));
 
                 }
                 else if (id == R.id.cart) {
@@ -310,7 +310,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             startActivity(new Intent(DashboardActivity.this, DashboardActivity.class));
         }
         else if (id == R.id.orders){
-            startActivity(new Intent(DashboardActivity.this, Myorders.class));
+            startActivity(new Intent(DashboardActivity.this, Orders_List_Activity.class));
 
         }
         else if (id == R.id.wallet) {
