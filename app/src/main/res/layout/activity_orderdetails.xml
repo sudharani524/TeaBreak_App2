@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -43,7 +43,7 @@
                             android:textSize="15sp" />
 
                         <TextView
-                            android:id="@+id/tv_service_num"
+                            android:id="@+id/order_num"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/_1234456789"
@@ -64,7 +64,7 @@
                             android:textSize="15sp" />
 
                         <TextView
-                            android:id="@+id/tv_order_num"
+                            android:id="@+id/tv_order_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/date"
@@ -121,7 +121,7 @@
                                             tools:ignore="TextSizeCheck" />
 
                                         <TextView
-                                            android:id="@+id/tv_department"
+                                            android:id="@+id/tv_amount"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:text="@string/_12000"
@@ -144,7 +144,7 @@
                                             android:textSize="15sp" />
 
                                         <TextView
-                                            android:id="@+id/tv_schedule"
+                                            android:id="@+id/tv_vehicle"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:text="@string/vehicle"
@@ -176,7 +176,7 @@
                                         android:textSize="15sp" />
 
                                     <TextView
-                                        android:id="@+id/tv_version_name"
+                                        android:id="@+id/tv_paymentmode"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="@string/debit_card"
@@ -199,7 +199,7 @@
                                         android:textSize="15sp" />
 
                                     <TextView
-                                        android:id="@+id/tv_customer_name"
+                                        android:id="@+id/tv_deliverycharges"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="@string/_230"
@@ -235,4 +235,4 @@
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
-</RelativeLayout>
+</LinearLayout>
