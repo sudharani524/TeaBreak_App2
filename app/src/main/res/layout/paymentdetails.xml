@@ -61,13 +61,13 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1.4"
                     android:textColor="@color/black"
-                    android:text="Amount" />
+                    android:text="@string/amount" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.1"
-                    android:text=":"
+                    android:text="@string/coloon"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
 
@@ -77,7 +77,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1.5"
                     android:textColor="@color/black"
-                    android:text="Amount" />
+                    android:text="@string/amount" />
             </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -90,13 +90,13 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1.4"
                         android:textColor="@color/black"
-                        android:text="Delivery Charges" />
+                        android:text="@string/delivery_charges" />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.1"
-                        android:text=":"
+                        android:text="@string/coloon"
                         android:textColor="@color/black"
                         android:textStyle="bold" />
 
@@ -106,7 +106,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1.5"
                         android:textColor="@color/black"
-                        android:text="Amount" />
+                        android:text="@string/amount" />
                 </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -125,7 +125,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1.5"
                     android:gravity="center_vertical"
-                    android:text="Wallet Amount is"
+                    android:text="@string/wallet_amount_is"
                     android:textColor="@color/black"/>
             </LinearLayout>
                 <LinearLayout
@@ -139,13 +139,13 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1.4"
                         android:textColor="@color/black"
-                        android:text="Total Amount" />
+                        android:text="@string/total_amount" />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.1"
-                        android:text=":"
+                        android:text="@string/coloon"
                         android:textColor="@color/black"
                         android:textStyle="bold" />
 
@@ -155,7 +155,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1.5"
                         android:textColor="@color/black"
-                        android:text="Total Amount" />
+                        android:text="@string/total_amount" />
                 </LinearLayout>
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/submit_btn"
@@ -163,7 +163,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg2"
                     android:backgroundTint="@color/red"
-                    android:text="Pay"
+                    android:text="@string/pay"
                     android:layout_margin="10dp"
                     android:layout_gravity="center"
                     android:textColor="@color/white"

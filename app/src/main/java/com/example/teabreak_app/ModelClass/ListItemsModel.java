@@ -57,6 +57,9 @@ public class ListItemsModel implements Serializable {
     @SerializedName("available_quantity")
     @Expose
     public String available_quantity;
+    @SerializedName("sub_total")
+    @Expose
+    public String sub_total;
 
     public String getAvailable_quantity() {
         return available_quantity;
@@ -152,5 +155,13 @@ public class ListItemsModel implements Serializable {
 
     public void setDate_created(String date_created) {
         this.date_created = date_created;
+    }
+
+    public String getSub_total() {
+        return sub_total;
+    }
+
+    public void setSub_total(String sub_total) {
+        this.sub_total = sub_total;
     }
 }

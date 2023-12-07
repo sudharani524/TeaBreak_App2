@@ -39,7 +39,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="My Bag"
+                    android:text="@string/my_bag"
                     android:layout_marginStart="30dp"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
@@ -47,7 +47,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="Clear All"
+                    android:text="@string/clear_all"
                     android:layout_marginStart="150dp"
                     android:textColor="@color/white"
                     android:textSize="18sp"/>
@@ -58,50 +58,9 @@
         android:id="@+id/rvListItems"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="8"
+        android:layout_weight="9"
         tools:listitem="@layout/custom_list_item_activity"
         android:layout_margin="5dp"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:padding="5dp"
-        android:layout_weight="1"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="10dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:text="Subtotal"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=":"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/Stotal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:text="310.0" />
-
-            </LinearLayout>
-    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -122,7 +81,7 @@
             android:textAllCaps="false"
             android:textStyle="bold"
             android:textSize="18sp"
-            android:text="Back"/>
+            android:text="@string/back"/>
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/Proceed"
             android:layout_width="150dp"
@@ -135,6 +94,6 @@
             android:textAllCaps="false"
             android:textStyle="bold"
             android:textSize="18sp"
-            android:text="Proceed"/>
+            android:text="@string/cart_list"/>
     </LinearLayout>
 </LinearLayout>

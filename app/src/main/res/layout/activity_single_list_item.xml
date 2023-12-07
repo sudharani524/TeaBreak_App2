@@ -32,7 +32,7 @@
             android:id="@+id/single_item_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Name"
+            android:text="@string/name"
             android:textSize="20sp"
             android:textStyle="bold"
             android:gravity="center"
@@ -54,7 +54,7 @@
                 android:layout_weight="1"
                 android:textSize="18sp"
                 android:gravity="center|start"
-                android:text="Qty"/>
+                android:text="@string/qty"/>
 
             <TextView
                 android:id="@+id/single_item_price"
@@ -64,7 +64,7 @@
                 android:textSize="18sp"
                 android:gravity="center|end"
                 android:textColor="@color/green"
-                android:text="Price"/>
+                android:text="@string/price"/>
 
 
         </LinearLayout>
@@ -92,7 +92,7 @@
             android:gravity="center"
             android:textStyle="bold"
             android:textSize="18sp"
-            android:text="Back"/>
+            android:text="@string/back"/>
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/Proceed"
             android:layout_width="0dp"
@@ -106,7 +106,7 @@
             android:textAllCaps="false"
             android:textStyle="bold"
             android:textSize="18sp"
-            android:text="Proceed"/>
+            android:text="@string/proceed"/>
 
     </LinearLayout>
 

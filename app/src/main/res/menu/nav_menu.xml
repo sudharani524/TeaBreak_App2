@@ -18,7 +18,7 @@
             android:title="My Wallet"/>
         <item
             android:id="@+id/cart"
-            android:icon="@drawable/cart"
+            android:icon="@drawable/shoppingcart"
             android:title="Cart"/>
         <item
             android:id="@+id/AboutUs"

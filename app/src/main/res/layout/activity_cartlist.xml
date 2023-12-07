@@ -43,7 +43,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Total Amount"
+                android:text="@string/total_amount"
                 android:gravity="center|left"/>
             <TextView
                 android:id="@+id/t_Amount"
@@ -73,7 +73,7 @@
                 android:textAllCaps="false"
                 android:textStyle="bold"
                 android:textSize="18sp"
-                android:text="Back"/>
+                android:text="@string/back"/>
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/Proceed"
                 android:layout_width="150dp"
@@ -86,7 +86,7 @@
                 android:textAllCaps="false"
                 android:textStyle="bold"
                 android:textSize="18sp"
-                android:text="Proceed"/>
+                android:text="@string/next"/>
         </LinearLayout>
     </LinearLayout>
 

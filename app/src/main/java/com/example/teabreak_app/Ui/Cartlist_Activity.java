@@ -5,7 +5,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,8 +40,10 @@ public class Cartlist_Activity extends AppCompatActivity {
     ProgressDialog progressDialog;
     private TeaBreakViewModel viewModel;
     ArrayList<ListItemsModel> cart_list=new ArrayList<>();
+    ArrayList<ListItemsModel> Pricelist = new ArrayList<>();
     ItemslistAdapter itemslistAdapter;
     String selected_line_item_id="",selected_price="",selected_qty="";
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +63,14 @@ public class Cartlist_Activity extends AppCompatActivity {
         binding.rvCartList.setLayoutManager(linearLayoutManager);
 
         cart_list_api_call();
+        binding.Proceed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Cartlist_Activity.this, Checkout.class));
+
+            }
+        });
+        binding.tBar.tlbarTitle.setText("Cart List");
 
     }
 
@@ -81,6 +93,8 @@ public class Cartlist_Activity extends AppCompatActivity {
                         JSONObject jsonObject1=new JSONObject(jsonObject.toString());
                         JSONArray jsonArray=new JSONArray();
                         jsonArray=jsonObject1.getJSONArray("data");
+                        JSONArray jsonArray1=new JSONArray();
+                        jsonArray1=jsonObject1.getJSONArray("sub_totals");
 
                         String message=jsonObject1.getString("message");
 
@@ -89,6 +103,19 @@ public class Cartlist_Activity extends AppCompatActivity {
                             ListItemsModel listItemsModel = new Gson().fromJson(jsonArray.get(i).toString(), new TypeToken<ListItemsModel>() {
                             }.getType());
                             cart_list.add(listItemsModel);
+                        }
+                        for(int i=0;i<jsonArray1.length();i++){
+                            Log.e("array",jsonArray1.toString());
+                            ListItemsModel listItemsModel = new Gson().fromJson(jsonArray1.get(i).toString(), new TypeToken<ListItemsModel>() {
+                            }.getType());
+                            Pricelist.add(listItemsModel);
+                        }
+                        for (int i = 0; i < Pricelist.size(); i++) {
+
+                            String total = Pricelist.get(i).getSub_total();
+                            Log.d("subtotal", total);
+                            binding.tAmount.setText(total);
+
                         }
 
                         itemslistAdapter=new ItemslistAdapter(cart_list, Cartlist_Activity.this, "cart_items", new CartInterface() {

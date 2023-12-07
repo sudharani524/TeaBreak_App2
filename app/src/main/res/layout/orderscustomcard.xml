@@ -24,11 +24,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Order Number:"/>
+                android:text="@string/order_number"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="9812479373"
+                android:text="@string/_9812479373"
                 android:textColor="@color/purple"/>
         </LinearLayout>
             <LinearLayout
@@ -42,13 +42,13 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.4"
-                    android:text="Delivery Type" />
+                    android:text="@string/delivery_type" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.1"
-                    android:text=":"
+                    android:text="@string/coloon"
                     android:gravity="center"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
@@ -59,7 +59,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1.5"
                     android:textColor="@color/black"
-                    android:text="Delivery type" />
+                    android:text="@string/delivery_type" />
 
             </LinearLayout>
             <LinearLayout
@@ -73,13 +73,13 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.4"
-                    android:text="Order Total" />
+                    android:text="@string/order_total" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.1"
-                    android:text=":"
+                    android:text="@string/coloon"
                     android:gravity="center"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
@@ -90,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1.5"
                     android:textColor="@color/black"
-                    android:text="Total Amount" />
+                    android:text="@string/total_amount" />
 
             </LinearLayout>
             <LinearLayout
@@ -104,13 +104,13 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.4"
-                    android:text="Ordered Date" />
+                    android:text="@string/ordered_date" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.1"
-                    android:text=":"
+                    android:text="@string/coloon"
                     android:gravity="center"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
@@ -121,7 +121,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1.5"
                     android:textColor="@color/black"
-                    android:text="Date" />
+                    android:text="@string/date" />
             </LinearLayout>
 
         </LinearLayout>

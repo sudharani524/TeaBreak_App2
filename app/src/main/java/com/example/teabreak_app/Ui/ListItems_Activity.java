@@ -66,7 +66,7 @@ public class ListItems_Activity extends AppCompatActivity {
         binding.Proceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ListItems_Activity.this, Checkout.class));
+                startActivity(new Intent(ListItems_Activity.this,Cartlist_Activity.class));
 
             }
         });

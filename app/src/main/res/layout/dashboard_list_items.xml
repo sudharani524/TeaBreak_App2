@@ -28,7 +28,7 @@
             android:scrollbars="horizontal"
             android:textStyle="bold"
             android:gravity="center"
-            android:text="Elachi"/>
+            android:text="@string/elachi"/>
        <!-- <LinearLayout
             android:id="@+id/ll_category"
             android:layout_width="match_parent"
@@ -58,7 +58,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="1Kg"
+                android:text="@string/_1kg"
                 android:singleLine="true"
                 android:gravity="start"
                 />
@@ -67,7 +67,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="₹98"
+                android:text="@string/_98"
                 android:gravity="end"
                 android:textColor="@color/green"/>
         </LinearLayout>
@@ -97,7 +97,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:text="Cart"
+                android:text="@string/cart"
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:layout_margin="2dp"

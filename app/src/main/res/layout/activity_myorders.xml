@@ -37,7 +37,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="My Orders"
+                    android:text="@string/my_orders"
                     android:layout_marginStart="10dp"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
