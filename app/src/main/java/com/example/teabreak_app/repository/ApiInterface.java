@@ -36,5 +36,8 @@ public interface ApiInterface {
     @Headers("Content-Type: application/json")
     @POST("apis/change_pwd")
     Call<JsonObject>change_password(@Body JsonObject jsonObject);
+    @Headers("Content-Type: application/json")
+    @POST("apis/get_user_order_history")
+    Call<JsonObject>orderslist(@Body JsonObject jsonObject);
 
 }

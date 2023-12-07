@@ -23,6 +23,7 @@ public class TeaBreakViewModel extends ViewModel {
     private MutableLiveData<JsonObject> add_cart_status;
     private MutableLiveData<JsonObject> logout;
     private MutableLiveData<JsonObject> change_password_status;
+    private MutableLiveData<JsonObject> order_items_status;
 
 
     public LiveData<JsonObject> get_list_items() {
@@ -62,8 +63,31 @@ public class TeaBreakViewModel extends ViewModel {
 
         return change_password_status;
     }
+    public LiveData<JsonObject> get_order_items(JsonObject jsonObject) {
+        order_items_status = new MutableLiveData<JsonObject>();
+        order_list_api_call(jsonObject);
+        return order_items_status;
+    }
 
 
+    private void order_list_api_call(JsonObject jsonObject) {
+        ApiInterface apiInterface = ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
+        Call<JsonObject> orderslist = apiInterface.orderslist(jsonObject);
+        orderslist.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.body()!= null){
+                    order_items_status.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("TAG_NAME", t.toString());
+            }
+        });
+
+    }
 
     private void change_password_api_call(JsonObject jsonObject) {
         ApiInterface apiInterface = ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
