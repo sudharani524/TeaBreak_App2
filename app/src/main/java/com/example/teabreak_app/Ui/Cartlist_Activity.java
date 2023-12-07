@@ -43,6 +43,7 @@ public class Cartlist_Activity extends AppCompatActivity {
     ArrayList<ListItemsModel> Pricelist = new ArrayList<>();
     ItemslistAdapter itemslistAdapter;
     String selected_line_item_id="",selected_price="",selected_qty="";
+    String total;
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +67,10 @@ public class Cartlist_Activity extends AppCompatActivity {
         binding.Proceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(Cartlist_Activity.this, Checkout.class));
+                Intent intent=new Intent(Cartlist_Activity.this, Checkout.class);
+                intent.putExtra("t_amount",total);
+                Log.e("t_amount",total);
+                startActivity(intent);
 
             }
         });
@@ -112,7 +116,7 @@ public class Cartlist_Activity extends AppCompatActivity {
                         }
                         for (int i = 0; i < Pricelist.size(); i++) {
 
-                            String total = Pricelist.get(i).getSub_total();
+                             total = Pricelist.get(i).getSub_total();
                             Log.d("subtotal", total);
                             binding.tAmount.setText(total);
 
