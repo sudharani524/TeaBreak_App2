@@ -324,6 +324,9 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         else if(id == R.id.Faq){
             startActivity(new Intent(DashboardActivity.this, Faqs.class));
         }
+        else if(id==R.id.change_pswd){
+            startActivity(new Intent(DashboardActivity.this,ChangePasswordActivity.class));
+        }
         else if(id ==R.id.logout){
             AlertDialog logoutDialog = new AlertDialog.Builder(DashboardActivity.this).setTitle("logout")
                     .setMessage("Are you really want to logout")

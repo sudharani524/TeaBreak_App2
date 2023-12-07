@@ -33,4 +33,8 @@ public interface ApiInterface {
     @POST("login/user_logout")
     Call<JsonObject>logout (@Body JsonObject jsonObject);
 
+    @Headers("Content-Type: application/json")
+    @POST("apis/change_pwd")
+    Call<JsonObject>change_password(@Body JsonObject jsonObject);
+
 }

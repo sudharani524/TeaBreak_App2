@@ -28,6 +28,12 @@
             android:id="@+id/Faq"
             android:icon="@drawable/faq"
             android:title="FAQ'S"/>
+
+        <item
+            android:id="@+id/change_pswd"
+            android:icon="@drawable/pswd"
+            android:title="Change Password"/>
+
         <item
             android:id="@+id/logout"
             android:icon="@drawable/logout"

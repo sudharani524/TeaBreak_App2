@@ -72,6 +72,12 @@
         <activity
             android:name=".Ui.DashboardActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".Ui.ChangePasswordActivity"
+            android:exported="false" />
+
+
         <activity
             android:name=".Ui.MainActivity"
             android:exported="false" />
