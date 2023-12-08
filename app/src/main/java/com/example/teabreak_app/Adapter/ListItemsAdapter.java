@@ -1,7 +1,6 @@
 package com.example.teabreak_app.Adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,7 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsAdapter.View
     List<ListItemsModel> lim=new ArrayList<>();
     private ListItemInterface listItemInterface;
 
-    public ListItemsAdapter(Context context, List<ListItemsModel> lim,ListItemInterface listItemInterface) {
+    public ListItemsAdapter(Context context, ArrayList<ListItemsModel> lim, ListItemInterface listItemInterface) {
         this.context = context;
         this.lim = lim;
         this.listItemInterface = listItemInterface;
@@ -51,6 +50,7 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsAdapter.View
         holder.binding.listCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 listItemInterface.OnItemClick(position,v,"card");
             }
         });

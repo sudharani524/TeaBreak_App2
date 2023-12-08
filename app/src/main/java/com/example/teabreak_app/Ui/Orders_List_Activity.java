@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.teabreak_app.Adapter.ItemslistAdapter;
+import com.example.teabreak_app.Adapter.ListItemsAdapter;
 import com.example.teabreak_app.Adapter.OrderHistoryAdapter;
 import com.example.teabreak_app.ModelClass.ListItemsModel;
 import com.example.teabreak_app.ModelClass.OrderHistoryModel;
@@ -25,6 +26,7 @@ import com.example.teabreak_app.databinding.ActivityListItemsBinding;
 import com.example.teabreak_app.databinding.ActivityOrdersListBinding;
 import com.example.teabreak_app.repository.CartInterface;
 import com.example.teabreak_app.repository.ListItemInterface;
+import com.example.teabreak_app.repository.OrderdetailsInterface;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -83,9 +85,19 @@ public class Orders_List_Activity extends AppCompatActivity {
                             Log.d("list",String.valueOf(list.size()));
                         }
                         Log.d("list2",String.valueOf(list.size()));
-
-
-                        orderHistoryAdapter=new OrderHistoryAdapter(list, Orders_List_Activity.this);
+                        orderHistoryAdapter=new OrderHistoryAdapter(list, Orders_List_Activity.this, new OrderdetailsInterface() {
+                            @Override
+                            public void OnItemClick(int position, OrderHistoryAdapter.ViewHolder holder, String s) {
+                                Intent intent=new Intent(Orders_List_Activity.this,Orderdetails.class);
+                                intent.putExtra("order_id",list.get(position).getOrder_id());
+                                intent.putExtra("order_no",list.get(position).getOrder_no());
+                                intent.putExtra("Amount",list.get(position).getTotal_amount());
+                                intent.putExtra("order_date",list.get(position).getOrder_date_time());
+                                intent.putExtra("delivery_mode",list.get(position).getDelivery_type_name());
+                                Log.d("orderid",list.get(position).getOrder_id());
+                                startActivity(intent);
+                            }
+                        });
                         binding.rvListItems.setAdapter(orderHistoryAdapter);
                         orderHistoryAdapter.notifyDataSetChanged();
 

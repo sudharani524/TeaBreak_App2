@@ -47,6 +47,9 @@ public interface ApiInterface {
     @Headers("Content-Type: application/json")
     @POST("apis/user_create_order_details")
     Call<JsonObject>create_order(@Body JsonObject jsonObject);
+    @Headers("Content-Type: application/json")
+    @POST("apis/get_user_order_items_by_order_id")
+    Call<JsonObject>Order_history(@Body JsonObject jsonObject);
 
 
 }

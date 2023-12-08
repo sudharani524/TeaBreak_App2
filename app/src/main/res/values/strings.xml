@@ -25,9 +25,9 @@
     <string name="login">Login</string>
     <string name="my_orders">My Orders</string>
     <string name="my_wallet">My Wallet</string>
-    <string name="order_no">Order_no</string>
+    <string name="order_no">Order Number</string>
     <string name="_1234456789">1234456789</string>
-    <string name="order_date">order date</string>
+    <string name="order_date">Order Date</string>
     <string name="date">date</string>
     <string name="amount">Amount</string>
     <string name="_12000">12000</string>
@@ -54,6 +54,7 @@
     <string name="ordered_date">Ordered Date</string>
     <string name="wallet_amount_is">Wallet Amount is</string>
     <string name="pay">Pay</string>
+    <string name="items_list">Items List</string>
     <array name="Deliverymode">
         <item>Select</item>
         <item>Pick Up</item>
