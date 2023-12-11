@@ -60,6 +60,9 @@ public class ListItemsModel implements Serializable {
     @SerializedName("sub_total")
     @Expose
     public String sub_total;
+    @SerializedName("sub_total_price")
+    @Expose
+    public String sub_total_price;
 
     public String getAvailable_quantity() {
         return available_quantity;
@@ -163,5 +166,13 @@ public class ListItemsModel implements Serializable {
 
     public void setSub_total(String sub_total) {
         this.sub_total = sub_total;
+    }
+
+    public String getSub_total_price() {
+        return sub_total_price;
+    }
+
+    public void setSub_total_price(String sub_total_price) {
+        this.sub_total_price = sub_total_price;
     }
 }

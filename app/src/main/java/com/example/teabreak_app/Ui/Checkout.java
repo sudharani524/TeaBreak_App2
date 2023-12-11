@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -19,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.teabreak_app.Adapter.DeliverydetailsAdapter;
 import com.example.teabreak_app.ModelClass.ListItemsModel;
 import com.example.teabreak_app.ModelClass.LoginUserModel;
 import com.example.teabreak_app.ModelClass.Order_delivery_type;
@@ -56,6 +59,8 @@ public class Checkout extends AppCompatActivity {
     ProgressDialog progressDialog;
     ArrayAdapter order_type_adapter;
     ArrayList<Order_delivery_type> order_list=new ArrayList<>();
+    ArrayList<ListItemsModel> cart_list=new ArrayList<>();
+    DeliverydetailsAdapter deliverydetailsAdapter;
 
     ArrayList<String> order_type=new ArrayList<>();
     private TeaBreakViewModel viewModel;
@@ -82,6 +87,11 @@ public class Checkout extends AppCompatActivity {
         t_amount=getIntent().getStringExtra("t_amount");
 
         Log.e("amount_checkout",t_amount);
+        ordered_Items_list_api_call();
+        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
+        binding.orderedListItems.setLayoutManager(linearLayoutManager);
+
 
         binding.Proceed.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,6 +123,54 @@ public class Checkout extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void ordered_Items_list_api_call() {
+        JsonObject object = new JsonObject();
+
+        object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
+        object.addProperty("user_token",SaveAppData.getLoginData().getToken());
+        viewModel.get_cart_list(object).observe(Checkout.this, new Observer<JsonObject>() {
+            @Override
+            public void onChanged(JsonObject jsonObject) {
+
+                if (jsonObject != null){
+
+                    Log.d("TAG","add_cart "+jsonObject);
+
+                    try {
+                        JSONObject jsonObject1=new JSONObject(jsonObject.toString());
+                        JSONArray jsonArray=new JSONArray();
+                        jsonArray=jsonObject1.getJSONArray("data");
+                        JSONArray jsonArray1=new JSONArray();
+                        jsonArray1=jsonObject1.getJSONArray("sub_totals");
+
+                        String message=jsonObject1.getString("message");
+
+                        Toast.makeText(Checkout.this, ""+message, Toast.LENGTH_SHORT).show();
+                        for(int i=0;i<jsonArray.length();i++){
+                            ListItemsModel listItemsModel = new Gson().fromJson(jsonArray.get(i).toString(), new TypeToken<ListItemsModel>() {
+                            }.getType());
+                            cart_list.add(listItemsModel);
+                        }
+                        deliverydetailsAdapter =new DeliverydetailsAdapter(cart_list, Checkout.this);
+
+                        binding.orderedListItems.setAdapter(deliverydetailsAdapter);
+                        deliverydetailsAdapter.notifyDataSetChanged();
+
+
+                    } catch (JSONException e) {
+                        Toast.makeText(Checkout.this, ""+e, Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }else{
+
+                    Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
     }
 
     private void create_order_api_call() {

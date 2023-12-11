@@ -55,6 +55,9 @@
     <string name="wallet_amount_is">Wallet Amount is</string>
     <string name="pay">Pay</string>
     <string name="items_list">Items List</string>
+    <string name="quantity">Quantity</string>
+    <string name="_20">20</string>
+    <string name="_300">300</string>
     <array name="Deliverymode">
         <item>Select</item>
         <item>Pick Up</item>
