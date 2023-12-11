@@ -147,6 +147,10 @@ public class Checkout extends AppCompatActivity {
 
 
                         Toast.makeText(Checkout.this, ""+message, Toast.LENGTH_SHORT).show();
+                        if(message.equalsIgnoreCase("success")){
+                            startActivity(new Intent(Checkout.this,Cartlist_Activity.class));
+                            finish();
+                        }
 
 
 
@@ -271,4 +275,5 @@ public class Checkout extends AppCompatActivity {
             }
         });
     }
+
 }
