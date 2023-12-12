@@ -34,12 +34,6 @@
             android:name=".Ui.Checkout"
             android:exported="false" />
         <activity
-            android:name=".Ui.Faqs"
-            android:exported="false" />
-        <activity
-            android:name=".Ui.Aboutus"
-            android:exported="false" />
-        <activity
             android:name=".Ui.Orderdetails"
             android:exported="false" />
         <activity

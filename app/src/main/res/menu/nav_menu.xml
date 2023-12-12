@@ -7,37 +7,28 @@
         <item
             android:id="@+id/home"
             android:icon="@drawable/home"
-            android:title="Home"/>
+            android:title="@string/home"/>
         <item
             android:id="@+id/orders"
             android:icon="@drawable/orders"
-            android:title="My Orders"/>
+            android:title="@string/my_orders"/>
         <item
             android:id="@+id/wallet"
             android:icon="@drawable/wallet"
-            android:title="My Wallet"/>
+            android:title="@string/my_wallet"/>
         <item
             android:id="@+id/cart"
             android:icon="@drawable/shoppingcart"
-            android:title="Cart"/>
-        <item
-            android:id="@+id/AboutUs"
-            android:icon="@drawable/info"
-            android:title="About Us"/>
-        <item
-            android:id="@+id/Faq"
-            android:icon="@drawable/faq"
-            android:title="FAQ'S"/>
-
+            android:title="@string/cart"/>
         <item
             android:id="@+id/change_pswd"
             android:icon="@drawable/pswd"
-            android:title="Change Password"/>
+            android:title="@string/change_password"/>
 
         <item
             android:id="@+id/logout"
             android:icon="@drawable/logout"
-            android:title="Logout"/>
+            android:title="@string/logout"/>
 
     </group>
 </menu>

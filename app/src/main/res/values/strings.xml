@@ -17,7 +17,7 @@
     <string name="proceed">Proceed</string>
     <string name="version">Version</string>
     <string name="dashboard">Dashboard</string>
-    <string name="my_bag">My Bag</string>
+    <string name="my_bag">Categories</string>
     <string name="clear_all">Clear All</string>
     <string name="cart_list">Cart List</string>
     <string name="username">Username</string>
@@ -48,7 +48,7 @@
     <string name="tea_break">Tea Break</string>
     <string name="hello">Hello</string>
     <string name="viewall"><![CDATA[ViewAll >>]]></string>
-    <string name="order_number">Order Number:</string>
+    <string name="order_number">Order Number</string>
     <string name="_9812479373">9812479373</string>
     <string name="order_total">Order Total</string>
     <string name="ordered_date">Ordered Date</string>
@@ -58,6 +58,9 @@
     <string name="quantity">Quantity</string>
     <string name="_20">20</string>
     <string name="_300">300</string>
+    <string name="change_password">Change Password</string>
+    <string name="home">Home</string>
+    <string name="logout">Logout</string>
     <array name="Deliverymode">
         <item>Select</item>
         <item>Pick Up</item>

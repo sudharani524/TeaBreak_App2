@@ -6,8 +6,10 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 import com.example.teabreak_app.Adapter.Orderdetailsadapter;
 import com.example.teabreak_app.ModelClass.OrderdetailsModel;
@@ -48,15 +50,20 @@ public class Orderdetails extends AppCompatActivity {
         delivery_mode=getIntent().getStringExtra("delivery_mode");
         order_id=getIntent().getStringExtra("order_id");
         binding.orderNum.setText(order_no);
-        binding.tvAmount.setText(Amount);
+        binding.tvAmount.setText( "₹"+Amount);
         binding.tvOrderDate.setText(order_date);
         binding.tvVehicle.setText(delivery_mode);
-        binding.tBar.tlbarTitle.setText("Order Details");
         viewModel = ViewModelProviders.of(Orderdetails.this).get(TeaBreakViewModel.class);
         order_details_list_api_call();
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         binding.rvlist.setLayoutManager(linearLayoutManager);
+        binding.backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Orderdetails.this,Orders_List_Activity.class));
+            }
+        });
     }
 
     private void order_details_list_api_call() {

@@ -35,7 +35,7 @@ public class DeliverydetailsAdapter extends RecyclerView.Adapter<Deliverydetails
 
     @Override
     public void onBindViewHolder(@NonNull DeliverydetailsAdapter.ViewHolder holder, int position) {
-        holder.price.setText(slm.get(position).getSub_total_price());
+        holder.price.setText( "₹"+slm.get(position).getSub_total_price());
         holder.quantity.setText(slm.get(position).getQuantity());
         holder.name.setText(slm.get(position).getLine_item_name());
         String img= Constant.SERVER_BASE_URL+slm.get(position).getImage();

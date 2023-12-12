@@ -30,14 +30,15 @@ public class ChangePasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding=ActivityChangePasswordBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-
-        setSupportActionBar(binding.tBar.toolbar);
-        binding.tBar.tlbarTitle.setText("Change Password");
-
         progressDialog=new ProgressDialog(this);
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
+        binding.backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ChangePasswordActivity.this, DashboardActivity.class));
+            }
+        });
 
         viewModel = ViewModelProviders.of(this).get(TeaBreakViewModel.class);
         binding.ivVisible.setOnClickListener(new View.OnClickListener() {

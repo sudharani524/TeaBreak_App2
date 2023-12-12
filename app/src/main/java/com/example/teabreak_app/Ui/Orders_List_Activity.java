@@ -60,6 +60,12 @@ public class Orders_List_Activity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         binding.rvListItems.setLayoutManager(linearLayoutManager);
+        binding.backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Orders_List_Activity.this,DashboardActivity.class));
+            }
+        });
     }
 
     private void order_list_api_call() {

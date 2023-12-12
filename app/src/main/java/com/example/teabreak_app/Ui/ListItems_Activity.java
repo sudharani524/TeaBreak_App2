@@ -70,6 +70,12 @@ public class ListItems_Activity extends AppCompatActivity {
 
             }
         });
+        binding.backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ListItems_Activity.this,DashboardActivity.class));
+            }
+        });
 
     }
 

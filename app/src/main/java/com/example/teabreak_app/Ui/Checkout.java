@@ -75,24 +75,29 @@ public class Checkout extends AppCompatActivity {
         binding=ActivityCheckoutBinding.inflate(getLayoutInflater());
         View view=binding.getRoot();
         setContentView(view);
-
         viewModel = ViewModelProviders.of(Checkout.this).get(TeaBreakViewModel.class);
-
         progressDialog=new ProgressDialog(Checkout.this);
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
-
         delivery_mode_api_call();
-
         t_amount=getIntent().getStringExtra("t_amount");
-
-        Log.e("amount_checkout",t_amount);
         ordered_Items_list_api_call();
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         binding.orderedListItems.setLayoutManager(linearLayoutManager);
+        binding.previous.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Checkout.this, Cartlist_Activity.class));
 
-
+            }
+        });
+        binding.backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Checkout.this, Cartlist_Activity.class));
+            }
+        });
         binding.Proceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,13 +106,11 @@ public class Checkout extends AppCompatActivity {
                 paymentdetails=view_alert.findViewById(R.id.paymentdetails);
                 close_btn=view_alert.findViewById(R.id.close_btn);
                 submit_btn=view_alert.findViewById(R.id.submit_btn);
-
-
                 submit_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if(selected_delivery_mode_id.equalsIgnoreCase("")){
-                            Toast.makeText(Checkout.this, "Please Slect the delivery mode", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Checkout.this, "Please Select the delivery mode", Toast.LENGTH_SHORT).show();
                             return;
                         }else{
                             create_order_api_call();
@@ -122,7 +125,6 @@ public class Checkout extends AppCompatActivity {
                 alertDialog.show();
             }
         });
-
     }
 
     private void ordered_Items_list_api_call() {
@@ -137,7 +139,6 @@ public class Checkout extends AppCompatActivity {
                 if (jsonObject != null){
 
                     Log.d("TAG","add_cart "+jsonObject);
-
                     try {
                         JSONObject jsonObject1=new JSONObject(jsonObject.toString());
                         JSONArray jsonArray=new JSONArray();
@@ -154,7 +155,6 @@ public class Checkout extends AppCompatActivity {
                             cart_list.add(listItemsModel);
                         }
                         deliverydetailsAdapter =new DeliverydetailsAdapter(cart_list, Checkout.this);
-
                         binding.orderedListItems.setAdapter(deliverydetailsAdapter);
                         deliverydetailsAdapter.notifyDataSetChanged();
 

@@ -41,7 +41,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.ordernumber.setText(ls.get(position).getOrder_no());
        holder.date.setText(ls.get(position).getOrder_date_time());
-       holder.totalamount.setText(ls.get(position).getTotal_amount());
+       holder.totalamount.setText( "₹"+ls.get(position).getTotal_amount());
       holder.deliverytype.setText(ls.get(position).getDelivery_type_name());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
