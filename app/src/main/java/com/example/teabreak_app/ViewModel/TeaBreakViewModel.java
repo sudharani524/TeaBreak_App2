@@ -26,6 +26,8 @@ public class TeaBreakViewModel extends ViewModel {
     private MutableLiveData<JsonObject> insert_order_status;
     private MutableLiveData<JsonObject> list_order_status;
     private MutableLiveData<JsonObject> Order_history_details;
+    private MutableLiveData<JsonObject> dlt_item_status;
+    private MutableLiveData<JsonObject> check_token_status;
 
 
     public LiveData<JsonObject> get_list_items() {
@@ -84,6 +86,58 @@ public class TeaBreakViewModel extends ViewModel {
         order_history_api_call(jsonObject);
         return Order_history_details;
     }
+
+
+    public LiveData<JsonObject> dlt_item_api(JsonObject jsonObject) {
+        dlt_item_status = new MutableLiveData<JsonObject>(jsonObject);
+        dlt_item_api_call(jsonObject);
+        return dlt_item_status;
+    }
+
+    public LiveData<JsonObject> check_token_status_api(JsonObject jsonObject) {
+        check_token_status = new MutableLiveData<JsonObject>();
+        check_token_status_api_call(jsonObject);
+        return check_token_status;
+    }
+
+
+    private void check_token_status_api_call(JsonObject jsonObject) {
+        ApiInterface apiInterface = ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
+        Call<JsonObject> token_status = apiInterface.check_token_status(jsonObject);
+        token_status.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.body()!= null){
+                    check_token_status.setValue(response.body());
+                }
+            }
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("TAG_NAME", t.toString());
+            }
+        });
+
+    }
+
+
+    private void dlt_item_api_call(JsonObject jsonObject) {
+        ApiInterface apiInterface = ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
+        Call<JsonObject> dlt_item = apiInterface.dlt_itm_api(jsonObject);
+        dlt_item.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.body()!= null){
+                    dlt_item_status.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("TAG_NAME", t.toString());
+            }
+        });
+    }
+
 
     private void order_history_api_call(JsonObject jsonObject) {
         ApiInterface apiInterface = ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);

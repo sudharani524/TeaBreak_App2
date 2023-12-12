@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,6 +38,7 @@ import android.widget.Toast;
 import com.example.teabreak_app.Adapter.ListItemsAdapter;
 import com.example.teabreak_app.ModelClass.ListItemsModel;
 import com.example.teabreak_app.R;
+import com.example.teabreak_app.Utils.Constant;
 import com.example.teabreak_app.Utils.SaveAppData;
 import com.example.teabreak_app.ViewModel.TeaBreakViewModel;
 import com.example.teabreak_app.databinding.ActivityDashboardBinding;
@@ -48,6 +50,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.squareup.picasso.BuildConfig;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -101,6 +104,20 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             }
         }
 
+
+        Constant.check_token_status_api_call(DashboardActivity.this);
+
+
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+//            binding.newDashboard.vesrionName.setText("v "+packageInfo.versionName);
+            binding.versionName.setText("Version: "+packageInfo.versionName);
+
+        } catch (PackageManager.NameNotFoundException e) {
+            // throw new RuntimeException(e);
+            Toast.makeText(this, "version_name"+e, Toast.LENGTH_SHORT).show();
+        }
 
         viewModel = ViewModelProviders.of(DashboardActivity.this).get(TeaBreakViewModel.class);
         list_items_api_call();
@@ -317,12 +334,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             startActivity(new Intent(DashboardActivity.this, Mywallet.class));
         } else if (id == R.id.cart) {
             startActivity(new Intent(DashboardActivity.this, Cartlist_Activity.class));
-
-        }else if (id == R.id.AboutUs) {
-            startActivity(new Intent(DashboardActivity.this, Aboutus.class));
-        }
-        else if(id == R.id.Faq){
-            startActivity(new Intent(DashboardActivity.this, Faqs.class));
         }
         else if(id==R.id.change_pswd){
             startActivity(new Intent(DashboardActivity.this,ChangePasswordActivity.class));
@@ -385,6 +396,11 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Constant.check_token_status_api_call(DashboardActivity.this);
+    }
 
     private class SliderTimer extends TimerTask {
         @Override

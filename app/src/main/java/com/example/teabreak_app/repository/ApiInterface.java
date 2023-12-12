@@ -51,5 +51,13 @@ public interface ApiInterface {
     @POST("apis/get_user_order_items_by_order_id")
     Call<JsonObject>Order_history(@Body JsonObject jsonObject);
 
+    @Headers("Content-Type: application/json")
+    @POST("login/delete_cart_items")
+    Call<JsonObject>dlt_itm_api(@Body JsonObject jsonObject);
+
+
+    @Headers("Content-Type: application/json")
+    @POST("apis/check_token_status")
+    Call<JsonObject>check_token_status(@Body JsonObject jsonObject);
 
 }

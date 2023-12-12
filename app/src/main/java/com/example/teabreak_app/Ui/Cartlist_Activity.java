@@ -12,6 +12,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +22,7 @@ import android.widget.Toast;
 import com.example.teabreak_app.Adapter.ItemslistAdapter;
 import com.example.teabreak_app.ModelClass.ListItemsModel;
 import com.example.teabreak_app.R;
+import com.example.teabreak_app.Utils.Constant;
 import com.example.teabreak_app.Utils.SaveAppData;
 import com.example.teabreak_app.ViewModel.TeaBreakViewModel;
 import com.example.teabreak_app.databinding.ActivityCartlistBinding;
@@ -58,6 +62,8 @@ public class Cartlist_Activity extends AppCompatActivity {
 
 
 
+        Constant.check_token_status_api_call(Cartlist_Activity.this);
+
 
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(linearLayoutManager.VERTICAL);
@@ -90,8 +96,9 @@ public class Cartlist_Activity extends AppCompatActivity {
             public void onChanged(JsonObject jsonObject) {
 
                 if (jsonObject != null){
-
                     Log.d("TAG","add_cart "+jsonObject);
+
+                    cart_list.clear();
 
                     try {
                         JSONObject jsonObject1=new JSONObject(jsonObject.toString());
@@ -128,6 +135,7 @@ public class Cartlist_Activity extends AppCompatActivity {
                                 selected_line_item_id=cart_list.get(position).getLine_item_id();
                                 selected_price=cart_list.get(position).getPrice();
 
+
                                 errorMessage(holder.itemView.findViewById(R.id.sp_qty),s);
                                 TextView textView=holder.itemView.findViewById(R.id.price);
                                 textView.setText(""+Float.parseFloat(cart_list.get(position).getPrice())*Float.parseFloat(s));
@@ -138,6 +146,15 @@ public class Cartlist_Activity extends AppCompatActivity {
                                 }else{
                                      add_cart_api_call(s,holder.itemView.findViewById(R.id.price),position);
                                 }
+
+                                ImageView iv_dlt=holder.itemView.findViewById(R.id.iv_delete);
+                                iv_dlt.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Log.e("dlt_click","dlt_click");
+                                        dlt_item_api_call();
+                                    }
+                                });
 
                             }
                         });
@@ -160,6 +177,7 @@ public class Cartlist_Activity extends AppCompatActivity {
 
                             }
                         });*/
+
                         binding.rvCartList.setAdapter(itemslistAdapter);
                         itemslistAdapter.notifyDataSetChanged();
 
@@ -179,13 +197,55 @@ public class Cartlist_Activity extends AppCompatActivity {
         });
     }
 
+    private void dlt_item_api_call() {
+
+        Log.e("dlt_api","dlt_api");
+        JsonObject object = new JsonObject();
+
+        object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
+        object.addProperty("user_token",SaveAppData.getLoginData().getToken());
+        object.addProperty("line_item_id",selected_line_item_id);
+        object.addProperty("status","0");
+
+
+        viewModel.dlt_item_api(object).observe(Cartlist_Activity.this, new Observer<JsonObject>() {
+            @Override
+            public void onChanged(JsonObject jsonObject) {
+
+                if (jsonObject != null){
+
+                    Log.d("TAG","complaint_names "+jsonObject);
+
+                    try {
+                        JSONObject jsonObject1=new JSONObject(jsonObject.toString());
+                        String message=jsonObject1.getString("message");
+                        String text=jsonObject1.getString("text");
+
+                        Toast.makeText(Cartlist_Activity.this, ""+message, Toast.LENGTH_SHORT).show();
+                        if(message.equalsIgnoreCase("Success")){
+                            cart_list_api_call();
+                        }
+
+                    } catch (JSONException e) {
+                        //throw new RuntimeException(e);
+                        Toast.makeText(Cartlist_Activity.this, ""+e, Toast.LENGTH_SHORT).show();
+                    }
+
+                }else{
+                    Toast.makeText(Cartlist_Activity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+        });
+    }
+
 
     public void errorMessage(Spinner spinner, String s){
 
         TextView error = (TextView) spinner.getSelectedView();
         error.setText(s);
         error.requestFocus();
-
 
     }
 
@@ -203,7 +263,6 @@ public class Cartlist_Activity extends AppCompatActivity {
             public void onChanged(JsonObject jsonObject) {
 
                 if (jsonObject != null){
-
                     Log.d("TAG","add_cart "+jsonObject);
 
                     try {
@@ -239,4 +298,10 @@ public class Cartlist_Activity extends AppCompatActivity {
         });
     }
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Constant.check_token_status_api_call(Cartlist_Activity.this);
+    }
 }

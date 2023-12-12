@@ -18,6 +18,7 @@ import com.example.teabreak_app.Adapter.ItemslistAdapter;
 
 import com.example.teabreak_app.ModelClass.ListItemsModel;
 
+import com.example.teabreak_app.Utils.Constant;
 import com.example.teabreak_app.Utils.SaveAppData;
 import com.example.teabreak_app.ViewModel.TeaBreakViewModel;
 import com.example.teabreak_app.databinding.ActivityListItemsBinding;
@@ -56,6 +57,10 @@ public class ListItems_Activity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         binding.rvListItems.setLayoutManager(linearLayoutManager);
+
+        Constant.check_token_status_api_call(ListItems_Activity.this);
+
+
         binding.previous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -182,4 +187,10 @@ public class ListItems_Activity extends AppCompatActivity {
         });
     }
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Constant.check_token_status_api_call(ListItems_Activity.this);
+    }
 }
