@@ -17,7 +17,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.9"
-            android:text="Sample Analysis List"
+            android:text="@string/payment"
             android:layout_gravity="center"
             android:gravity="center|left"
             android:layout_marginLeft="5dp"

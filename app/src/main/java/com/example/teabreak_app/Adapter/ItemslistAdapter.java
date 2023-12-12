@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.teabreak_app.ModelClass.ListItemsModel;
+import com.example.teabreak_app.ModelClass.OrderHistoryModel;
 import com.example.teabreak_app.R;
 import com.example.teabreak_app.Utils.Constant;
 import com.example.teabreak_app.repository.CartInterface;
@@ -26,11 +27,13 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class ItemslistAdapter extends RecyclerView.Adapter<ItemslistAdapter.ViewHolder> {
     Context context;
     int quantity;
     List<ListItemsModel> slm=new ArrayList<>();
+    List<ListItemsModel>Itemslist=new ArrayList<>();
     String item_type;
     ArrayList<String> qty_array=new ArrayList<>();
     ArrayAdapter qty_adapter;
@@ -39,6 +42,7 @@ public class ItemslistAdapter extends RecyclerView.Adapter<ItemslistAdapter.View
 
     private ListItemInterface listItemInterface;
     private CartInterface cartInterface;
+
     public ItemslistAdapter(Context context, List<ListItemsModel> slm,String item_type,ListItemInterface listItemInterface) {
         this.context = context;
         this.slm = slm;
@@ -96,13 +100,11 @@ public class ItemslistAdapter extends RecyclerView.Adapter<ItemslistAdapter.View
             Log.e("price",slm.get(position).getPrice());
             String img= Constant.SERVER_BASE_URL+slm.get(position).getImage();
 
-
             Log.d("img",img);
             Picasso.get().load(img).fit().centerInside().into(holder.sample_image);
             holder.add_cart.setVisibility(View.VISIBLE);
             holder.card.setVisibility(View.GONE);
             holder.ll_qty.setVisibility(View.GONE);
-            holder.iv_delete.setVisibility(View.GONE);
            // holder.cb.setVisibility(View.GONE);
 
             holder.add_cart.setOnClickListener(new View.OnClickListener() {
@@ -112,8 +114,7 @@ public class ItemslistAdapter extends RecyclerView.Adapter<ItemslistAdapter.View
                 }
             });
 
-        }
-        else{
+        }else{
             holder.Productname.setText(slm.get(position).getLine_item_name());
             holder.quantity.setText(slm.get(position).getPack_of_qty());
             holder.price.setText( "₹"+slm.get(position).getPrice());
@@ -125,17 +126,14 @@ public class ItemslistAdapter extends RecyclerView.Adapter<ItemslistAdapter.View
             String available_quantity=slm.get(position).getAvailable_quantity();
             qty_array.clear();
            // qty_array.add("Select");
-
             for(int i=1;i<=Integer.valueOf(available_quantity);i++){
                 qty_array.add(String.valueOf(i));
             }
-
             Log.e("qty_array",qty_array.toString());
             holder.add_cart.setVisibility(View.GONE);
             holder.ll_qty.setVisibility(View.VISIBLE);
            // holder.cb.setVisibility(View.VISIBLE);
             holder.card.setVisibility(View.GONE);
-            holder.iv_delete.setVisibility(View.VISIBLE);
 
        /*     holder.btnIncrease.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -205,19 +203,48 @@ public class ItemslistAdapter extends RecyclerView.Adapter<ItemslistAdapter.View
                 }
             });
 
+
+
+
+
         }
 
 
 
     }
+    public void filter(String charText){
 
+        if (charText.length() == 1) {
+            this.Itemslist.clear();
+            this.Itemslist.addAll(slm);
+        }
+
+        charText = charText.toLowerCase(Locale.getDefault());
+        slm.clear();
+
+        if (charText.length() == 0) {
+            slm.addAll(Itemslist);
+            notifyDataSetChanged();
+        } else {
+            for (ListItemsModel ts : Itemslist) {
+
+                if (ts.getLine_item_name().trim().toLowerCase(Locale.getDefault()).contains(charText) ||
+                        ts.getQuantity().trim().toLowerCase(Locale.getDefault()).contains(charText)) {
+                    slm.add(ts);
+
+                }
+            }
+            notifyDataSetChanged();
+        }
+
+    }
     @Override
     public int getItemCount() {
         return slm.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView sample_image,iv_delete;
+        ImageView sample_image;
         TextView Productname,quantity,price,txtQuantity,btnIncrease,btnDecrease;
         LinearLayout add_cart,card,ll_qty;
         Spinner sp_qty;
@@ -235,7 +262,6 @@ public class ItemslistAdapter extends RecyclerView.Adapter<ItemslistAdapter.View
             card=itemView.findViewById(R.id.card);
             ll_qty=itemView.findViewById(R.id.ll_qty);
             sp_qty=itemView.findViewById(R.id.sp_qty);
-            iv_delete=itemView.findViewById(R.id.iv_delete);
           //  cb=itemView.findViewById(R.id.cb_item_check);
 
         }

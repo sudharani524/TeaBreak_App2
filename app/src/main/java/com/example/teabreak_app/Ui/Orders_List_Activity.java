@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -36,14 +38,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class Orders_List_Activity extends AppCompatActivity {
     private ActivityOrdersListBinding binding;
     ProgressDialog progressDialog;
     private TeaBreakViewModel viewModel;
-    OrderHistoryAdapter orderHistoryAdapter;
+    OrderHistoryAdapter orderHistoryAdapter,adapter;
 
     ArrayList<OrderHistoryModel> list=new ArrayList<>();
+    boolean Orderfilterlist=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +68,30 @@ public class Orders_List_Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(Orders_List_Activity.this,DashboardActivity.class));
+            }
+        });
+        binding.etSearchfilter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String text = binding.etSearchfilter.getText().toString().toLowerCase(Locale.getDefault());
+                if (Orderfilterlist){
+                    if (adapter != null) {
+                        adapter.filter(text);
+                        adapter.notifyDataSetChanged();
+                    }
+                }else {
+                    if (orderHistoryAdapter != null) {
+                        orderHistoryAdapter.filter(text);
+                        orderHistoryAdapter.notifyDataSetChanged();
+                    }
+                }
             }
         });
     }

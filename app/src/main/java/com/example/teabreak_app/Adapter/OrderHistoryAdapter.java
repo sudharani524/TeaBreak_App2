@@ -20,9 +20,11 @@ import com.example.teabreak_app.repository.OrderdetailsInterface;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapter.ViewHolder> {
     List<OrderHistoryModel> ls=new ArrayList<>();
+    List<OrderHistoryModel> Orderslist=new ArrayList<>();
     Context context;
     OrderdetailsInterface orderdetailsInterface;
     public OrderHistoryAdapter(List<OrderHistoryModel> ls, Context context,OrderdetailsInterface orderdetailsInterface) {
@@ -52,6 +54,33 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         });
 
     }
+    public void filter(String charText){
+
+        if (charText.length() == 1) {
+            this.Orderslist.clear();
+            this.Orderslist.addAll(ls);
+        }
+
+        charText = charText.toLowerCase(Locale.getDefault());
+        ls.clear();
+
+        if (charText.length() == 0) {
+            ls.addAll(Orderslist);
+            notifyDataSetChanged();
+        } else {
+            for (OrderHistoryModel ts : Orderslist) {
+
+                if (ts.getOrder_no().trim().toLowerCase(Locale.getDefault()).contains(charText) ||
+                        ts.getOrder_id().trim().toLowerCase(Locale.getDefault()).contains(charText)) {
+                    ls.add(ts);
+
+                }
+            }
+            notifyDataSetChanged();
+        }
+
+    }
+
 
     @Override
     public int getItemCount() {

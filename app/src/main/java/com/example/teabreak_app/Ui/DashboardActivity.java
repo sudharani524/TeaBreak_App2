@@ -123,11 +123,11 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         list_items_api_call();
 
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
 
 
 
-        GridLayoutManager gridLayoutManager=new GridLayoutManager(this,2,RecyclerView.HORIZONTAL,false);
+        GridLayoutManager gridLayoutManager=new GridLayoutManager(this,2,RecyclerView.VERTICAL,false);
         binding.newDashboarddd.rvListItems.setLayoutManager(gridLayoutManager);
 
         images_list.add(R.drawable.slider_img);

@@ -46,6 +46,23 @@
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
     </LinearLayout>
+
+    <EditText
+        android:id="@+id/et_Searchfilter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:drawableLeft="@drawable/search"
+        android:drawablePadding="10dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="center_vertical"
+        android:hint="Search"
+        android:background="@drawable/bg"
+        android:maxLines="1"
+        android:minHeight="48dp"
+        android:padding="5dp" />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvListItems"
         android:layout_width="match_parent"

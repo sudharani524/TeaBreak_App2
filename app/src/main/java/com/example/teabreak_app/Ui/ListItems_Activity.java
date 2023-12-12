@@ -10,6 +10,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -32,12 +34,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class ListItems_Activity extends AppCompatActivity {
     private ActivityListItemsBinding binding;
     ProgressDialog progressDialog;
     private TeaBreakViewModel viewModel;
-    ItemslistAdapter ItemslistAdapter;
+    ItemslistAdapter ItemslistAdapter,adapter;
+    boolean Listfilter=false;
 
     ArrayList<ListItemsModel> list=new ArrayList<>();
     String selected_line_item_id="",selected_price="",selected_qty="";
@@ -79,6 +83,30 @@ public class ListItems_Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(ListItems_Activity.this,DashboardActivity.class));
+            }
+        });
+        binding.etSearchfilter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String text = binding.etSearchfilter.getText().toString().toLowerCase(Locale.getDefault());
+                if (Listfilter){
+                    if (adapter != null) {
+                        adapter.filter(text);
+                        adapter.notifyDataSetChanged();
+                    }
+                }else {
+                    if (ItemslistAdapter != null) {
+                        ItemslistAdapter.filter(text);
+                        ItemslistAdapter.notifyDataSetChanged();
+                    }
+                }
             }
         });
 

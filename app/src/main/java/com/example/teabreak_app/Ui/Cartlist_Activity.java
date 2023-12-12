@@ -10,6 +10,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -37,6 +39,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class Cartlist_Activity extends AppCompatActivity {
 
@@ -45,7 +48,9 @@ public class Cartlist_Activity extends AppCompatActivity {
     private TeaBreakViewModel viewModel;
     ArrayList<ListItemsModel> cart_list=new ArrayList<>();
     ArrayList<ListItemsModel> Pricelist = new ArrayList<>();
-    ItemslistAdapter itemslistAdapter;
+    ItemslistAdapter itemslistAdapter,adapter;
+    boolean Cartfilterlist=false;
+
     String selected_line_item_id="",selected_price="",selected_qty="";
     String total;
     @SuppressLint("SetTextI18n")
@@ -80,7 +85,42 @@ public class Cartlist_Activity extends AppCompatActivity {
 
             }
         });
-        binding.tBar.tlbarTitle.setText("Cart List");
+        binding.previous.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Cartlist_Activity.this,ListItems_Activity.class));
+            }
+        });
+        binding.backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Cartlist_Activity.this,ListItems_Activity.class));
+            }
+        });
+        binding.etSearchfilter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String text = binding.etSearchfilter.getText().toString().toLowerCase(Locale.getDefault());
+                if (Cartfilterlist){
+                    if (adapter != null) {
+                        adapter.filter(text);
+                        adapter.notifyDataSetChanged();
+                    }
+                }else {
+                    if (itemslistAdapter != null) {
+                        itemslistAdapter.filter(text);
+                        itemslistAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+        });
 
     }
 
@@ -125,7 +165,7 @@ public class Cartlist_Activity extends AppCompatActivity {
 
                              total = Pricelist.get(i).getSub_total();
                             Log.d("subtotal", total);
-                            binding.tAmount.setText(total);
+                            binding.tAmount.setText("₹"+total);
 
                         }
 
@@ -138,7 +178,7 @@ public class Cartlist_Activity extends AppCompatActivity {
 
                                 errorMessage(holder.itemView.findViewById(R.id.sp_qty),s);
                                 TextView textView=holder.itemView.findViewById(R.id.price);
-                                textView.setText(""+Float.parseFloat(cart_list.get(position).getPrice())*Float.parseFloat(s));
+                                textView.setText("₹"+""+Float.parseFloat(cart_list.get(position).getPrice())*Float.parseFloat(s));
 
                                 if(s.equalsIgnoreCase("Select")){
                                     Toast.makeText(Cartlist_Activity.this, "Please select the quantity", Toast.LENGTH_SHORT).show();
@@ -277,7 +317,7 @@ public class Cartlist_Activity extends AppCompatActivity {
                             TextView textView= (TextView) v;
                             Log.e("s_qty",cart_list.get(position).getPrice());
                             Log.e("price",s);
-                            textView.setText(""+Float.parseFloat(cart_list.get(position).getPrice())*Float.parseFloat(s));
+                            textView.setText("₹"+""+Float.parseFloat(cart_list.get(position).getPrice())*Float.parseFloat(s));
                             Log.e("t_price",""+Float.parseFloat(cart_list.get(position).getPrice())*Float.parseFloat(s));
 
                             //cart_list_api_call();
