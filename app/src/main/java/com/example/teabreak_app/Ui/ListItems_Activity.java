@@ -18,6 +18,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -50,9 +51,11 @@ public class ListItems_Activity extends AppCompatActivity {
     ItemslistAdapter ItemslistAdapter,adapter;
     boolean Listfilter=false;
     LinearLayout paymentdetails;
-    ImageView close_btn;
+    ImageView close_btn,clear_btn;
     AlertDialog alertDialog;
-    AppCompatButton submit_btn;
+    LinearLayout submit_btn,cancel;
+    EditText quanity;
+    String ordecount;
 
     ArrayList<ListItemsModel> list=new ArrayList<>();
     String selected_line_item_id="",selected_price="",selected_qty="";
@@ -165,20 +168,42 @@ public class ListItems_Activity extends AppCompatActivity {
                                     paymentdetails=view_alert.findViewById(R.id.quantitydetails);
                                     close_btn=view_alert.findViewById(R.id.close_btn);
                                     submit_btn=view_alert.findViewById(R.id.submit_btn);
+                                    clear_btn=view_alert.findViewById(R.id.clearButton);
+                                    quanity=view_alert.findViewById(R.id.quanity);
+                                    cancel=view_alert.findViewById(R.id.Cancel);
                                     submit_btn.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
+                                            ordecount=quanity.getText().toString();
+                                            Log.e("ordercount",ordecount.toString());
                                             add_cart_api_call();
+
                                         }
                                     });
+                                    clear_btn.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            quanity.setText("");
 
-
+                                        }
+                                    });
+                                    close_btn.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            alertDialog.dismiss();
+                                        }
+                                    });
+                                    cancel.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            alertDialog.dismiss();
+                                        }
+                                    });
                                     dialog.setView(view_alert);
-                                    dialog.setCancelable(true);
+                                    dialog.setCancelable(false);
                                     alertDialog = dialog.create();
                                     alertDialog.show();
                                 }
-                                    //startActivity(new Intent(DashboardActivity.this,Cartlist_Activity.class));
 
                                 }
                         });

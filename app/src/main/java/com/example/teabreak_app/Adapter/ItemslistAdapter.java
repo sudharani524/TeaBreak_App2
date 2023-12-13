@@ -111,6 +111,7 @@ public class ItemslistAdapter extends RecyclerView.Adapter<ItemslistAdapter.View
                 @Override
                 public void onClick(View v) {
                     listItemInterface.OnItemClick(position,v,"cart");
+//                    cartInterface.OnItemClick(position,holder,"2");
                 }
             });
 

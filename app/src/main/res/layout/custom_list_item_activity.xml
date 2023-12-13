@@ -189,24 +189,37 @@
 <!--                                android:layout_gravity="center"-->
 <!--                                android:src="@drawable/cart"/>-->
                             <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:text="ADD"
-                                android:textColor="@color/white"
+                                android:layout_width="31dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="-"
+                                android:textSize="20sp"
                                 android:textStyle="bold"
-                                android:padding="3dp"
-                                android:layout_margin="2dp"
-                                android:layout_weight="0.9"
-                                android:gravity="center"
-                                android:layout_gravity="center"/>
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_weight="0.1"
-                                android:padding="3dp"
-                                android:visibility="gone"
+                                android:textColor="@color/white"
                                 android:layout_gravity="center"
-                                android:src="@drawable/add"/>
+                                android:gravity="center"
+                                />
+
+                            <TextView
+                                android:id="@+id/Quantity"
+                                android:layout_width="31dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="0"
+                                android:textColor="@color/white"
+                                android:textSize="18sp" />
+                            <TextView
+                                android:layout_width="31dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="+"
+                                android:textSize="20sp"
+                                android:textColor="@color/white"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                />
 
                         </LinearLayout>
                     </LinearLayout>
