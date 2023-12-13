@@ -126,9 +126,9 @@ public class ItemslistAdapter extends RecyclerView.Adapter<ItemslistAdapter.View
             String available_quantity=slm.get(position).getAvailable_quantity();
             qty_array.clear();
            // qty_array.add("Select");
-            for(int i=1;i<=Integer.valueOf(available_quantity);i++){
-                qty_array.add(String.valueOf(i));
-            }
+//            for(int i=1;i<=Integer.valueOf(available_quantity);i++){
+//                qty_array.add(String.valueOf(i));
+//            }
             Log.e("qty_array",qty_array.toString());
             holder.add_cart.setVisibility(View.GONE);
             holder.ll_qty.setVisibility(View.VISIBLE);
