@@ -70,13 +70,15 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
 
     private void initiatePayment1() {
 
+
+
         AvenueOrder orderDetails = new AvenueOrder();
-        orderDetails.setOrderId("order_id");
+        orderDetails.setOrderId("123");
         orderDetails.setRequestHash("request_hash");
-        orderDetails.setAccessCode("access_code");
-        orderDetails.setMerchantId("merhant_id");
-        orderDetails.setCurrency("currency");
-        orderDetails.setAmount("amount");
+        orderDetails.setAccessCode("AVFB29KC10BD75BFDB");
+        orderDetails.setMerchantId("2158349");
+        orderDetails.setCurrency("INR");
+        orderDetails.setAmount("10");
         orderDetails.setRedirectUrl("redirect_url");
         orderDetails.setCancelUrl("cancel_url");
         orderDetails.setCustomerId("customer_id");
@@ -208,16 +210,16 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
 
     @Override
     public void onTransactionResponse(Bundle bundle) {
-
+        Log.e("transaction_res","onTransactionResponse"+bundle.toString());
     }
 
     @Override
     public void onErrorOccurred(String s) {
-
+        Log.e("transaction_res","onErrorOccurred"+s);
     }
 
     @Override
     public void onCancelTransaction(String s) {
-
+        Log.e("transaction_res","onCancelTransaction"+s);
     }
 }

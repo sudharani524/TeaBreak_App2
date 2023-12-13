@@ -229,7 +229,6 @@ public class Cartlist_Activity extends AppCompatActivity {
 
 
                 }else{
-
                     Toast.makeText(Cartlist_Activity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                 }
 
