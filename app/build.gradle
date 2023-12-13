@@ -65,6 +65,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-messaging:23.1.0'
 
+    // Real time payments SDK (local aar)
+    implementation files('libs/ccavenue-indiasdk_v3.1.6.aar')
+
 //    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
 }
