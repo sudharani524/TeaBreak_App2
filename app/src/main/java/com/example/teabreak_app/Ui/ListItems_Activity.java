@@ -1,11 +1,14 @@
 package com.example.teabreak_app.Ui;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,13 +16,17 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.teabreak_app.Adapter.ItemslistAdapter;
 
 import com.example.teabreak_app.ModelClass.ListItemsModel;
 
+import com.example.teabreak_app.R;
 import com.example.teabreak_app.Utils.Constant;
 import com.example.teabreak_app.Utils.SaveAppData;
 import com.example.teabreak_app.ViewModel.TeaBreakViewModel;
@@ -42,6 +49,10 @@ public class ListItems_Activity extends AppCompatActivity {
     private TeaBreakViewModel viewModel;
     ItemslistAdapter ItemslistAdapter,adapter;
     boolean Listfilter=false;
+    LinearLayout paymentdetails;
+    ImageView close_btn;
+    AlertDialog alertDialog;
+    AppCompatButton submit_btn;
 
     ArrayList<ListItemsModel> list=new ArrayList<>();
     String selected_line_item_id="",selected_price="",selected_qty="";
@@ -140,6 +151,7 @@ public class ListItems_Activity extends AppCompatActivity {
                         }
 
                         ItemslistAdapter= new ItemslistAdapter(ListItems_Activity.this, list,"list_items", new ListItemInterface() {
+                            @SuppressLint("MissingInflatedId")
                             @Override
                             public void OnItemClick(int position, View v, String s) {
 
@@ -148,12 +160,27 @@ public class ListItems_Activity extends AppCompatActivity {
                                 selected_qty=list.get(position).getPack_of_qty();
 
                                 if(s.equalsIgnoreCase("cart")){
-                                    //startActivity(new Intent(DashboardActivity.this,Cartlist_Activity.class));
-                                    add_cart_api_call();
+                                    AlertDialog.Builder dialog=new AlertDialog.Builder(ListItems_Activity.this);
+                                    View view_alert= LayoutInflater.from(ListItems_Activity.this).inflate(R.layout.quantityupdate,null);
+                                    paymentdetails=view_alert.findViewById(R.id.quantitydetails);
+                                    close_btn=view_alert.findViewById(R.id.close_btn);
+                                    submit_btn=view_alert.findViewById(R.id.submit_btn);
+                                    submit_btn.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            add_cart_api_call();
+                                        }
+                                    });
+
+
+                                    dialog.setView(view_alert);
+                                    dialog.setCancelable(true);
+                                    alertDialog = dialog.create();
+                                    alertDialog.show();
                                 }
+                                    //startActivity(new Intent(DashboardActivity.this,Cartlist_Activity.class));
 
-
-                            }
+                                }
                         });
                         binding.rvListItems.setAdapter(ItemslistAdapter);
                         ItemslistAdapter.notifyDataSetChanged();

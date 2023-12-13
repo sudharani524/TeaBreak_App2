@@ -60,7 +60,8 @@
             android:exported="false" />
         <activity
             android:name=".Ui.Cartlist_Activity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".Ui.ListItems_Activity"
             android:exported="false" />
