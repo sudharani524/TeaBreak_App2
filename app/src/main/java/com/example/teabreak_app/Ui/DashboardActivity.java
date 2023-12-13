@@ -176,7 +176,8 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
                 }
                 else if (id == R.id.cart) {
-                    startActivity(new Intent(DashboardActivity.this, Cartlist_Activity.class));
+//                    startActivity(new Intent(DashboardActivity.this, Cartlist_Activity.class));
+                    startActivity(new Intent(DashboardActivity.this, MerchantCheckoutActivity.class));
 
                 }
                 else if(id ==R.id.logout){

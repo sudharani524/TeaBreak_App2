@@ -25,6 +25,7 @@
         android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/Theme.TeaBreak_App"
         tools:targetApi="31">
         <activity
@@ -69,6 +70,18 @@
 
         <activity
             android:name=".Ui.ChangePasswordActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".Ui.CCAvenueActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".Ui.MerchantCheckoutActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".Ui.PaymentStatusActivity"
             android:exported="false" />
 
 

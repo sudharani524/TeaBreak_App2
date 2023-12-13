@@ -7,6 +7,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 public interface ApiInterface {
 
@@ -55,6 +56,8 @@ public interface ApiInterface {
     @POST("login/delete_cart_items")
     Call<JsonObject>dlt_itm_api(@Body JsonObject jsonObject);
 
+    @POST("MobPHPKit/india/init_payment.php")
+    Call<JsonObject> initiatePayment(@Query("amount") String amount);
 
     @Headers("Content-Type: application/json")
     @POST("apis/check_token_status")
