@@ -1,5 +1,6 @@
 package com.example.teabreak_app.Ui;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -13,10 +14,13 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,7 +54,14 @@ public class Cartlist_Activity extends AppCompatActivity {
     ArrayList<ListItemsModel> Pricelist = new ArrayList<>();
     ItemslistAdapter itemslistAdapter,adapter;
     boolean Cartfilterlist=false;
+    LinearLayout paymentdetails;
+    ImageView close_btn,clear_btn;
+    AlertDialog alertDialog;
+    LinearLayout submit_btn,cancel;
+    EditText quanity;
+    String ordecount;
 
+    TextView tv_qty;
     String selected_line_item_id="",selected_price="",selected_qty="";
     String total;
     @SuppressLint("SetTextI18n")
@@ -65,10 +76,7 @@ public class Cartlist_Activity extends AppCompatActivity {
         progressDialog.setCancelable(false);
         viewModel = ViewModelProviders.of(Cartlist_Activity.this).get(TeaBreakViewModel.class);
 
-
-
         Constant.check_token_status_api_call(Cartlist_Activity.this);
-
 
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(linearLayoutManager.VERTICAL);
@@ -169,14 +177,15 @@ public class Cartlist_Activity extends AppCompatActivity {
 
                         }
 
-                        itemslistAdapter=new ItemslistAdapter(cart_list, Cartlist_Activity.this, "cart_items", new CartInterface() {
+
+                   /*     itemslistAdapter=new ItemslistAdapter(cart_list, Cartlist_Activity.this, "cart_items", new CartInterface() {
                             @Override
                             public void OnItemClick(int position, ItemslistAdapter.ViewHolder holder, String s) {
                                 selected_line_item_id=cart_list.get(position).getLine_item_id();
                                 selected_price=cart_list.get(position).getPrice();
 
 
-                                errorMessage(holder.itemView.findViewById(R.id.sp_qty),s);
+                                //errorMessage(holder.itemView.findViewById(R.id.sp_qty),s);
                                 TextView textView=holder.itemView.findViewById(R.id.price);
                                 textView.setText("₹"+""+Float.parseFloat(cart_list.get(position).getPrice())*Float.parseFloat(s));
 
@@ -198,25 +207,86 @@ public class Cartlist_Activity extends AppCompatActivity {
 
                             }
                         });
+*/
 
-                      /*  itemslistAdapter=new ItemslistAdapter(Cartlist_Activity.this, cart_list,"cart_items", new ListItemInterface() {
+                        itemslistAdapter=new ItemslistAdapter(cart_list, Cartlist_Activity.this, "cart_items", new CartInterface() {
                             @Override
-                            public void OnItemClick(int position, View v, String s) {
-
+                            public void OnItemClick(int position, ItemslistAdapter.ViewHolder holder, String s) {
                                 selected_line_item_id=cart_list.get(position).getLine_item_id();
                                 selected_price=cart_list.get(position).getPrice();
 
-                                errorMessage((Spinner) v,s);
-                                if(s.equalsIgnoreCase("Select")){
+
+                                //errorMessage(holder.itemView.findViewById(R.id.sp_qty),s);
+                                TextView textView=holder.itemView.findViewById(R.id.price);
+                                tv_qty=holder.itemView.findViewById(R.id.Quantity);
+                                textView.setText("₹"+""+Float.parseFloat(cart_list.get(position).getPrice())*Float.parseFloat(s));
+
+                                Log.e("priceee",""+Float.parseFloat(cart_list.get(position).getPrice())*Float.parseFloat(s));
+                              /*  if(s.equalsIgnoreCase("Select")){
                                     Toast.makeText(Cartlist_Activity.this, "Please select the quantity", Toast.LENGTH_SHORT).show();
                                     return;
                                 }else{
-                                   // add_cart_api_call(s,v,position);
-                                }
+                                    add_cart_api_call(s,holder.itemView.findViewById(R.id.price),position);
+                                }*/
+
+                                ImageView iv_dlt=holder.itemView.findViewById(R.id.iv_delete);
+                                LinearLayout add_cart=holder.itemView.findViewById(R.id.add_cart);
+
+                                iv_dlt.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Log.e("dlt_click","dlt_click");
+                                        dlt_item_api_call();
+                                    }
+                                });
+
+                                add_cart.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        AlertDialog.Builder dialog=new AlertDialog.Builder(Cartlist_Activity.this);
+                                        View view_alert= LayoutInflater.from(Cartlist_Activity.this).inflate(R.layout.quantityupdate,null);
+                                        paymentdetails=view_alert.findViewById(R.id.quantitydetails);
+                                        close_btn=view_alert.findViewById(R.id.close_btn);
+                                        submit_btn=view_alert.findViewById(R.id.submit_btn);
+                                        clear_btn=view_alert.findViewById(R.id.clearButton);
+                                        quanity=view_alert.findViewById(R.id.quanity);
+                                        cancel=view_alert.findViewById(R.id.Cancel);
+                                        submit_btn.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                ordecount=quanity.getText().toString();
+                                                Log.e("ordercount",ordecount.toString());
+                                                add_cart_api_call(ordecount,holder.itemView.findViewById(R.id.price),position);
+                                            }
+                                        });
+                                        clear_btn.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                quanity.setText("");
+                                            }
+                                        });
+                                        close_btn.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                alertDialog.dismiss();
+                                            }
+                                        });
+                                        cancel.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                alertDialog.dismiss();
+                                            }
+                                        });
+                                        dialog.setView(view_alert);
+                                        dialog.setCancelable(false);
+                                        alertDialog = dialog.create();
+                                        alertDialog.show();
+                                    }
+                                });
 
 
                             }
-                        });*/
+                        });
 
                         binding.rvCartList.setAdapter(itemslistAdapter);
                         itemslistAdapter.notifyDataSetChanged();
@@ -313,6 +383,8 @@ public class Cartlist_Activity extends AppCompatActivity {
 
                         if(message.equalsIgnoreCase("success")){
 
+                            alertDialog.dismiss();
+                            tv_qty.setText(ordecount);
                             TextView textView= (TextView) v;
                             Log.e("s_qty",cart_list.get(position).getPrice());
                             Log.e("price",s);

@@ -100,7 +100,7 @@
                         android:layout_weight="0.4"
                         android:orientation="horizontal">
 
-                        <LinearLayout
+                      <!--  <LinearLayout
                             android:id="@+id/ll_qty"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -111,10 +111,10 @@
                             android:layout_margin="2dp"
                             android:orientation="horizontal">
 
-                         <!--   <TextView
+                         &lt;!&ndash;   <TextView
                                 android:id="@+id/tv_qty"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"/>-->
+                                android:layout_height="wrap_content"/>&ndash;&gt;
                             <Spinner
                                 android:id="@+id/sp_qty"
                                 android:layout_width="match_parent"
@@ -122,7 +122,7 @@
                                 style="@style/ThemeOverlay.Material3.AutoCompleteTextView.OutlinedBox"
                                 />
 
-                        </LinearLayout>
+                        </LinearLayout>-->
 
                         <LinearLayout
                             android:id="@+id/card"

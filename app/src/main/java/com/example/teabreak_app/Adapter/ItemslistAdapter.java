@@ -67,32 +67,6 @@ public class ItemslistAdapter extends RecyclerView.Adapter<ItemslistAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ItemslistAdapter.ViewHolder holder, int position) {
 
-
-      /*  if (quantity == 0) {
-            holder.txtQuantity.setText(String.valueOf(quantity));
-        }*/
-
-      /*  holder.btnIncrease.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int count= Integer.parseInt(String.valueOf(holder.txtQuantity.getText()));
-                count++;
-                holder.txtQuantity.setText("" + count);
-            }
-        });
-
-        holder.btnDecrease.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int count= Integer.parseInt(String.valueOf(holder.txtQuantity.getText()));
-                if (count == 0) {
-                    holder.txtQuantity.setText("0");
-                } else {
-                    count -= 1;
-                    holder.txtQuantity.setText("" + count);
-                }
-            }
-        });*/
         if(item_type.equalsIgnoreCase("list_items")){
             holder.Productname.setText(slm.get(position).getLine_item_name());
             holder.quantity.setText(slm.get(position).getPack_of_qty());
@@ -104,109 +78,42 @@ public class ItemslistAdapter extends RecyclerView.Adapter<ItemslistAdapter.View
             Picasso.get().load(img).fit().centerInside().into(holder.sample_image);
             holder.add_cart.setVisibility(View.VISIBLE);
             holder.card.setVisibility(View.GONE);
-            holder.ll_qty.setVisibility(View.GONE);
-           // holder.cb.setVisibility(View.GONE);
+            holder.iv_delete.setVisibility(View.GONE);
+
+
 
             holder.add_cart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listItemInterface.OnItemClick(position,v,"cart");
-//                    cartInterface.OnItemClick(position,holder,"2");
+                //    listItemInterface.OnItemClick(position,v,"cart");
+                    cartInterface.OnItemClick(position,holder,"2");
                 }
             });
 
         }else{
             holder.Productname.setText(slm.get(position).getLine_item_name());
             holder.quantity.setText(slm.get(position).getPack_of_qty());
-            holder.price.setText( "₹"+slm.get(position).getPrice());
+            holder.price.setText( "₹"+Float.parseFloat(slm.get(position).getPrice())*Float.parseFloat(slm.get(position).getQuantity()));
+            holder.txtQuantity.setText(slm.get(position).getQuantity());
             Log.e("price2",slm.get(position).getPrice());
             String img= Constant.SERVER_BASE_URL+slm.get(position).getImage();
 
             Log.d("img",img);
             Picasso.get().load(img).fit().centerInside().into(holder.sample_image);
-            String available_quantity=slm.get(position).getAvailable_quantity();
-            qty_array.clear();
-           // qty_array.add("Select");
-//            for(int i=1;i<=Integer.valueOf(available_quantity);i++){
-//                qty_array.add(String.valueOf(i));
-//            }
+
             Log.e("qty_array",qty_array.toString());
-            holder.add_cart.setVisibility(View.GONE);
-            holder.ll_qty.setVisibility(View.VISIBLE);
-           // holder.cb.setVisibility(View.VISIBLE);
+            holder.add_cart.setVisibility(View.VISIBLE);
+            holder.iv_delete.setVisibility(View.VISIBLE);
             holder.card.setVisibility(View.GONE);
 
-       /*     holder.btnIncrease.setOnClickListener(new View.OnClickListener() {
+
+
+            holder.add_cart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listItemInterface.OnItemClick(position,v,"increase");
+                    cartInterface.OnItemClick(position,holder,slm.get(position).getQuantity());
                 }
             });
-            holder.btnDecrease.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listItemInterface.OnItemClick(position,v,"decrease");
-                }
-            });*/
-
-         /*   holder.cb.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });*/
-
-
-
-            qty_adapter=new ArrayAdapter(context,R.layout.spinner_text,qty_array);
-            qty_adapter.setDropDownViewResource(R.layout.spinner_text);
-            holder.sp_qty.setAdapter(qty_adapter);
-
-           holder.sp_qty.setSelection(Integer.parseInt(slm.get(position).getQuantity())-1);
-
-
-
-           /* TextView textView= (TextView) holder.sp_qty.getSelectedView().;
-            textView.setText("3");*/
-
-           // holder.sp_qty.setPrompt("3");
-
-          /*  holder.sp_qty.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    errorMessage(holder.sp_qty,""+slm.get(position).getQuantity());
-
-                }
-            });*/
-
-
-          //  errorMessage(holder.sp_qty,""+slm.get(position).getQuantity());
-
-            holder.sp_qty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-
-                     selected_qty=parent.getSelectedItem().toString();
-                   /* if(selected_qty.equalsIgnoreCase("Select")){
-                        return;
-                    }*/
-
-                   // errorMessage(holder.sp_qty,slm.get(position).getQuantity());
-                    Float qty=Float.valueOf(parent.getSelectedItem().toString());
-                   // holder.price.setText("₹"+qty*Float.valueOf(slm.get(position).getPrice()));
-                  //  listItemInterface.OnItemClick(position,holder.price,selected_qty);
-                    cartInterface.OnItemClick(position,holder,selected_qty);
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
-
-
-
-
 
         }
 
@@ -245,7 +152,7 @@ public class ItemslistAdapter extends RecyclerView.Adapter<ItemslistAdapter.View
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView sample_image;
+        ImageView sample_image,iv_delete;
         TextView Productname,quantity,price,txtQuantity,btnIncrease,btnDecrease;
         LinearLayout add_cart,card,ll_qty;
         Spinner sp_qty;
@@ -255,14 +162,15 @@ public class ItemslistAdapter extends RecyclerView.Adapter<ItemslistAdapter.View
             Productname=itemView.findViewById(R.id.name);
             quantity=itemView.findViewById(R.id.packquantity);
             price=itemView.findViewById(R.id.price);
-            txtQuantity=itemView.findViewById(R.id.txtQuantity);
+            txtQuantity=itemView.findViewById(R.id.Quantity);
             btnIncrease=itemView.findViewById(R.id.add);
             btnDecrease=itemView.findViewById(R.id.minus);
             sample_image=itemView.findViewById(R.id.listimage);
             add_cart=itemView.findViewById(R.id.add_cart);
             card=itemView.findViewById(R.id.card);
-            ll_qty=itemView.findViewById(R.id.ll_qty);
-            sp_qty=itemView.findViewById(R.id.sp_qty);
+           // ll_qty=itemView.findViewById(R.id.ll_qty);
+          //  sp_qty=itemView.findViewById(R.id.sp_qty);
+            iv_delete=itemView.findViewById(R.id.iv_delete);
           //  cb=itemView.findViewById(R.id.cb_item_check);
 
         }

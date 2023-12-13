@@ -63,6 +63,7 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
 //            initiatePayment(edtAmount.getText().toString());
             initiatePayment1();
 
+
         } else {
             Toast.makeText(MerchantCheckoutActivity.this, "Enter Amount", Toast.LENGTH_LONG).show();
         }

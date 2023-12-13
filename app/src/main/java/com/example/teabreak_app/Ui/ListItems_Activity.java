@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.teabreak_app.Adapter.ItemslistAdapter;
@@ -32,6 +33,7 @@ import com.example.teabreak_app.Utils.Constant;
 import com.example.teabreak_app.Utils.SaveAppData;
 import com.example.teabreak_app.ViewModel.TeaBreakViewModel;
 import com.example.teabreak_app.databinding.ActivityListItemsBinding;
+import com.example.teabreak_app.repository.CartInterface;
 import com.example.teabreak_app.repository.ListItemInterface;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -56,6 +58,8 @@ public class ListItems_Activity extends AppCompatActivity {
     LinearLayout submit_btn,cancel;
     EditText quanity;
     String ordecount;
+
+    TextView tv_qty;
 
     ArrayList<ListItemsModel> list=new ArrayList<>();
     String selected_line_item_id="",selected_price="",selected_qty="";
@@ -153,7 +157,7 @@ public class ListItems_Activity extends AppCompatActivity {
                             }
                         }
 
-                        ItemslistAdapter= new ItemslistAdapter(ListItems_Activity.this, list,"list_items", new ListItemInterface() {
+               /*         ItemslistAdapter= new ItemslistAdapter(ListItems_Activity.this, list,"list_items", new ListItemInterface() {
                             @SuppressLint("MissingInflatedId")
                             @Override
                             public void OnItemClick(int position, View v, String s) {
@@ -207,6 +211,59 @@ public class ListItems_Activity extends AppCompatActivity {
 
                                 }
                         });
+*/
+
+
+                        ItemslistAdapter=new ItemslistAdapter(list, ListItems_Activity.this, "list_items", new CartInterface() {
+                            @Override
+                            public void OnItemClick(int position, com.example.teabreak_app.Adapter.ItemslistAdapter.ViewHolder holder, String s) {
+                                selected_line_item_id=list.get(position).getLine_item_id();
+                                selected_price=list.get(position).getPrice();
+                                //selected_qty=list.get(position).getPack_of_qty();
+
+                                 tv_qty=holder.itemView.findViewById(R.id.Quantity);
+
+                                AlertDialog.Builder dialog=new AlertDialog.Builder(ListItems_Activity.this);
+                                View view_alert= LayoutInflater.from(ListItems_Activity.this).inflate(R.layout.quantityupdate,null);
+                                paymentdetails=view_alert.findViewById(R.id.quantitydetails);
+                                close_btn=view_alert.findViewById(R.id.close_btn);
+                                submit_btn=view_alert.findViewById(R.id.submit_btn);
+                                clear_btn=view_alert.findViewById(R.id.clearButton);
+                                quanity=view_alert.findViewById(R.id.quanity);
+                                cancel=view_alert.findViewById(R.id.Cancel);
+                                submit_btn.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        ordecount=quanity.getText().toString();
+                                        Log.e("ordercount",ordecount.toString());
+                                        add_cart_api_call();
+                                    }
+                                });
+                                clear_btn.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        quanity.setText("");
+                                    }
+                                });
+                                close_btn.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        alertDialog.dismiss();
+                                    }
+                                });
+                                cancel.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        alertDialog.dismiss();
+                                    }
+                                });
+                                dialog.setView(view_alert);
+                                dialog.setCancelable(false);
+                                alertDialog = dialog.create();
+                                alertDialog.show();
+                            }
+                        });
+
                         binding.rvListItems.setAdapter(ItemslistAdapter);
                         ItemslistAdapter.notifyDataSetChanged();
 
@@ -234,7 +291,7 @@ public class ListItems_Activity extends AppCompatActivity {
         object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
         object.addProperty("user_token",SaveAppData.getLoginData().getToken());
         object.addProperty("line_item_id",selected_line_item_id);
-        object.addProperty("quantity",selected_qty);
+        object.addProperty("quantity",ordecount);
         object.addProperty("price",selected_price);
 
         viewModel.add_cart_api(object).observe(ListItems_Activity.this, new Observer<JsonObject>() {
@@ -251,6 +308,11 @@ public class ListItems_Activity extends AppCompatActivity {
                         String text=jsonObject1.getString("text");
 
                         Toast.makeText(ListItems_Activity.this, ""+text, Toast.LENGTH_SHORT).show();
+                        if(message.equalsIgnoreCase("Success")){
+                            alertDialog.dismiss();
+                             tv_qty.setText(ordecount);
+                        }
+
 
                     } catch (JSONException e) {
                         //throw new RuntimeException(e);
