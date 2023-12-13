@@ -15,6 +15,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.ccavenue.indiasdk.AvenueOrder;
+import com.ccavenue.indiasdk.AvenuesApplication;
+import com.ccavenue.indiasdk.AvenuesTransactionCallback;
 import com.example.teabreak_app.ModelClass.Order_delivery_type;
 import com.example.teabreak_app.ModelClass.orderDetails;
 import com.example.teabreak_app.R;
@@ -31,7 +34,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class MerchantCheckoutActivity extends AppCompatActivity {
+public class MerchantCheckoutActivity extends AppCompatActivity implements AvenuesTransactionCallback {
     private EditText edtAmount;
     Context mContext;
     ProgressDialog progress;
@@ -57,16 +60,57 @@ public class MerchantCheckoutActivity extends AppCompatActivity {
             Toast.makeText(MerchantCheckoutActivity.this, "Enter Amount", Toast.LENGTH_LONG).show();
         } else if (Integer.parseInt(edtAmount.getText().toString()) > 0) {
 
-            initiatePayment(edtAmount.getText().toString());
+//            initiatePayment(edtAmount.getText().toString());
+            initiatePayment1();
 
         } else {
             Toast.makeText(MerchantCheckoutActivity.this, "Enter Amount", Toast.LENGTH_LONG).show();
         }
     }
 
+    private void initiatePayment1() {
+
+        AvenueOrder orderDetails = new AvenueOrder();
+        orderDetails.setOrderId("order_id");
+        orderDetails.setRequestHash("request_hash");
+        orderDetails.setAccessCode("access_code");
+        orderDetails.setMerchantId("merhant_id");
+        orderDetails.setCurrency("currency");
+        orderDetails.setAmount("amount");
+        orderDetails.setRedirectUrl("redirect_url");
+        orderDetails.setCancelUrl("cancel_url");
+        orderDetails.setCustomerId("customer_id");
+        orderDetails.setPaymentType("payment_type");
+        orderDetails.setMerchantLogo("merchant_logo");
+        orderDetails.setBillingName("billing_name");
+        orderDetails.setBillingAddress("billing_address");
+        orderDetails.setBillingCountry("billing_country");
+        orderDetails.setBillingState("billing_state");
+        orderDetails.setBillingCity("billing_city");
+        orderDetails.setBillingZip("billing_zip");
+        orderDetails.setBillingTel("billing_tel");
+        orderDetails.setBillingEmail("billing_email");
+        orderDetails.setDeliveryName("delivery_name");
+        orderDetails.setDeliveryAddress("delivery_address");
+        orderDetails.setDeliveryCountry("delivery_country");
+        orderDetails.setDeliveryState("delivery_state");
+        orderDetails.setDeliveryCity("delivery_city");
+        orderDetails.setDeliveryZip("delivery_zip");
+        orderDetails.setDeliveryTel("delivery_tel");
+        orderDetails.setMerchant_param1("merchant_data"); //total 5 parameters
+        orderDetails.setMobileNo("mobile_number");
+        orderDetails.setPaymentEnviroment("app_staging"); //app_live - prod
+        orderDetails.setColorPrimary("color_primary");
+        orderDetails.setColorAccent("color_accent");
+        orderDetails.setColorFont("color_font");
+        orderDetails.setBackgroundDrawable(0);
+
+        //To begin transaction through SDK…
+        AvenuesApplication.startTransaction(MerchantCheckoutActivity.this, orderDetails);
+    }
 
 
-// This API is implemented by merchant
+    // This API is implemented by merchant
     private void initiatePayment(String amount) {
 
         ApiInterface apiInterface = ApiClient.getClient(Constant.MERCHANT_SERVER_URL).create(ApiInterface.class);
@@ -162,4 +206,18 @@ public class MerchantCheckoutActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+    @Override
+    public void onTransactionResponse(Bundle bundle) {
+
+    }
+
+    @Override
+    public void onErrorOccurred(String s) {
+
+    }
+
+    @Override
+    public void onCancelTransaction(String s) {
+
+    }
 }
