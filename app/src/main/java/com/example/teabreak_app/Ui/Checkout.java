@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.teabreak_app.Adapter.DeliverydetailsAdapter;
@@ -65,9 +66,10 @@ public class Checkout extends AppCompatActivity {
 
     ArrayList<String> order_type=new ArrayList<>();
     private TeaBreakViewModel viewModel;
-    String t_amount;
+    String t_amount,Delivery_charges;
 
     String order_no;
+    Float t_amt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +83,16 @@ public class Checkout extends AppCompatActivity {
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
         delivery_mode_api_call();
+
         t_amount=getIntent().getStringExtra("t_amount");
+        Delivery_charges=getIntent().getStringExtra("delivery_charges");
+
+
         ordered_Items_list_api_call();
+
+        binding.total.setText(t_amount);
+        binding.charges.setText(Delivery_charges);
+
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         binding.orderedListItems.setLayoutManager(linearLayoutManager);
@@ -102,11 +112,37 @@ public class Checkout extends AppCompatActivity {
         binding.Proceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if(selected_delivery_mode_id.equalsIgnoreCase("")){
+                    Toast.makeText(Checkout.this, "Please Select the delivery mode", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 AlertDialog.Builder dialog=new AlertDialog.Builder(Checkout.this);
                 View view_alert= LayoutInflater.from(Checkout.this).inflate(R.layout.paymentdetails,null);
                 paymentdetails=view_alert.findViewById(R.id.paymentdetails);
+                TextView amount=view_alert.findViewById(R.id.amount);
+                TextView total_amt=view_alert.findViewById(R.id.total);
+                TextView delivery_charges=view_alert.findViewById(R.id.tv_delivery_charges);
+
+                amount.setText(t_amount);
+                delivery_charges.setText(Delivery_charges);
+
+                 t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges));
+
+                total_amt.setText(String.valueOf(t_amt));
+
                 close_btn=view_alert.findViewById(R.id.close_btn);
                 submit_btn=view_alert.findViewById(R.id.submit_btn);
+
+
+                close_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                    }
+                });
+
                 submit_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -124,6 +160,7 @@ public class Checkout extends AppCompatActivity {
                 dialog.setCancelable(true);
                 alertDialog = dialog.create();
                 alertDialog.show();
+
             }
         });
     }
@@ -182,8 +219,8 @@ public class Checkout extends AppCompatActivity {
         jsonObject.addProperty("user_token", SaveAppData.getLoginData().getToken());
         jsonObject.addProperty("user_id",SaveAppData.getLoginData().getUser_id() );
         jsonObject.addProperty("delivery_type_id",selected_delivery_mode_id );
-        jsonObject.addProperty("discount","0" );
-        jsonObject.addProperty("paid_amount",t_amount);
+        jsonObject.addProperty("discount",Delivery_charges);
+        jsonObject.addProperty("paid_amount",t_amt);
 
         viewModel.insert_order_api(jsonObject).observe(Checkout.this, new Observer<JsonObject>() {
             @Override
@@ -199,16 +236,21 @@ public class Checkout extends AppCompatActivity {
                     try {
                         JSONObject jsonObject1=new JSONObject(jsonObject.toString());
                         String message=jsonObject1.getString("message");
-                         order_no=jsonObject1.getString("order_no");
 
                         JSONObject data_object=new JSONObject();
                         data_object=jsonObject1.getJSONObject("data");
+                        order_no=data_object.getString("order_no");
 
 
-                        Toast.makeText(Checkout.this, ""+message, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Checkout.this, "data"+message, Toast.LENGTH_SHORT).show();
+                        Log.e("message",message);
+
                         if(message.equalsIgnoreCase("success")){
-                            startActivity(new Intent(Checkout.this,Cartlist_Activity.class));
-                            finish();
+
+                           /* startActivity(new Intent(Checkout.this,Cartlist_Activity.class));
+                            finish();*/
+
+                            alertDialog.dismiss();
                         }
 
 

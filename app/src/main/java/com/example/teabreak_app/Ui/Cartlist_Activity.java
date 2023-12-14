@@ -63,8 +63,8 @@ public class Cartlist_Activity extends AppCompatActivity {
 
     TextView tv_qty;
     String selected_line_item_id="",selected_price="",selected_qty="";
-    String total;
-    @SuppressLint("SetTextI18n")
+    String total="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +88,7 @@ public class Cartlist_Activity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent=new Intent(Cartlist_Activity.this, Checkout.class);
                 intent.putExtra("t_amount",total);
+                intent.putExtra("delivery_charges","0");
                 Log.e("t_amount",total);
                 startActivity(intent);
 
@@ -392,7 +393,7 @@ public class Cartlist_Activity extends AppCompatActivity {
                             textView.setText("₹"+""+Float.parseFloat(cart_list.get(position).getPrice())*Float.parseFloat(s));
                             Log.e("t_price",""+Float.parseFloat(cart_list.get(position).getPrice())*Float.parseFloat(s));
 
-                            //cart_list_api_call();
+                            cart_list_api_call();
                         }
 
                     } catch (JSONException e) {

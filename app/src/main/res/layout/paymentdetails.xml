@@ -101,7 +101,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_procurement_no"
+                        android:id="@+id/tv_delivery_charges"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1.5"
@@ -152,10 +152,10 @@
                     <TextView
                         android:id="@+id/total"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="5dp"
                         android:layout_weight="1.5"
-                        android:textColor="@color/black"
-                        android:text="@string/total_amount" />
+                        android:text="@string/total_amount"
+                        android:textColor="@color/black" />
                 </LinearLayout>
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/submit_btn"

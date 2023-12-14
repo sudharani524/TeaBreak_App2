@@ -38,11 +38,14 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
     private EditText edtAmount;
     Context mContext;
     ProgressDialog progress;
+    String Order_id;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_merchant_checkout);
+
+        generateOrderID();
 
         mContext = MerchantCheckoutActivity.this;
         progress = new ProgressDialog(this);
@@ -51,6 +54,25 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
         progress.setCancelable(true);
         edtAmount = findViewById(R.id.edt_amount);
 
+
+
+     //  String request_hash=SHA512(2158349+AVFB29KC10BD75BFDB+320ECB91D6183CD5D65D9D91E2D2CF2B);
+     //  String request_hash=SHA512(Order_id+"320ECB91D6183CD5D65D9D91E2D2CF2B"+"2158349");
+
+
+
+    }
+
+
+    public void generateOrderID() {
+        // You can customize the order ID generation logic based on your requirements
+        // Here, we are using a combination of timestamp and a random number
+        String timeStamp = String.valueOf(System.currentTimeMillis());
+        String randomNumber = String.valueOf((int) (Math.random() * 1000));
+
+        // Concatenate the timestamp and random number to create a unique order ID
+       // return timeStamp + randomNumber;
+        Order_id=timeStamp + randomNumber;
     }
 
     public void onClick(View view) {
@@ -110,6 +132,8 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
 
         //To begin transaction through SDK…
         AvenuesApplication.startTransaction(MerchantCheckoutActivity.this, orderDetails);
+
+
     }
 
 

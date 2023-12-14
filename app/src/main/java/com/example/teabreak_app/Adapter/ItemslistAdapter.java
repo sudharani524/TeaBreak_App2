@@ -81,7 +81,6 @@ public class ItemslistAdapter extends RecyclerView.Adapter<ItemslistAdapter.View
             holder.iv_delete.setVisibility(View.GONE);
 
 
-
             holder.add_cart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -107,11 +106,11 @@ public class ItemslistAdapter extends RecyclerView.Adapter<ItemslistAdapter.View
             holder.card.setVisibility(View.GONE);
 
 
-
             holder.add_cart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     cartInterface.OnItemClick(position,holder,slm.get(position).getQuantity());
+
                 }
             });
 

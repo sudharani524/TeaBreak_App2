@@ -155,6 +155,10 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         binding.navView.setItemIconTintList(null);
         View navHeaderView = binding.navView.getHeaderView(0);
         TextView nav_name = (TextView) navHeaderView.findViewById(R.id.nav_name);
+        TextView wallet_amt=(TextView) navHeaderView.findViewById(R.id.wallet_amt);
+
+        wallet_amt.setText("0");
+
         binding.newDashboarddd.viewAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
