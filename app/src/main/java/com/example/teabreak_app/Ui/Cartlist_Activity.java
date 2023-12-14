@@ -230,6 +230,7 @@ public class Cartlist_Activity extends AppCompatActivity {
                                 }*/
 
                                 ImageView iv_dlt=holder.itemView.findViewById(R.id.iv_delete);
+                                Log.d("cartdelete","delete");
                                 LinearLayout add_cart=holder.itemView.findViewById(R.id.add_cart);
 
                                 iv_dlt.setOnClickListener(new View.OnClickListener() {

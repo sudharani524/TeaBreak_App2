@@ -41,40 +41,85 @@
                 android:layout_weight="1.4"
                 android:gravity="center"
                 android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/tea_powder"
                     android:layout_marginStart="10dp"
                     android:layout_marginBottom="10dp"
+                    android:text="@string/tea_powder"
                     android:textColor="@color/black"
                     android:textSize="15sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:text="Total-Quantity" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.1"
+                        android:text="@string/coloon"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
                 <TextView
                     android:id="@+id/packquantity"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1.4"
                     android:layout_height="wrap_content"
                     android:text="@string/quantity_pack"
                     android:layout_marginStart="10dp"
                     android:layout_marginBottom="10dp"
                     android:textColor="@color/black"
                     android:textSize="15sp" />
+                </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:weightSum="1"
                     android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.5"
+                            android:text="Total-Price" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.1"
+                            android:text="@string/coloon"
+                            android:gravity="center"
+                            android:textColor="@color/black"
+                            android:textStyle="bold" />
                     <TextView
                         android:id="@+id/price"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.4"
+                        android:layout_weight="1.6"
                         android:layout_gravity="center"
                         android:layout_marginStart="15dp"
                         android:text="@string/_400"
                         android:visibility="visible"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

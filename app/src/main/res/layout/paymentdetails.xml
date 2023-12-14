@@ -11,7 +11,7 @@
         android:weightSum="1"
         android:layout_gravity="center"
         android:gravity="center"
-        android:background="@color/red">
+        android:background="#228B22">
 
         <TextView
             android:layout_width="0dp"
@@ -162,7 +162,7 @@
                     android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg2"
-                    android:backgroundTint="@color/red"
+                    android:backgroundTint="#228B22"
                     android:text="@string/pay"
                     android:layout_margin="10dp"
                     android:layout_gravity="center"

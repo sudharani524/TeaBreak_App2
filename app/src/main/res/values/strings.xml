@@ -64,6 +64,11 @@
     <string name="orders_details">Orders Details</string>
     <string name="payment">Payment</string>
     <string name="search">Search</string>
+    <string name="quantity_update">Quantity Update</string>
+    <string name="enter_number">Enter Number</string>
+    <string name="apply">Apply</string>
+    <string name="cancel">Cancel</string>
+    <string name="enter_quantity">Enter Quantity</string>
     <array name="Deliverymode">
         <item>Select</item>
         <item>Pick Up</item>

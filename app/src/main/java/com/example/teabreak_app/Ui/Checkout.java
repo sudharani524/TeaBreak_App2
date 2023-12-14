@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -51,7 +52,7 @@ import retrofit2.Response;
 
 public class Checkout extends AppCompatActivity {
     private ActivityCheckoutBinding binding;
-    LinearLayout paymentdetails;
+    LinearLayout paymentdetails,deliverydetails,submit;
     ImageView close_btn;
     AppCompatButton submit_btn;
     AlertDialog alertDialog;
@@ -288,12 +289,35 @@ public class Checkout extends AppCompatActivity {
 
 
                         binding.deliverymode.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @SuppressLint("MissingInflatedId")
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                                 Selected_deliverymode  = binding.deliverymode.getSelectedItem().toString();
                                 selected_delivery_mode_id  =order_list.get(i).getCat_id();
+                                if(Selected_deliverymode.equalsIgnoreCase("Vehicle Delivery")){
+                                    AlertDialog.Builder dialog=new AlertDialog.Builder(Checkout.this);
+                                    View view_alert= LayoutInflater.from(Checkout.this).inflate(R.layout.vehicledeliveryalert,null);
+                                    deliverydetails=view_alert.findViewById(R.id.deliverydetails);
+                                    close_btn=view_alert.findViewById(R.id.close_btn);
+                                    submit=view_alert.findViewById(R.id.submit_btn);
+                                    submit.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            alertDialog.dismiss();
+                                        }
+                                    });
+                                    close_btn.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            alertDialog.dismiss();
+                                        }
+                                    });
+                                    dialog.setView(view_alert);
+                                    dialog.setCancelable(true);
+                                    alertDialog = dialog.create();
+                                    alertDialog.show();
 
-
+                                }
                                 if(Selected_deliverymode.equalsIgnoreCase("Courier")){
                                     binding.type.setVisibility(View.VISIBLE);
                                 }

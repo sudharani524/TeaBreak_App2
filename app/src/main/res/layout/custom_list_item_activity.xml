@@ -132,7 +132,7 @@
                             android:background="@drawable/bg2"
                             android:gravity="center"
                             android:visibility="gone"
-                            android:backgroundTint="#fd5c63"
+                            android:backgroundTint="#228B22"
                             android:weightSum="3"
                             android:orientation="horizontal">
                             <TextView
@@ -179,7 +179,7 @@
                             android:background="@drawable/bg2"
                             android:gravity="center"
                             android:visibility="visible"
-                            android:backgroundTint="#fd5c63"
+                            android:backgroundTint="#228B22"
                             android:orientation="horizontal">
 <!--                            <ImageView-->
 <!--                                android:layout_width="wrap_content"-->
