@@ -70,6 +70,8 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
     ArrayList<ListItemsModel> list=new ArrayList<>();
     String selected_line_item_id="",selected_price="",selected_qty="";
+    static String wallet_amount="";
+    TextView wallet_amt;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -124,6 +126,8 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         viewModel = ViewModelProviders.of(DashboardActivity.this).get(TeaBreakViewModel.class);
         list_items_api_call();
 
+        wallet_amount_api_call();
+
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
 
@@ -157,9 +161,9 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         binding.navView.setItemIconTintList(null);
         View navHeaderView = binding.navView.getHeaderView(0);
         TextView nav_name = (TextView) navHeaderView.findViewById(R.id.nav_name);
-        TextView wallet_amt=(TextView) navHeaderView.findViewById(R.id.wallet_amt);
-        wallet_amt.setText(""+SaveAppData.getLoginData().getWallet_amount());
-        Log.e("wallet_amount",wallet_amt.toString());
+        wallet_amt=(TextView) navHeaderView.findViewById(R.id.wallet_amt);
+        wallet_amt.setText(wallet_amount);
+        Log.e("wallet_amounttttttt",wallet_amount);
 
         binding.newDashboarddd.viewAll.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -212,6 +216,44 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
 
     }
+
+    private void wallet_amount_api_call() {
+
+        JsonObject object = new JsonObject();
+
+        object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
+        object.addProperty("user_token",SaveAppData.getLoginData().getToken());
+
+        viewModel.get_wallet_amt(object).observe(DashboardActivity.this, new Observer<JsonObject>() {
+            @Override
+            public void onChanged(JsonObject jsonObject) {
+
+                if (jsonObject != null){
+                    Log.d("wallet_api_method","wallet_api "+jsonObject);
+                    try {
+                        JSONObject jsonObject1=new JSONObject(jsonObject.toString());
+                        //String message=jsonObject1.getString("message");
+                        wallet_amount=jsonObject1.getJSONObject("data").getString("wallet_amount");
+                        Log.e("wallet_amt_money",wallet_amount);
+                        wallet_amt.setText(wallet_amount);
+
+
+                    } catch (JSONException e) {
+                        //throw new RuntimeException(e);
+                        Toast.makeText(DashboardActivity.this, ""+e, Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }else{
+
+                    Toast.makeText(DashboardActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+    }
+
+
 
     private void list_items_api_call() {
 

@@ -66,4 +66,13 @@ public interface ApiInterface {
     @POST("apis/get_user_wallet_history")
     Call<JsonObject>Wallet_history(@Body JsonObject jsonObject);
 
+    @Headers("Content-Type: application/json")
+    @POST("login/get_order_delivery_dates")
+    Call<JsonObject>order_delivery_dates(@Body JsonObject jsonObject);
+
+    @Headers("Content-Type: application/json")
+    @POST("apis/get_current_wallet_amount")
+    Call<JsonObject>current_wallet_amt(@Body JsonObject jsonObject);
+
+
 }

@@ -70,6 +70,9 @@ public class Checkout extends AppCompatActivity {
 
     String order_no;
     Float t_amt;
+    String availability_date="";
+    ArrayList<String> as_dates;
+    TextView delivery_date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +99,7 @@ public class Checkout extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         binding.orderedListItems.setLayoutManager(linearLayoutManager);
+
         binding.previous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,7 +132,7 @@ public class Checkout extends AppCompatActivity {
                 amount.setText(t_amount);
                 delivery_charges.setText(Delivery_charges);
 
-                 t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges));
+                t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges));
 
                 total_amt.setText(String.valueOf(t_amt));
 
@@ -331,16 +335,25 @@ public class Checkout extends AppCompatActivity {
 
 
                         binding.deliverymode.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @SuppressLint("MissingInflatedId")
+
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                                 Selected_deliverymode  = binding.deliverymode.getSelectedItem().toString();
-                                selected_delivery_mode_id  =order_list.get(i).getCat_id();
+                                selected_delivery_mode_id  =order_list.get(i).getSub_cat_id();
                                 if(Selected_deliverymode.equalsIgnoreCase("Vehicle Delivery")){
+
+
+
                                     AlertDialog.Builder dialog=new AlertDialog.Builder(Checkout.this);
                                     View view_alert= LayoutInflater.from(Checkout.this).inflate(R.layout.vehicledeliveryalert,null);
                                     deliverydetails=view_alert.findViewById(R.id.deliverydetails);
                                     close_btn=view_alert.findViewById(R.id.close_btn);
+                                    delivery_date=view_alert.findViewById(R.id.deliverydate);
+                                    order_delivery_date_api_call();
+                                    Log.e("future_date",availability_date);
+
+                                    delivery_date.setText(availability_date);
+
                                     submit=view_alert.findViewById(R.id.submit_btn);
                                     submit.setOnClickListener(new View.OnClickListener() {
                                         @Override
@@ -384,6 +397,71 @@ public class Checkout extends AppCompatActivity {
 
                 }else{
                     Toast.makeText(Checkout.this, "null", Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+                if (progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+                Toast.makeText(Checkout.this, ""+t, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void order_delivery_date_api_call() {
+
+        progressDialog.show();
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("user_token", SaveAppData.getLoginData().getToken());
+        jsonObject.addProperty("user_id",SaveAppData.getLoginData().getUser_id() );
+        jsonObject.addProperty("delivery_type",selected_delivery_mode_id );
+
+
+        ApiInterface apiInterface = ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
+        Call<JsonObject> order_delivery_date = apiInterface.order_delivery_dates(jsonObject);
+
+        order_delivery_date.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                if (progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+
+                try {
+                    JSONObject jsonObject1=new JSONObject(response.body().toString());
+                    String message=jsonObject1.getString("message");
+
+                    JSONArray jsonArray=new JSONArray();
+                    jsonArray=jsonObject1.getJSONArray("availability_date");
+
+
+                    // availability_date=jsonObject1.getJSONArray("availability_date").toString();
+                     Log.e("dates_array",""+jsonArray.length());
+                    as_dates=new ArrayList<>();
+
+                    for(int i=0;i<=jsonArray.length();i++){
+                        as_dates.add((String) jsonArray.get(i));
+                        availability_date=availability_date+jsonArray.get(i)+",";
+                        Log.e("availability_date",availability_date);
+                        delivery_date.setText(availability_date);
+                    }
+
+
+                    Log.e("availability_dateeeee",availability_date);
+                    Log.e("dates",""+as_dates.size());
+
+
+                } catch (JSONException e) {
+                    //throw new RuntimeException(e);
+                    Toast.makeText(Checkout.this, "Exception"+e, Toast.LENGTH_SHORT).show();
+
                 }
 
 

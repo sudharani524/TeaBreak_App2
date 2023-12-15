@@ -29,6 +29,7 @@ public class TeaBreakViewModel extends ViewModel {
     private MutableLiveData<JsonObject> dlt_item_status;
     private MutableLiveData<JsonObject> check_token_status;
     private MutableLiveData<JsonObject> Wallet_history_details;
+    private MutableLiveData<JsonObject> wallet_amt_status;
 
 
     public LiveData<JsonObject> get_list_items() {
@@ -105,6 +106,36 @@ public class TeaBreakViewModel extends ViewModel {
         wallet_histor_api_call(jsonObject);
         return Wallet_history_details;
     }
+
+
+
+    public LiveData<JsonObject> get_wallet_amt(JsonObject jsonObject) {
+        wallet_amt_status = new MutableLiveData<JsonObject>();
+        wallet_amount_api_call(jsonObject);
+        return wallet_amt_status;
+    }
+
+
+    private void wallet_amount_api_call(JsonObject jsonObject) {
+        ApiInterface apiInterface = ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
+        Call<JsonObject> wallet_amount = apiInterface.current_wallet_amt(jsonObject);
+        wallet_amount.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.body()!= null){
+                    wallet_amt_status.setValue(response.body());
+                }
+            }
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("TAG_NAME", t.toString());
+            }
+        });
+
+    }
+
+
+
 
     private void wallet_histor_api_call(JsonObject jsonObject) {
         ApiInterface apiInterface = ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
