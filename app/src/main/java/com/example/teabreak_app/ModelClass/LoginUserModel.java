@@ -51,6 +51,9 @@ public class LoginUserModel implements Serializable {
     @SerializedName("role_full_name")
     @Expose
     public String role_full_name;
+    @SerializedName("wallet_amount")
+    @Expose
+    public String wallet_amount;
 
     public String getRole_full_name() {
         return role_full_name;
@@ -138,5 +141,13 @@ public class LoginUserModel implements Serializable {
 
     public void setScroll_msg(String scroll_msg) {
         this.scroll_msg = scroll_msg;
+    }
+
+    public String getWallet_amount() {
+        return wallet_amount;
+    }
+
+    public void setWallet_amount(String wallet_amount) {
+        this.wallet_amount = wallet_amount;
     }
 }

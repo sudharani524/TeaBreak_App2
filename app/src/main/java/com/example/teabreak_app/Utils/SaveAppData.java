@@ -2,6 +2,7 @@ package com.example.teabreak_app.Utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.example.teabreak_app.ModelClass.LoginUserModel;
 import com.google.gson.Gson;
@@ -12,6 +13,7 @@ public class SaveAppData{
     public static String TeaBreak_App = "Paddy_App";
     public static String SHPREF_KEY_EMP_LOGIN="EMP_LOGIN";
     public static String TeaBreak_App_Token = "Token";
+//    public static  String Wallent_amount="wallet_amount";
 
     private SaveAppData() {}
     public static SaveAppData getSessionDataInstance() {
@@ -27,6 +29,8 @@ public class SaveAppData{
             Gson gson = new Gson();
             String json = gson.toJson(emplogin);
             e.putString(SHPREF_KEY_EMP_LOGIN, json);
+//            e.putString(Wallent_amount,json);
+//            Log.e("wallet",e.putString(Wallent_amount,json).toString());
         } else {
             e.putString(SHPREF_KEY_EMP_LOGIN, null);
         }

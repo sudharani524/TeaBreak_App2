@@ -62,5 +62,8 @@ public interface ApiInterface {
     @Headers("Content-Type: application/json")
     @POST("apis/check_token_status")
     Call<JsonObject>check_token_status(@Body JsonObject jsonObject);
+    @Headers("Content-Type: application/json")
+    @POST("apis/get_user_wallet_history")
+    Call<JsonObject>Wallet_history(@Body JsonObject jsonObject);
 
 }

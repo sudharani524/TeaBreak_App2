@@ -28,6 +28,7 @@ public class TeaBreakViewModel extends ViewModel {
     private MutableLiveData<JsonObject> Order_history_details;
     private MutableLiveData<JsonObject> dlt_item_status;
     private MutableLiveData<JsonObject> check_token_status;
+    private MutableLiveData<JsonObject> Wallet_history_details;
 
 
     public LiveData<JsonObject> get_list_items() {
@@ -98,6 +99,30 @@ public class TeaBreakViewModel extends ViewModel {
         check_token_status = new MutableLiveData<JsonObject>();
         check_token_status_api_call(jsonObject);
         return check_token_status;
+    }
+    public LiveData<JsonObject> get_wallet_history(JsonObject jsonObject) {
+        Wallet_history_details = new MutableLiveData<JsonObject>(jsonObject);
+        wallet_histor_api_call(jsonObject);
+        return Wallet_history_details;
+    }
+
+    private void wallet_histor_api_call(JsonObject jsonObject) {
+        ApiInterface apiInterface = ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
+        Call<JsonObject> Wallet_history = apiInterface.Wallet_history(jsonObject);
+        Wallet_history.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.body()!= null){
+                    Wallet_history_details.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("TAG_NAME", t.toString());
+            }
+        });
+
     }
 
 

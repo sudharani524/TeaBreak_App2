@@ -71,6 +71,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     ArrayList<ListItemsModel> list=new ArrayList<>();
     String selected_line_item_id="",selected_price="",selected_qty="";
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,8 +82,9 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         progressDialog=new ProgressDialog(this);
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
-
-
+//        View navHeaderView= binding.navView.getHeaderView(0);
+//        TextView wallet_amount = (TextView) navHeaderView.findViewById(R.id.wallet);
+//        wallet_amount.setText(""+SaveAppData.getLoginData().getWallet_amount());
         if (ContextCompat.checkSelfPermission(DashboardActivity.this,
                 Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED)  {
@@ -156,8 +158,8 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         View navHeaderView = binding.navView.getHeaderView(0);
         TextView nav_name = (TextView) navHeaderView.findViewById(R.id.nav_name);
         TextView wallet_amt=(TextView) navHeaderView.findViewById(R.id.wallet_amt);
-
-        wallet_amt.setText("0");
+        wallet_amt.setText(""+SaveAppData.getLoginData().getWallet_amount());
+        Log.e("wallet_amount",wallet_amt.toString());
 
         binding.newDashboarddd.viewAll.setOnClickListener(new View.OnClickListener() {
             @Override

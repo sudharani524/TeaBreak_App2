@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     String selected_user_role_id="";
     String FCMToken="token";
     private boolean isShowPassword = false;
+    String Walletamount;
 
 
     @Override
@@ -158,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
                             LoginUserModel operatorLoginData = new Gson().fromJson(jsonObj.getJSONObject("data").toString(), new TypeToken<LoginUserModel>() {
                             }.getType());
                             SaveAppData.saveOperatorLoginData(operatorLoginData);
+
 
                             startActivity(new Intent(MainActivity.this, DashboardActivity.class));
                             finish();

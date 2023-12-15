@@ -11,7 +11,7 @@
         android:weightSum="1"
         android:layout_gravity="center"
         android:gravity="center"
-        android:background="#228B22">
+        android:background="@color/red">
 
         <TextView
             android:layout_width="0dp"

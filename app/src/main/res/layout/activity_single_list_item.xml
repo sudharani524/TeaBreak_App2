@@ -106,7 +106,7 @@
             android:textAllCaps="false"
             android:textStyle="bold"
             android:textSize="18sp"
-            android:text="@string/proceed"/>
+            android:text="@string/add_to_cart"/>
 
     </LinearLayout>
 
