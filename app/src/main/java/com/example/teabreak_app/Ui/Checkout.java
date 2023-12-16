@@ -17,6 +17,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -57,7 +59,7 @@ public class Checkout extends AppCompatActivity {
     ImageView close_btn;
     AppCompatButton submit_btn;
     AlertDialog alertDialog;
-    String Selected_deliverymode,selected_delivery_mode_id;
+    String Selected_deliverymode="",selected_delivery_mode_id="";
     ProgressDialog progressDialog;
     ArrayAdapter order_type_adapter;
     ArrayList<Order_delivery_type> order_list=new ArrayList<>();
@@ -74,6 +76,8 @@ public class Checkout extends AppCompatActivity {
     ArrayList<String> as_dates;
     TextView delivery_date;
     static String wallet_amount="";
+
+    static String wallet_status="0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,48 +131,85 @@ public class Checkout extends AppCompatActivity {
                     return;
                 }
 
-                AlertDialog.Builder dialog=new AlertDialog.Builder(Checkout.this);
-                View view_alert= LayoutInflater.from(Checkout.this).inflate(R.layout.paymentdetails,null);
-                paymentdetails=view_alert.findViewById(R.id.paymentdetails);
-                TextView amount=view_alert.findViewById(R.id.amount);
-                TextView total_amt=view_alert.findViewById(R.id.Total);
-                TextView delivery_charges=view_alert.findViewById(R.id.tv_delivery_charges);
+                if(!selected_delivery_mode_id.equalsIgnoreCase("")){
+                    AlertDialog.Builder dialog=new AlertDialog.Builder(Checkout.this);
+                    View view_alert= LayoutInflater.from(Checkout.this).inflate(R.layout.paymentdetails,null);
+                    paymentdetails=view_alert.findViewById(R.id.paymentdetails);
+                    TextView amount=view_alert.findViewById(R.id.amount);
+                    TextView total_amt=view_alert.findViewById(R.id.Total);
+                    TextView wallet_amt_txt=view_alert.findViewById(R.id.wallet_amt_txt);
 
-                amount.setText(t_amount);
-                delivery_charges.setText(Delivery_charges);
+                    CheckBox checkBox=view_alert.findViewById(R.id.myCheckbox);
+                    TextView delivery_charges=view_alert.findViewById(R.id.tv_delivery_charges);
 
-                t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges));
+                    amount.setText(t_amount);
+                    delivery_charges.setText(Delivery_charges);
 
-                total_amt.setText(String.valueOf(t_amt));
+                    wallet_amt_txt.setText("Wallet Amount is("+wallet_amount+")");
+                    t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges));
+                    total_amt.setText(String.valueOf(t_amt));
 
-                close_btn=view_alert.findViewById(R.id.close_btn);
-                submit_btn=view_alert.findViewById(R.id.submit_btn);
+                    close_btn=view_alert.findViewById(R.id.close_btn);
+                    submit_btn=view_alert.findViewById(R.id.submit_btn);
 
 
-                close_btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        alertDialog.dismiss();
-                    }
-                });
-
-                submit_btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(selected_delivery_mode_id.equalsIgnoreCase("")){
-                            Toast.makeText(Checkout.this, "Please Select the delivery mode", Toast.LENGTH_SHORT).show();
-                            return;
-                        }else{
-                            create_order_api_call();
+                 /*   checkBox.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges))-Float.parseFloat(wallet_amount);
+                         //   Float t_amt_with_wallet=t_amt-Float.parseFloat(wallet_amount);
+                            total_amt.setText(String.valueOf(t_amt));
                         }
-                    }
-                });
+                    });*/
 
 
-                dialog.setView(view_alert);
-                dialog.setCancelable(true);
-                alertDialog = dialog.create();
-                alertDialog.show();
+                    checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                           if(checkBox.isChecked()){
+                               wallet_status="1";
+                               t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges))-Float.parseFloat(wallet_amount);
+                               // Float t_amt_with_wallet=t_amt-Float.parseFloat(wallet_amount);
+                               total_amt.setText(String.valueOf(t_amt));
+                           }else{
+                               wallet_status="0";
+                               t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges));
+                               total_amt.setText(String.valueOf(t_amt));
+                           }
+                        }
+                    });
+
+
+                    close_btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialog.dismiss();
+                        }
+                    });
+
+                    submit_btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(selected_delivery_mode_id.equalsIgnoreCase("")){
+                                Toast.makeText(Checkout.this, "Please Select the delivery mode", Toast.LENGTH_SHORT).show();
+                                return;
+                            }else{
+                                create_order_api_call();
+                            }
+                        }
+                    });
+
+
+                    dialog.setView(view_alert);
+                    dialog.setCancelable(true);
+                    alertDialog = dialog.create();
+                    alertDialog.show();
+
+                }
+                else{
+                    Toast.makeText(Checkout.this, "Please Select the delivery mode", Toast.LENGTH_SHORT).show();
+                }
+
 
             }
         });
@@ -266,8 +307,17 @@ public class Checkout extends AppCompatActivity {
         jsonObject.addProperty("user_token", SaveAppData.getLoginData().getToken());
         jsonObject.addProperty("user_id",SaveAppData.getLoginData().getUser_id() );
         jsonObject.addProperty("delivery_type_id",selected_delivery_mode_id );
-        jsonObject.addProperty("discount",Delivery_charges);
-        jsonObject.addProperty("paid_amount",t_amt);
+        jsonObject.addProperty("discount","0");
+        jsonObject.addProperty("sub_total_amount",t_amount);
+        jsonObject.addProperty("total_delivery_charges",Delivery_charges);
+        jsonObject.addProperty("total_amount",Float.parseFloat(t_amount)+Float.parseFloat(Delivery_charges));
+        jsonObject.addProperty("wallet_used_status",wallet_status);
+        if(wallet_status.equalsIgnoreCase("1")){
+            jsonObject.addProperty("used_wallet_amount",wallet_amount);
+        }else{
+            jsonObject.addProperty("used_wallet_amount","0");
+        }
+        jsonObject.addProperty("online_paid_amount",t_amt);
 
         viewModel.insert_order_api(jsonObject).observe(Checkout.this, new Observer<JsonObject>() {
             @Override
@@ -361,6 +411,7 @@ public class Checkout extends AppCompatActivity {
                         order_type.clear();
                         Order_delivery_type order_delivery_type2=new Order_delivery_type();
                         order_delivery_type2.setCat_id("");
+                        order_delivery_type2.setSub_cat_id("");
 
                         order_type.add("Select");
                         order_list.add(order_delivery_type2);
@@ -388,6 +439,7 @@ public class Checkout extends AppCompatActivity {
                                 selected_delivery_mode_id  =order_list.get(i).getSub_cat_id();
                                 if(Selected_deliverymode.equalsIgnoreCase("Vehicle Delivery")){
 
+                                    Log.e("vehicle_delivery","vehicle_delivery");
                                     AlertDialog.Builder dialog=new AlertDialog.Builder(Checkout.this);
                                     View view_alert= LayoutInflater.from(Checkout.this).inflate(R.layout.vehicledeliveryalert,null);
                                     deliverydetails=view_alert.findViewById(R.id.deliverydetails);
@@ -412,7 +464,7 @@ public class Checkout extends AppCompatActivity {
                                         }
                                     });
                                     dialog.setView(view_alert);
-                                    dialog.setCancelable(true);
+                                    dialog.setCancelable(false);
                                     alertDialog = dialog.create();
                                     alertDialog.show();
 

@@ -147,7 +147,6 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
 
                     Log.d("TAG","rsponse payment : "+response.body());
                     try {
-
                         JSONObject job = new JSONObject(response.body().toString());
                         Log.d("TAG","rsponse payment1 : "+job);
                         if (job.getString("status").equalsIgnoreCase("0")) {
@@ -170,14 +169,11 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
                         e.printStackTrace();
                         show_alert("Please try Again!!!");
                     }
-
                 }
                 else
                 {
                     show_alert("Please try Again!!!");
-
                 }
-
             }
 
             @Override
