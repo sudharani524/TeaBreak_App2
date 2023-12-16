@@ -131,7 +131,7 @@ public class Checkout extends AppCompatActivity {
                 View view_alert= LayoutInflater.from(Checkout.this).inflate(R.layout.paymentdetails,null);
                 paymentdetails=view_alert.findViewById(R.id.paymentdetails);
                 TextView amount=view_alert.findViewById(R.id.amount);
-                TextView total_amt=view_alert.findViewById(R.id.total);
+                TextView total_amt=view_alert.findViewById(R.id.Total);
                 TextView delivery_charges=view_alert.findViewById(R.id.tv_delivery_charges);
 
                 amount.setText(t_amount);

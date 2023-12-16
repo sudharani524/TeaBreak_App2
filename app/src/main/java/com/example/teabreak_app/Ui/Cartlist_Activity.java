@@ -63,7 +63,7 @@ public class Cartlist_Activity extends AppCompatActivity {
 
     TextView tv_qty;
     String selected_line_item_id="",selected_price="",selected_qty="";
-    String total="";
+    String total="",Delivery_charges="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,8 +88,9 @@ public class Cartlist_Activity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent=new Intent(Cartlist_Activity.this, Checkout.class);
                 intent.putExtra("t_amount",total);
-                intent.putExtra("delivery_charges","0");
                 Log.e("t_amount",total);
+                intent.putExtra("delivery_charges",Delivery_charges);
+                Log.e("delivery",Delivery_charges);
                 startActivity(intent);
 
             }
@@ -176,6 +177,8 @@ public class Cartlist_Activity extends AppCompatActivity {
                              total = Pricelist.get(i).getSub_total();
                             Log.d("subtotal", total);
                             binding.tAmount.setText("₹"+total);
+                            Delivery_charges=Pricelist.get(i).getAll_sub_total_delivery_charges();
+                            Log.d("Delivery Charges",Delivery_charges);
 
                         }
 

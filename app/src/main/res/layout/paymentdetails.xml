@@ -150,9 +150,9 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/total"
+                        android:id="@+id/Total"
                         android:layout_width="0dp"
-                        android:layout_height="5dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1.5"
                         android:text="@string/total_amount"
                         android:textColor="@color/black" />
@@ -162,7 +162,7 @@
                     android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg2"
-                    android:backgroundTint="#228B22"
+                    android:backgroundTint="@color/red"
                     android:text="@string/pay"
                     android:layout_margin="10dp"
                     android:layout_gravity="center"
