@@ -22,6 +22,7 @@ import com.example.teabreak_app.ModelClass.Order_delivery_type;
 import com.example.teabreak_app.ModelClass.orderDetails;
 import com.example.teabreak_app.R;
 import com.example.teabreak_app.Utils.Constant;
+import com.example.teabreak_app.Utils.SaveAppData;
 import com.example.teabreak_app.repository.ApiClient;
 import com.example.teabreak_app.repository.ApiInterface;
 import com.google.gson.JsonObject;
@@ -45,7 +46,8 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_merchant_checkout);
 
-        generateOrderID();
+
+        Order_id=getIntent().getStringExtra("order_no");
 
         mContext = MerchantCheckoutActivity.this;
         progress = new ProgressDialog(this);
@@ -64,16 +66,7 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
     }
 
 
-    public void generateOrderID() {
-        // You can customize the order ID generation logic based on your requirements
-        // Here, we are using a combination of timestamp and a random number
-        String timeStamp = String.valueOf(System.currentTimeMillis());
-        String randomNumber = String.valueOf((int) (Math.random() * 1000));
 
-        // Concatenate the timestamp and random number to create a unique order ID
-       // return timeStamp + randomNumber;
-        Order_id=timeStamp + randomNumber;
-    }
 
     public void onClick(View view) {
 
@@ -96,7 +89,7 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
 
 
         AvenueOrder orderDetails = new AvenueOrder();
-        orderDetails.setOrderId("123");
+        orderDetails.setOrderId(Order_id);
         orderDetails.setRequestHash("request_hash");
         orderDetails.setAccessCode("AVFB29KC10BD75BFDB");
         orderDetails.setMerchantId("2158349");
@@ -104,7 +97,7 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
         orderDetails.setAmount("10");
         orderDetails.setRedirectUrl("redirect_url");
         orderDetails.setCancelUrl("cancel_url");
-        orderDetails.setCustomerId("customer_id");
+        orderDetails.setCustomerId(SaveAppData.getLoginData().getUser_id());
         orderDetails.setPaymentType("payment_type");
         orderDetails.setMerchantLogo("merchant_logo");
         orderDetails.setBillingName("billing_name");
@@ -132,7 +125,6 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
 
         //To begin transaction through SDK…
         AvenuesApplication.startTransaction(MerchantCheckoutActivity.this, orderDetails);
-
 
     }
 

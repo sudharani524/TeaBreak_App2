@@ -153,10 +153,11 @@ public class Cartlist_Activity extends AppCompatActivity {
                         JSONObject jsonObject1=new JSONObject(jsonObject.toString());
                         JSONArray jsonArray=new JSONArray();
                         jsonArray=jsonObject1.getJSONArray("data");
+                        String message=jsonObject1.getString("message");
+
                         JSONArray jsonArray1=new JSONArray();
                         jsonArray1=jsonObject1.getJSONArray("sub_totals");
 
-                        String message=jsonObject1.getString("message");
 
                         Toast.makeText(Cartlist_Activity.this, ""+message, Toast.LENGTH_SHORT).show();
                         for(int i=0;i<jsonArray.length();i++){
@@ -232,7 +233,6 @@ public class Cartlist_Activity extends AppCompatActivity {
 
                                 ImageView iv_dlt=holder.itemView.findViewById(R.id.iv_delete);
                                 Log.d("cartdelete","delete");
-                                LinearLayout add_cart=holder.itemView.findViewById(R.id.add_cart);
 
                                 iv_dlt.setOnClickListener(new View.OnClickListener() {
                                     @Override
@@ -241,6 +241,16 @@ public class Cartlist_Activity extends AppCompatActivity {
                                         dlt_item_api_call();
                                     }
                                 });
+
+                                LinearLayout add_cart=holder.itemView.findViewById(R.id.add_cart);
+
+                               /* iv_dlt.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Log.e("dlt_click","dlt_click");
+                                        dlt_item_api_call();
+                                    }
+                                });*/
 
                                 add_cart.setOnClickListener(new View.OnClickListener() {
                                     @Override

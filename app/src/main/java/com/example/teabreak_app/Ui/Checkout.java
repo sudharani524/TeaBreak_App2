@@ -73,6 +73,7 @@ public class Checkout extends AppCompatActivity {
     String availability_date="";
     ArrayList<String> as_dates;
     TextView delivery_date;
+    static String wallet_amount="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,10 +82,14 @@ public class Checkout extends AppCompatActivity {
         binding=ActivityCheckoutBinding.inflate(getLayoutInflater());
         View view=binding.getRoot();
         setContentView(view);
+
         viewModel = ViewModelProviders.of(Checkout.this).get(TeaBreakViewModel.class);
         progressDialog=new ProgressDialog(Checkout.this);
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
+        wallet_amount_api_call();
+
+        Log.e("wallet_amt",wallet_amount);
         delivery_mode_api_call();
 
         t_amount=getIntent().getStringExtra("t_amount");
@@ -168,6 +173,44 @@ public class Checkout extends AppCompatActivity {
             }
         });
     }
+
+
+    public void wallet_amount_api_call() {
+
+        JsonObject object = new JsonObject();
+
+        object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
+        object.addProperty("user_token",SaveAppData.getLoginData().getToken());
+
+        viewModel.get_wallet_amt(object).observe(Checkout.this, new Observer<JsonObject>() {
+            @Override
+            public void onChanged(JsonObject jsonObject) {
+
+                if (jsonObject != null){
+                    Log.d("wallet_api_method","wallet_api "+jsonObject);
+                    try {
+                        JSONObject jsonObject1=new JSONObject(jsonObject.toString());
+                        //String message=jsonObject1.getString("message");
+                        wallet_amount=jsonObject1.getJSONObject("data").getString("wallet_amount");
+                        Log.e("wallet_amt_money",wallet_amount);
+
+
+
+                    } catch (JSONException e) {
+                        //throw new RuntimeException(e);
+                        Toast.makeText(Checkout.this, ""+e, Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }else{
+
+                    Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+    }
+
 
     private void ordered_Items_list_api_call() {
         JsonObject object = new JsonObject();
@@ -255,6 +298,9 @@ public class Checkout extends AppCompatActivity {
                             finish();*/
 
                             alertDialog.dismiss();
+                            Intent intent=new Intent(Checkout.this,MerchantCheckoutActivity.class);
+                            intent.putExtra("order_no",order_no);
+                            startActivity(intent);
                         }
 
 
@@ -341,8 +387,6 @@ public class Checkout extends AppCompatActivity {
                                 Selected_deliverymode  = binding.deliverymode.getSelectedItem().toString();
                                 selected_delivery_mode_id  =order_list.get(i).getSub_cat_id();
                                 if(Selected_deliverymode.equalsIgnoreCase("Vehicle Delivery")){
-
-
 
                                     AlertDialog.Builder dialog=new AlertDialog.Builder(Checkout.this);
                                     View view_alert= LayoutInflater.from(Checkout.this).inflate(R.layout.vehicledeliveryalert,null);

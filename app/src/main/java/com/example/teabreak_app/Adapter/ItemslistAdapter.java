@@ -13,17 +13,25 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.teabreak_app.ModelClass.ListItemsModel;
 import com.example.teabreak_app.ModelClass.OrderHistoryModel;
 import com.example.teabreak_app.R;
+import com.example.teabreak_app.Ui.Cartlist_Activity;
 import com.example.teabreak_app.Utils.Constant;
+import com.example.teabreak_app.Utils.SaveAppData;
 import com.example.teabreak_app.repository.CartInterface;
 import com.example.teabreak_app.repository.ListItemInterface;
+import com.google.gson.JsonObject;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,12 +113,18 @@ public class ItemslistAdapter extends RecyclerView.Adapter<ItemslistAdapter.View
             holder.iv_delete.setVisibility(View.VISIBLE);
             holder.card.setVisibility(View.GONE);
 
-
-            holder.add_cart.setOnClickListener(new View.OnClickListener() {
+         /*   holder.iv_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                     dlt_item_api_call();
+                   // Cartlist_Activity.dlt_item_api_call();
+                }
+            });
+*/
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     cartInterface.OnItemClick(position,holder,slm.get(position).getQuantity());
-
                 }
             });
 
@@ -175,14 +189,49 @@ public class ItemslistAdapter extends RecyclerView.Adapter<ItemslistAdapter.View
         }
     }
 
+   /* private void dlt_item_api_call() {
 
-    public void errorMessage(Spinner spinner,String s){
+        Log.e("dlt_api","dlt_api");
+        JsonObject object = new JsonObject();
 
-        TextView error = (TextView) spinner.getSelectedView();
-        error.setText(s);
-        error.setError("");
-        error.requestFocus();
-        error.setTextColor(Color.RED);
+        object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
+        object.addProperty("user_token",SaveAppData.getLoginData().getToken());
+        object.addProperty("line_item_id",selected_line_item_id);
+        object.addProperty("status","0");
 
-    }
+
+        viewModel.dlt_item_api(object).observe(Cartlist_Activity.this, new Observer<JsonObject>() {
+            @Override
+            public void onChanged(JsonObject jsonObject) {
+
+                if (jsonObject != null){
+
+                    Log.d("TAG","complaint_names "+jsonObject);
+
+                    try {
+                        JSONObject jsonObject1=new JSONObject(jsonObject.toString());
+                        String message=jsonObject1.getString("message");
+                        String text=jsonObject1.getString("text");
+
+                        Toast.makeText(Cartlist_Activity.this, ""+message, Toast.LENGTH_SHORT).show();
+                        if(message.equalsIgnoreCase("Success")){
+                            cart_list_api_call();
+                        }
+
+                    } catch (JSONException e) {
+                        //throw new RuntimeException(e);
+                        Toast.makeText(Cartlist_Activity.this, ""+e, Toast.LENGTH_SHORT).show();
+                    }
+
+                }else{
+                    Toast.makeText(Cartlist_Activity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+        });
+    }*/
+
+
+
 }
