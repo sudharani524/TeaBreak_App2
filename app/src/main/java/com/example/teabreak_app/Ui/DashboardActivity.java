@@ -162,7 +162,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         View navHeaderView = binding.navView.getHeaderView(0);
         TextView nav_name = (TextView) navHeaderView.findViewById(R.id.nav_name);
         wallet_amt=(TextView) navHeaderView.findViewById(R.id.wallet_amt);
-        wallet_amt.setText(wallet_amount);
+        wallet_amt.setText("₹"+wallet_amount);
         Log.e("wallet_amounttttttt",wallet_amount);
 
         binding.newDashboarddd.viewAll.setOnClickListener(new View.OnClickListener() {
@@ -235,7 +235,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                         //String message=jsonObject1.getString("message");
                         wallet_amount=jsonObject1.getJSONObject("data").getString("wallet_amount");
                         Log.e("wallet_amt_money",wallet_amount);
-                        wallet_amt.setText(wallet_amount);
+                        wallet_amt.setText("₹"+wallet_amount);
 
 
                     } catch (JSONException e) {

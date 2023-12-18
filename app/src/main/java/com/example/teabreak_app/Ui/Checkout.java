@@ -102,8 +102,8 @@ public class Checkout extends AppCompatActivity {
 
         ordered_Items_list_api_call();
 
-        binding.total.setText(t_amount);
-        binding.charges.setText(Delivery_charges);
+        binding.total.setText( "₹"+t_amount);
+        binding.charges.setText( "₹"+Delivery_charges);
 
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
@@ -142,12 +142,12 @@ public class Checkout extends AppCompatActivity {
                     CheckBox checkBox=view_alert.findViewById(R.id.myCheckbox);
                     TextView delivery_charges=view_alert.findViewById(R.id.tv_delivery_charges);
 
-                    amount.setText(t_amount);
-                    delivery_charges.setText(Delivery_charges);
+                    amount.setText( "₹"+t_amount);
+                    delivery_charges.setText( "₹"+Delivery_charges);
 
-                    wallet_amt_txt.setText("Wallet Amount is("+wallet_amount+")");
+                    wallet_amt_txt.setText("Wallet Amount is("+"₹"+""+wallet_amount+")");
                     t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges));
-                    total_amt.setText(String.valueOf(t_amt));
+                    total_amt.setText(String.valueOf( "₹"+t_amt));
 
                     close_btn=view_alert.findViewById(R.id.close_btn);
                     submit_btn=view_alert.findViewById(R.id.submit_btn);
@@ -170,11 +170,11 @@ public class Checkout extends AppCompatActivity {
                                wallet_status="1";
                                t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges))-Float.parseFloat(wallet_amount);
                                // Float t_amt_with_wallet=t_amt-Float.parseFloat(wallet_amount);
-                               total_amt.setText(String.valueOf(t_amt));
+                               total_amt.setText(String.valueOf( "₹"+t_amt));
                            }else{
                                wallet_status="0";
                                t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges));
-                               total_amt.setText(String.valueOf(t_amt));
+                               total_amt.setText(String.valueOf( "₹"+t_amt));
                            }
                         }
                     });
@@ -471,9 +471,11 @@ public class Checkout extends AppCompatActivity {
                                 }
                                 if(Selected_deliverymode.equalsIgnoreCase("Courier")){
                                     binding.type.setVisibility(View.VISIBLE);
+                                    binding.deliverycharges.setVisibility(View.VISIBLE);
                                 }
                                 else {
                                     binding.type.setVisibility(View.GONE);
+                                    binding.deliverycharges.setVisibility(View.GONE);
                                 }
 
                             }

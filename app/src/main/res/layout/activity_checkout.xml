@@ -133,15 +133,17 @@
         android:layout_weight="1.2"
         android:orientation="vertical">
         <LinearLayout
+            android:id="@+id/deliverycharges"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:visibility="gone"
             android:weightSum="3">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="1.5"
                 android:textColor="@color/black"
                 android:text="@string/delivery_charges" />
 
@@ -157,7 +159,8 @@
                 android:id="@+id/charges"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="1.4"
+                android:layout_marginStart="80dp"
                 android:textColor="@color/black"
                 android:text="@string/_0" />
 
@@ -171,7 +174,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="1.5"
                 android:textColor="@color/black"
                 android:text="@string/total_amount" />
 
@@ -186,7 +189,8 @@
                 android:id="@+id/total"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="1.4"
+                android:layout_marginStart="80dp"
                 android:textColor="@color/black"
                 android:text="@string/_0" />
 
@@ -202,29 +206,31 @@
         android:layout_margin="10dp">
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/previous"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:layout_gravity="start"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="20dp"
             android:textColor="#228B22"
             android:background="@drawable/bg2"
             android:textAllCaps="false"
             android:textStyle="bold"
             android:textSize="18sp"
             android:text="@string/back"/>
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/Proceed"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
             android:layout_gravity="end"
-            android:layout_marginStart="30dp"
+            android:layout_marginStart="80dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/bg2"
-            android:textColor="#228B22"
+            android:gravity="center"
+            android:text="@string/proceed"
             android:textAllCaps="false"
-            android:textStyle="bold"
+            android:textColor="#228B22"
             android:textSize="18sp"
-            android:text="@string/proceed"/>
+            android:textStyle="bold" />
     </LinearLayout>
 </LinearLayout>
