@@ -30,6 +30,8 @@ public class TeaBreakViewModel extends ViewModel {
     private MutableLiveData<JsonObject> check_token_status;
     private MutableLiveData<JsonObject> Wallet_history_details;
     private MutableLiveData<JsonObject> wallet_amt_status;
+    private MutableLiveData<JsonObject> payment_gateway_details_status;
+    private MutableLiveData<JsonObject> secure_token_status;
 
 
     public LiveData<JsonObject> get_list_items() {
@@ -115,6 +117,58 @@ public class TeaBreakViewModel extends ViewModel {
         return wallet_amt_status;
     }
 
+
+    public LiveData<JsonObject> get_payment_details(JsonObject jsonObject) {
+        payment_gateway_details_status = new MutableLiveData<JsonObject>();
+        payment_gateway_details_api(jsonObject);
+        return payment_gateway_details_status;
+    }
+
+    public LiveData<JsonObject> get_secure_token(JsonObject jsonObject, String[] s_array) {
+        secure_token_status = new MutableLiveData<JsonObject>();
+        secure_token_api_call(jsonObject,s_array);
+        return secure_token_status;
+    }
+
+    private void payment_gateway_details_api(JsonObject jsonObject) {
+        ApiInterface apiInterface = ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
+        Call<JsonObject> payment_details = apiInterface.payment_gateway_details(jsonObject);
+        payment_details.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.body()!= null){
+                    payment_gateway_details_status.setValue(response.body());
+                }
+            }
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("TAG_NAME", t.toString());
+            }
+        });
+
+    }
+
+
+    private void secure_token_api_call(JsonObject jsonObject, String[] s_array) {
+      //  ApiInterface apiInterface = ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
+      //  ApiInterface apiInterface = ApiClient.getClient("https://secure.ccavenue.com/").create(ApiInterface.class); //production
+        ApiInterface apiInterface = ApiClient.getClient("https://stgsecure.ccavenue.com/").create(ApiInterface.class); //test
+      //  Call<JsonObject> secure_token = apiInterface.secure_token_generation_api(jsonObject,s_array);
+        Call<JsonObject> secure_token = apiInterface.secure_token_generation_api(s_array[0],s_array[1],s_array[2]);
+        secure_token.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.body()!= null){
+                    secure_token_status.setValue(response.body());
+                }
+            }
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("TAG_NAME", t.toString());
+            }
+        });
+
+    }
 
     private void wallet_amount_api_call(JsonObject jsonObject) {
         ApiInterface apiInterface = ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);

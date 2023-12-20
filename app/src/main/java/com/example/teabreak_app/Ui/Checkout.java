@@ -532,35 +532,39 @@ public class Checkout extends AppCompatActivity {
                     progressDialog.dismiss();
                 }
 
-                try {
-                    JSONObject jsonObject1=new JSONObject(response.body().toString());
-                    String message=jsonObject1.getString("message");
+              if(response.body()!=null){
+                  try {
+                      JSONObject jsonObject1=new JSONObject(response.body().toString());
+                      String message=jsonObject1.getString("message");
 
-                    JSONArray jsonArray=new JSONArray();
-                    jsonArray=jsonObject1.getJSONArray("availability_date");
-
-
-                    // availability_date=jsonObject1.getJSONArray("availability_date").toString();
-                     Log.e("dates_array",""+jsonArray.length());
-                    as_dates=new ArrayList<>();
-
-                    for(int i=0;i<=jsonArray.length();i++){
-                        as_dates.add((String) jsonArray.get(i));
-                        availability_date=availability_date+jsonArray.get(i)+",";
-                        Log.e("availability_date",availability_date);
-                        delivery_date.setText(availability_date);
-                    }
+                      JSONArray jsonArray=new JSONArray();
+                      jsonArray=jsonObject1.getJSONArray("availability_date");
 
 
-                    Log.e("availability_dateeeee",availability_date);
-                    Log.e("dates",""+as_dates.size());
+                      // availability_date=jsonObject1.getJSONArray("availability_date").toString();
+                      Log.e("dates_array",""+jsonArray.length());
+                      as_dates=new ArrayList<>();
+
+                      for(int i=0;i<=jsonArray.length();i++){
+                          as_dates.add((String) jsonArray.get(i));
+                          availability_date=availability_date+jsonArray.get(i)+",";
+                          Log.e("availability_date",availability_date);
+                          delivery_date.setText(availability_date);
+                      }
 
 
-                } catch (JSONException e) {
-                    //throw new RuntimeException(e);
-                    Toast.makeText(Checkout.this, "Exception"+e, Toast.LENGTH_SHORT).show();
+                      Log.e("availability_dateeeee",availability_date);
+                      Log.e("dates",""+as_dates.size());
 
-                }
+
+                  } catch (JSONException e) {
+                      //throw new RuntimeException(e);
+                      Toast.makeText(Checkout.this, "Exception"+e, Toast.LENGTH_SHORT).show();
+
+                  }
+              }else{
+                  Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+              }
 
 
             }

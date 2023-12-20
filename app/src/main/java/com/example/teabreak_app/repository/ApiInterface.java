@@ -4,6 +4,8 @@ import com.google.gson.JsonObject;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
@@ -16,7 +18,7 @@ public interface ApiInterface {
     Call<JsonObject> list_items();
 
     @Headers("Content-Type: application/json")
-    @GET("login/user_roles_list")
+    @GET("apis/user_roles_list")
     Call<JsonObject> roles_list();
 
     @Headers("Content-Type: application/json")
@@ -74,5 +76,32 @@ public interface ApiInterface {
     @POST("apis/get_current_wallet_amount")
     Call<JsonObject>current_wallet_amt(@Body JsonObject jsonObject);
 
+    @Headers("Content-Type: application/json")
+    @POST("apis/get_payment_gateway_details")
+    Call<JsonObject>payment_gateway_details(@Body JsonObject jsonObject);
+
+    /*@Headers("Content-Type: application/json")
+    @POST("mobile/service/getSecureToken")
+    Call<JsonObject>secure_token_generation_api(@Body JsonObject jsonObject);*/
+
+
+   /* @FormUrlEncoded
+    @POST("mobile/service/getSecureToken")
+    Call<JsonObject>secure_token_generation_api(@Field("requestId") String param1,
+                                    @Field("accessCode") String param2,
+                                    @Field("requestHash") String param3);*/
+
+    @FormUrlEncoded
+    @POST("mobile/service/getSecureToken")
+    Call<JsonObject>secure_token_generation_api(@Field("requestId") String param1,
+                                                @Field("accessCode") String param2,
+                                                @Field("requestHash") String param3);
+
+
+
+
+  /*  @Headers("Content-Type: application/json")
+    @POST("apis/request_secure_token_generation")
+    Call<JsonObject>secure_token_generation_api(@Body JsonObject jsonObject);*/
 
 }
