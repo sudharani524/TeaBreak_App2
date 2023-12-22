@@ -19,6 +19,7 @@ import android.graphics.fonts.Font;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -59,6 +60,7 @@ import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class Orderdetails extends AppCompatActivity {
     private ActivityOrderdetailsBinding binding;
@@ -70,6 +72,7 @@ public class Orderdetails extends AppCompatActivity {
     ArrayList<OrderdetailsModel> list=new ArrayList<>();
 
     private PermissionsChecker checker;
+    public static final String APPLICATION_ID = "com.example.teabreak_app";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +127,20 @@ public class Orderdetails extends AppCompatActivity {
                 PermissionsActivity.startActivityForResult(Orderdetails.this, PERMISSION_REQUEST_CODE, REQUIRED_PERMISSION132);
             } else {
                 Log.e("payment_success","create pdf for payment success activity 13");
+
+                String pdfFilePath = getExternalCacheDir().getPath();
+
                 createPdf(FileUtils.getAppPath(Orderdetails.this) +"9390126304"+"("+sdf1.format(System.currentTimeMillis())+")"+".pdf");
+              //  createPdf(pdfFilePath +"9390126304"+"("+sdf1.format(System.currentTimeMillis())+")"+".pdf");
+
+            /*    File direc = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                createPdf(direc.getAbsolutePath() + "/" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(System.currentTimeMillis()) + ".pdf");
+*/
+
+
+              /*   File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                 createPdf(dir.getAbsolutePath().toString()+"/"+ sdf1.format(System.currentTimeMillis())+".pdf");*/
+
             }
 
         }else{
@@ -133,35 +149,35 @@ public class Orderdetails extends AppCompatActivity {
                 PermissionsActivity.startActivityForResult(Orderdetails.this, PERMISSION_REQUEST_CODE, REQUIRED_PERMISSION);
             } else {
                 Log.e("payment_success","create pdf for payment success activity");
+                String pdfFilePath = getExternalCacheDir().getPath();
+
                 createPdf(FileUtils.getAppPath(Orderdetails.this) +"9390126304"+"("+sdf1.format(System.currentTimeMillis())+")"+".pdf");
+              //  createPdf(pdfFilePath +"9390126304"+"("+sdf1.format(System.currentTimeMillis())+")"+".pdf");
+
+             /*   File direc = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                Log.e("direc",direc.toString());
+                createPdf(direc.getAbsolutePath() + "/" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(System.currentTimeMillis()) + ".pdf");
+*/
+
             }
         }
 
-        File outputFile = new File(FileUtils.getAppPath(Orderdetails.this) +"9390126304"+"("+sdf1.format(System.currentTimeMillis())+")"+".pdf");
+        String pdfFilePath = getExternalCacheDir().getPath();
+        File outputFile = new File( FileUtils.getAppPath(Orderdetails.this)+"9390126304"+"("+sdf1.format(System.currentTimeMillis())+")"+".pdf");
+       // File outputFile = new File( pdfFilePath+"9390126304"+"("+sdf1.format(System.currentTimeMillis())+")"+".pdf");
+       // File outputFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         Uri uri = null;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            uri=
-                    Uri.fromFile(outputFile);
+            uri= Uri.fromFile(outputFile);
             Log.e("file_path", String.valueOf(uri));
         } else {
             try {
-                PackageInfo packageInfo = null;
-                try {
-                    packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-
-                    uri= FileProvider.getUriForFile(Orderdetails.this,
-                            BuildConfig.APPLICATION_ID+ ".fileprovider", outputFile);
-                    Log.e("file_path_13", String.valueOf(uri));
-
-                } catch (PackageManager.NameNotFoundException e) {
-                    // throw new RuntimeException(e);
-                    Toast.makeText(this, "version_name"+e, Toast.LENGTH_SHORT).show();
-                }
-
-
+                uri=FileProvider.getUriForFile(Orderdetails.this,
+                        APPLICATION_ID+ ".fileprovider", outputFile);
 
             }catch (Exception e){
-                Toast.makeText(Orderdetails.this, "file_provider"+e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Orderdetails.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("file_exception","Exception"+e.getLocalizedMessage());
             }
         }
         String myFormat = "dd-MM-yyyy"; //In which you need put here
@@ -265,12 +281,12 @@ public class Orderdetails extends AppCompatActivity {
             float mHeadingFontSize = 20.0f;
             float mValueFontSize = 26.0f;
 
-            BaseFont urName = null;
+         /*   BaseFont urName = null;
             try {
                 urName = BaseFont.createFont("assets/fonts/brandon_medium.otf", "UTF-8", BaseFont.EMBEDDED);
             } catch (DocumentException e) {
                 throw new RuntimeException(e);
-            }
+            }*/
 
             // LINE SEPARATOR
             LineSeparator lineSeparator = new LineSeparator();
@@ -419,6 +435,7 @@ public class Orderdetails extends AppCompatActivity {
             document.add(validity);
 
 
+            Log.e("document",document.toString());
 
 
             document.close();

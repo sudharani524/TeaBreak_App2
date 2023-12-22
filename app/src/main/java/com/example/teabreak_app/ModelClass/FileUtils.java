@@ -127,17 +127,19 @@ public class FileUtils {
     //context.getFilesDir().getAbsolutePath()
     //context.getExternalCacheDir()
     public static String getAppPath(Context context) {
-      /*  File dir = new File(context.getExternalCacheDir()
+        File dir = new File(context.getExternalCacheDir()
                 + File.separator
                 + context.getResources().getString(R.string.app_name)
-                + File.separator);*/
+                + File.separator);
 
-        File dir = new File(String.valueOf(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)));
+
+      //  File dir = new File(String.valueOf(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)));
      //  File dir=Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
         if (!dir.exists()) {
             dir.mkdir();
         }
-        return dir.getPath() + File.separator;
+       // return dir.getPath() + File.separator;
+        return dir.getPath();
     }
 
     /***

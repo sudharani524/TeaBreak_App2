@@ -124,12 +124,17 @@ public class TeaBreakViewModel extends ViewModel {
         return payment_gateway_details_status;
     }
 
-    public LiveData<JsonObject> get_secure_token(JsonObject jsonObject, String[] s_array) {
+   /* public LiveData<JsonObject> get_secure_token(JsonObject jsonObject, String[] s_array) {
         secure_token_status = new MutableLiveData<JsonObject>();
         secure_token_api_call(jsonObject,s_array);
         return secure_token_status;
-    }
+    }*/
 
+    public LiveData<JsonObject> get_secure_token() {
+        secure_token_status = new MutableLiveData<JsonObject>();
+        secure_token_api_call();
+        return secure_token_status;
+    }
     private void payment_gateway_details_api(JsonObject jsonObject) {
         ApiInterface apiInterface = ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
         Call<JsonObject> payment_details = apiInterface.payment_gateway_details(jsonObject);
@@ -149,12 +154,12 @@ public class TeaBreakViewModel extends ViewModel {
     }
 
 
-    private void secure_token_api_call(JsonObject jsonObject, String[] s_array) {
-      //  ApiInterface apiInterface = ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
+    private void secure_token_api_call() {
+        ApiInterface apiInterface = ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
       //  ApiInterface apiInterface = ApiClient.getClient("https://secure.ccavenue.com/").create(ApiInterface.class); //production
-        ApiInterface apiInterface = ApiClient.getClient("https://stgsecure.ccavenue.com/").create(ApiInterface.class); //test
-      //  Call<JsonObject> secure_token = apiInterface.secure_token_generation_api(jsonObject,s_array);
-        Call<JsonObject> secure_token = apiInterface.secure_token_generation_api(s_array[0],s_array[1],s_array[2]);
+       // ApiInterface apiInterface = ApiClient.getClient("https://stgsecure.ccavenue.com/").create(ApiInterface.class); //test
+        Call<JsonObject> secure_token = apiInterface.secure_token_generation_api();
+       // Call<JsonObject> secure_token = apiInterface.secure_token_generation_api(s_array[0],s_array[1],s_array[2]);
         secure_token.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {

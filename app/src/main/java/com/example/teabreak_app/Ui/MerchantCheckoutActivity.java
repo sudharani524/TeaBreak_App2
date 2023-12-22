@@ -47,11 +47,12 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
     Context mContext;
     ProgressDialog progress;
     String Order_id;
-    String  ba1;
+    String  ba1,ba2;
     private TeaBreakViewModel viewModel;
-    String request_hash="";
+    String request_hash="",req_id="";
 
     String gateway_id="",gateway_name="",payment_mode="",workingKey="",merchantId="",accessCode="",status="",last_update_date_time="",requestId="";
+    String responseCode,responseStatus,responseMessage,secureToken,creationTimestamp,secureTokenExpiry,responseHash;
 
 
     @Override
@@ -64,15 +65,15 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
 
       //  Order_id = String.valueOf(System.currentTimeMillis());
        Order_id=getIntent().getStringExtra("order_no");
+       req_id=String.valueOf(System.currentTimeMillis());
+       Log.e("req_id",req_id);
 
         mContext = MerchantCheckoutActivity.this;
         progress = new ProgressDialog(this);
         progress.setMessage("Loading...");
         progress.setCanceledOnTouchOutside(false);
         progress.setCancelable(true);
-        edtAmount = findViewById(R.id.edt_amount);
-
-
+     //   edtAmount = findViewById(R.id.edt_amount);
 
     /*    byte[] byteArray = request_hash.getBytes();
          ba1 = Base64.encodeToString(byteArray, Base64.DEFAULT);
@@ -86,25 +87,27 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
     private void secure_token_api_call() {
         Log.e("secure_token","secure_token_mthd");
         JsonObject object = new JsonObject();
-        Long a= Long.valueOf(requestId);
+       // Long a= Long.valueOf(requestId);
 
 /*        Long b= Long.valueOf(accessCode);
         Long c= Long.valueOf(ba1);
         object.addProperty("requestId",Order_id);*/
 
-        object.addProperty("requestId",requestId);
-        object.addProperty("accessCode",accessCode);
-        object.addProperty("requestHash",ba1);
+       // object.addProperty("requestId",requestId);
+      //  object.addProperty("requestId",req_id);
+      //  object.addProperty("accessCode",accessCode);
+       // object.addProperty("requestHash",ba1);
        // object.addProperty("merchantId",merchantId);
-        Log.e("secure_ba1111",ba1);
-        String[] s_array=new String[3];
-        s_array[0]=requestId;
+
+       // String[] s_array=new String[3];
+      //  s_array[0]=requestId;
        // s_array[1]="AVFB29KC10BD75BFDB";
-        s_array[1]="AVNP41KL90BL12PNLB";//live
-        s_array[2]=ba1;
+       // s_array[1]=accessCode;//live
+     //   s_array[1]="AVGV42KL73BP43VGPB";//live
+      //  s_array[2]=ba1;
 
 
-        viewModel.get_secure_token(object,s_array).observe(MerchantCheckoutActivity.this, new Observer<JsonObject>() {
+        viewModel.get_secure_token().observe(MerchantCheckoutActivity.this, new Observer<JsonObject>() {
             @Override
             public void onChanged(JsonObject jsonObject) {
 
@@ -113,6 +116,23 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
                     try {
                         JSONObject jsonObject1=new JSONObject(jsonObject.toString());
                        Log.e("secure_token_res",jsonObject.toString());
+
+                       if(jsonObject1.getString("text").equalsIgnoreCase("Success")){
+                           secureToken=jsonObject1.getJSONObject("message").getString("secureToken");
+                           responseHash=jsonObject1.getJSONObject("message").getString("responseHash");
+                           responseCode=jsonObject1.getJSONObject("message").getString("responseHash");
+
+                           Log.e("response_hash",responseHash);
+                           request_hash=Order_id+"INR"+"10.00"+secureToken;
+                           try {
+                               ba2=generateReqHash(request_hash);
+                               Log.e("ba2",ba2);
+                           } catch (NoSuchAlgorithmException e) {
+                               Log.e("ba2_Exception",ba2);
+                               throw new RuntimeException(e);
+                           }
+                           initiatePayment1();
+                       }
 
 
                     } catch (JSONException e) {
@@ -159,11 +179,16 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
                         requestId=jsonObject1.getString("requestId");
 
                         Log.e("accessCode_for_secure_token",accessCode);
+                        Log.e("working_key",workingKey);
                         Log.e("merchantId",merchantId);
+                        Log.e("workingKey",workingKey);
 
-                      //  request_hash=requestId+workingKey+merchantId;
+                        request_hash=requestId+workingKey+merchantId;
                        // request_hash=requestId+"320ECB91D6183CD5D65D9D91E2D2CF2B"+merchantId;
-                        request_hash=requestId+"C84AF8924DB0262E1362AAD0BEBE59ED"+merchantId; //live
+                       // request_hash=requestId+"C84AF8924DB0262E1362AAD0BEBE59ED"+merchantId; //live
+                       // request_hash=requestId+"5D75051B7F577D861C9ECAD9B619804D"+merchantId; //live
+
+                       // request_hash=req_id+workingKey+merchantId; //live
 
                         Log.e("request_hash",request_hash);
                         try {
@@ -210,7 +235,7 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
     }
 
 
-    public void onClick(View view) {
+/*    public void onClick(View view) {
 
 
         if (edtAmount.getText().toString().length() == 0) {
@@ -224,51 +249,51 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
         } else {
             Toast.makeText(MerchantCheckoutActivity.this, "Enter Amount", Toast.LENGTH_LONG).show();
         }
-    }
+    }*/
 
     private void initiatePayment1() {
 
-
         AvenueOrder orderDetails = new AvenueOrder();
         orderDetails.setOrderId(Order_id);
-        orderDetails.setRequestHash(ba1);
+        orderDetails.setRequestHash(ba2);
         orderDetails.setAccessCode(accessCode);
         orderDetails.setMerchantId(merchantId);
-        Log.e("access_code",accessCode);
-        Log.e("merchantId",merchantId);
-
         orderDetails.setCurrency("INR");
-        orderDetails.setAmount("10");
+        orderDetails.setAmount("10.00");
        // orderDetails.setRedirectUrl("redirect_url");
-        orderDetails.setRedirectUrl("http://amazonaws.com/payment/ccav_resp.php");
+        orderDetails.setRedirectUrl(Constant.SERVER_BASE_URL+"redirectPage.php");
        // orderDetails.setCancelUrl("cancel_url");
-        orderDetails.setCancelUrl("cancel_url=http://amazonaws.com/payment/ccav_resp.php");
+       // orderDetails.setCancelUrl("https://www.testserver.com/cancelPage.php");
+        orderDetails.setCancelUrl(Constant.SERVER_BASE_URL+"cancelPage.php");
         orderDetails.setCustomerId("9390126304");
-        orderDetails.setPaymentType("payment_type");
+        orderDetails.setPaymentType(payment_mode);
         orderDetails.setMerchantLogo("merchant_logo");
-        orderDetails.setBillingName("billing_name");
-        orderDetails.setBillingAddress("billing_address");
-        orderDetails.setBillingCountry("billing_country");
-        orderDetails.setBillingState("billing_state");
-        orderDetails.setBillingCity("billing_city");
-        orderDetails.setBillingZip("billing_zip");
-        orderDetails.setBillingTel("98765432345678987654");
-        orderDetails.setBillingEmail("test@gmail.com");
-        orderDetails.setDeliveryName("delivery_name");
-        orderDetails.setDeliveryAddress("delivery_address");
-        orderDetails.setDeliveryCountry("delivery_country");
-        orderDetails.setDeliveryState("delivery_state");
-        orderDetails.setDeliveryCity("delivery_city");
-        orderDetails.setDeliveryZip("delivery_zip");
-        orderDetails.setDeliveryTel("98893567823456789234");
-        orderDetails.setMerchant_param1("merchant_data"); //total 5 parameters
-        orderDetails.setMobileNo("7995595304");
-        orderDetails.setPaymentEnviroment("app_staging"); //app_live - prod
+        orderDetails.setBillingName(SaveAppData.getLoginData().getName());
+        orderDetails.setBillingAddress("Hyderabad");
+        orderDetails.setBillingCountry("India");
+        orderDetails.setBillingState("Telangana");
+        orderDetails.setBillingCity("Hyderabad");
+        orderDetails.setBillingZip("500016");
+        orderDetails.setBillingTel("9390126304");
+        orderDetails.setBillingEmail("sudhak4585@gmail.com");
+        orderDetails.setDeliveryName("test");
+        orderDetails.setDeliveryAddress("Hyderabad");
+        orderDetails.setDeliveryCountry("India");
+        orderDetails.setDeliveryState("Telangana");
+        orderDetails.setDeliveryCity("Hyderabad");
+        orderDetails.setDeliveryZip("500016");
+        orderDetails.setDeliveryTel("9390126304");
+        orderDetails.setMerchant_param1("test"); //total 5 parameters
+        orderDetails.setMerchant_param2("transaction"); //total 5 parameters
+        orderDetails.setMerchant_param3("1"); //total 5 parameters
+        orderDetails.setMerchant_param4("2"); //total 5 parameters
+        orderDetails.setMerchant_param5("3"); //total 5 parameters
+        orderDetails.setMobileNo("9390126304");
+        orderDetails.setPaymentEnviroment("“app_staging"); //app_live - prod
         orderDetails.setColorPrimary("color_primary");
         orderDetails.setColorAccent("color_accent");
         orderDetails.setColorFont("color_font");
         orderDetails.setBackgroundDrawable(0);
-
         //To begin transaction through SDK…
         AvenuesApplication.startTransaction(MerchantCheckoutActivity.this, orderDetails);
 
@@ -357,7 +382,6 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
         alertDialog.setMessage(msg);
 
         alertDialog.setButton(Dialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
-
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 finish();
@@ -374,7 +398,7 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
 
     @Override
     public void onErrorOccurred(String s) {
-        Log.e("transaction_res","onErrorOccurred"+s);
+        Log.e("transaction_res","onErrorOccurred "+s);
     }
 
     @Override

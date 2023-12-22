@@ -80,28 +80,26 @@ public interface ApiInterface {
     @POST("apis/get_payment_gateway_details")
     Call<JsonObject>payment_gateway_details(@Body JsonObject jsonObject);
 
-    /*@Headers("Content-Type: application/json")
-    @POST("mobile/service/getSecureToken")
-    Call<JsonObject>secure_token_generation_api(@Body JsonObject jsonObject);*/
 
 
-   /* @FormUrlEncoded
-    @POST("mobile/service/getSecureToken")
+
+ /* @FormUrlEncoded
+    @POST("login/create_secure_token")
+  //  @POST("apis/request_secure_token_generation")
     Call<JsonObject>secure_token_generation_api(@Field("requestId") String param1,
                                     @Field("accessCode") String param2,
                                     @Field("requestHash") String param3);*/
 
-    @FormUrlEncoded
+    @Headers("Content-Type: application/json")
+    @GET("login/create_secure_token")
+    Call<JsonObject> secure_token_generation_api();
+
+
+  /*  @FormUrlEncoded
     @POST("mobile/service/getSecureToken")
     Call<JsonObject>secure_token_generation_api(@Field("requestId") String param1,
                                                 @Field("accessCode") String param2,
-                                                @Field("requestHash") String param3);
+                                                @Field("requestHash") String param3);*/
 
-
-
-
-  /*  @Headers("Content-Type: application/json")
-    @POST("apis/request_secure_token_generation")
-    Call<JsonObject>secure_token_generation_api(@Body JsonObject jsonObject);*/
 
 }

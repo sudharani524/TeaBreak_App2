@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -90,12 +91,14 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView ordernumber,deliverytype,totalamount,date;
+        ImageView iv_whatsapp_share;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ordernumber=itemView.findViewById(R.id.ordernumber);
             deliverytype=itemView.findViewById(R.id.DeliveryType);
             totalamount=itemView.findViewById(R.id.Totalamount);
             date=itemView.findViewById(R.id.orderdate);
+            iv_whatsapp_share=itemView.findViewById(R.id.iv_whatsapp_share);
 
         }
     }
