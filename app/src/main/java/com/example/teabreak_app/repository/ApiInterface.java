@@ -57,6 +57,12 @@ public interface ApiInterface {
     @Headers("Content-Type: application/json")
     @POST("login/delete_cart_items")
     Call<JsonObject>dlt_itm_api(@Body JsonObject jsonObject);
+    @Headers("Content-Type: application/json")
+    @POST("login/get_dispatcher_order_list")
+    Call<JsonObject>ordered_list_items(@Body JsonObject jsonObject);
+    @Headers("Content-Type: application/json")
+    @POST("login/get_dispatcher_order_item_list")
+    Call<JsonObject>Items_ordered_list(@Body JsonObject jsonObject);
 
     @POST("MobPHPKit/india/init_payment.php")
     Call<JsonObject> initiatePayment(@Query("amount") String amount);

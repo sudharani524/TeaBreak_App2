@@ -53,6 +53,12 @@
             android:name=".Ui.Myorders"
             android:exported="false" />
         <activity
+            android:name=".Ui.Orderitemscheck"
+            android:exported="false" />
+        <activity
+            android:name=".Ui.VendorOrderlist"
+            android:exported="false" />
+        <activity
             android:name=".Ui.SplashScreen"
             android:exported="true">
             <intent-filter>

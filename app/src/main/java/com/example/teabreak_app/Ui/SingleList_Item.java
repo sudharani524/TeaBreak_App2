@@ -45,6 +45,13 @@ public class SingleList_Item extends AppCompatActivity {
                 startActivity(new Intent(SingleList_Item.this,Cartlist_Activity.class));
             }
         });
+        binding.backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(SingleList_Item.this,DashboardActivity.class));
+
+            }
+        });
 
     }
 }

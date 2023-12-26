@@ -32,6 +32,8 @@ public class TeaBreakViewModel extends ViewModel {
     private MutableLiveData<JsonObject> wallet_amt_status;
     private MutableLiveData<JsonObject> payment_gateway_details_status;
     private MutableLiveData<JsonObject> secure_token_status;
+    private MutableLiveData<JsonObject> Order_list_details;
+    private MutableLiveData<JsonObject> Orders_items_list;
 
 
     public LiveData<JsonObject> get_list_items() {
@@ -134,6 +136,52 @@ public class TeaBreakViewModel extends ViewModel {
         secure_token_status = new MutableLiveData<JsonObject>();
         secure_token_api_call();
         return secure_token_status;
+    }
+    public LiveData<JsonObject> get_ordered_list(JsonObject jsonObject) {
+        Order_list_details = new MutableLiveData<JsonObject>(jsonObject);
+        ordered_list_api_call(jsonObject);
+        return Order_list_details;
+    }
+    public LiveData<JsonObject>get_Ordered_items_list(JsonObject jsonObject){
+        Orders_items_list = new MutableLiveData<JsonObject>(jsonObject);
+        ordered_list_items_api_call(jsonObject);
+        return Orders_items_list;
+    }
+    private void ordered_list_items_api_call(JsonObject jsonObject) {
+        ApiInterface apiInterface=ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
+        Call<JsonObject>Items_list= apiInterface.Items_ordered_list(jsonObject);
+        Items_list.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.body()!= null){
+                    Orders_items_list.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("TAG_NAME", t.toString());
+            }
+        });
+    }
+
+    private void ordered_list_api_call(JsonObject jsonObject) {
+        ApiInterface apiInterface=ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
+        Call<JsonObject>Ordred_list=apiInterface.ordered_list_items(jsonObject);
+        Ordred_list.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.body()!= null){
+                    Order_list_details.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("TAG_NAME", t.toString());
+            }
+        });
+
     }
     private void payment_gateway_details_api(JsonObject jsonObject) {
         ApiInterface apiInterface = ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);

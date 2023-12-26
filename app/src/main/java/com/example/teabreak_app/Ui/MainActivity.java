@@ -68,9 +68,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding=ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-
-
         viewModel = ViewModelProviders.of(MainActivity.this).get(TeaBreakViewModel.class);
         
         progressDialog=new ProgressDialog(this);
@@ -161,8 +158,8 @@ public class MainActivity extends AppCompatActivity {
                             SaveAppData.saveOperatorLoginData(operatorLoginData);
 
 
-                            startActivity(new Intent(MainActivity.this, DashboardActivity.class));
-                            finish();
+//                            startActivity(new Intent(MainActivity.this, DashboardActivity.class));
+//                            finish();
 
                            /* switch (selected_user_role_id) {
                                 case "1":
@@ -175,6 +172,20 @@ public class MainActivity extends AppCompatActivity {
                                     finish();
                                     break;
                             }*/
+                            switch (selected_user_role_id) {
+                                case "1":
+                                    startActivity(new Intent(MainActivity.this, DashboardActivity.class));
+                                    finish();
+                                    break;
+                                case "3":
+                                    startActivity(new Intent(MainActivity.this, VendorOrderlist.class));
+                                    finish();
+                                    break;
+                                default:
+                                    startActivity(new Intent(MainActivity.this, DashboardActivity.class));
+                                    finish();
+                                    break;
+                            }
 
 
                         }
