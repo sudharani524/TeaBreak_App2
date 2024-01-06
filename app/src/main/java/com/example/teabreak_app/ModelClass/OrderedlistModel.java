@@ -38,6 +38,30 @@ public class OrderedlistModel  implements Serializable {
     public String total_quantity;
 
 
+    @SerializedName("online_paid_amount")
+    @Expose
+    public String online_paid_amount;
+
+    @SerializedName("used_wallet_amount")
+    @Expose
+    public String used_wallet_amount;
+
+    public String getUsed_wallet_amount() {
+        return used_wallet_amount;
+    }
+
+    public void setUsed_wallet_amount(String used_wallet_amount) {
+        this.used_wallet_amount = used_wallet_amount;
+    }
+
+    public String getOnline_paid_amount() {
+        return online_paid_amount;
+    }
+
+    public void setOnline_paid_amount(String online_paid_amount) {
+        this.online_paid_amount = online_paid_amount;
+    }
+
     public String getOrder_no() {
         return order_no;
     }

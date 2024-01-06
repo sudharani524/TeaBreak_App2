@@ -108,6 +108,15 @@ public class Orders_List_Activity extends AppCompatActivity {
                 startActivity(new Intent(Orders_List_Activity.this,DashboardActivity.class));
             }
         });
+
+        binding.logoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logout_api_call();
+            }
+        });
+
+
         binding.etSearchfilter.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -132,6 +141,42 @@ public class Orders_List_Activity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void logout_api_call() {
+        progressDialog.show();
+        JsonObject object = new JsonObject();
+
+        object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
+        object.addProperty("user_token",SaveAppData.getLoginData().getToken());
+
+        viewModel.logout_api(object).observe(Orders_List_Activity
+                .this, new Observer<JsonObject>() {
+            @Override
+            public void onChanged(JsonObject jsonObject) {
+
+                if (jsonObject != null){
+                    if(progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
+                    Log.d("Logout","logout"+jsonObject);
+
+
+                    if (jsonObject.get("message").getAsString().equalsIgnoreCase("Successfully Logout")){
+                        SaveAppData.saveOperatorLoginData(null);
+                        startActivity(new Intent(Orders_List_Activity.this, MainActivity.class));
+                        finish();
+                    }
+                }else{
+                    if(progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
+                    Toast.makeText(Orders_List_Activity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
     }
 
 
@@ -220,7 +265,8 @@ public class Orders_List_Activity extends AppCompatActivity {
         sendIntent.putExtra(Intent.EXTRA_TEXT, "");
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.setPackage("com.whatsapp");
-        sendIntent.setType("image/png");
+        sendIntent.setType("i" +
+                "mage/png");
         startActivity(sendIntent);
             /*try {
                 String text = "  Bill for : "+formattedDate1+
@@ -327,12 +373,14 @@ public class Orders_List_Activity extends AppCompatActivity {
            /* if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
                 mOrdermobileFont = new Font("urName", mHeadingFontSize, mColorAccent);
             }*/
+
             Chunk mOrdermobileChunk = new Chunk("9390126304");
             Paragraph mOrdermobileParagraph = new Paragraph(mOrdermobileChunk);
             mOrdermobileParagraph.setAlignment(Element.ALIGN_CENTER);
             document.add(mOrdermobileParagraph);
             document.add(new Paragraph(""));
             document.add(new Chunk(lineSeparator));
+
             // Fields of Order Details...
             // Adding Chunks for Title and value
 
@@ -356,17 +404,14 @@ public class Orders_List_Activity extends AppCompatActivity {
             accounts1.addCell(getheaderCellR("Invoice"));
 
 
-            accounts1.addCell(getBillRowCell("Basic Pack"));
-            accounts1.addCell(getheaderCellR("100"));
 
-
-
-
-            PdfPTable billTable1 = new PdfPTable(2); //one page contains 15 records
+            PdfPTable billTable1 = new PdfPTable(4); //one page contains 15 records
             billTable1.setWidthPercentage(100);
-            billTable1.setWidths(new float[] { 5,2 });
-            billTable1.addCell(getBillHeaderCell("Previous Due"));
-            billTable1.addCell(getBillHeaderCell(getroundedFigure("500")));
+            billTable1.setWidths(new float[] { 3,3,3,3 });
+            billTable1.addCell(getBillHeaderCell("Item"));
+            billTable1.addCell(getBillHeaderCell("Quantity"));
+            billTable1.addCell(getBillHeaderCell("Price"));
+            billTable1.addCell(getBillHeaderCell("Amount"));
 
             PdfPTable billTable12 = new PdfPTable(2); //one page contains 15 records
             billTable12.setWidthPercentage(100);
@@ -427,7 +472,7 @@ public class Orders_List_Activity extends AppCompatActivity {
             accounts.setSpacingBefore(20.0f);
             accounts.setWidthPercentage(70);
             accounts.addCell(getAccountsCell("Collected By"));
-            accounts.addCell(getAccountsCellR("test"+"test"));
+            accounts.addCell(getAccountsCellR("sudha"+"sdfgh"));
 
             accounts.addCell(getAccountsCell(" "));
             accounts.addCell(getAccountsCellR(" "));

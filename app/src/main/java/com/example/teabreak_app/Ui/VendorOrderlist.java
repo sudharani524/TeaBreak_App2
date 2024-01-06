@@ -59,6 +59,7 @@ public class VendorOrderlist extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityVendorOrderlistBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
+
         setContentView(view);
         Calendar c = Calendar.getInstance();
         int day = c.get(Calendar.DAY_OF_MONTH);
@@ -90,6 +91,14 @@ public class VendorOrderlist extends AppCompatActivity {
                 to_dateselect();
             }
         });
+
+        binding.logoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logout_api_call();
+            }
+        });
+
         mDatasetlistner=new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -281,6 +290,41 @@ public class VendorOrderlist extends AppCompatActivity {
         dialog.getWindow().setGravity(Gravity.BOTTOM);
 
         dialog.show();
+    }
+
+    private void logout_api_call() {
+        progressDialog.show();
+        JsonObject object = new JsonObject();
+
+        object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
+        object.addProperty("user_token",SaveAppData.getLoginData().getToken());
+
+        viewModel.logout_api(object).observe(VendorOrderlist.this, new Observer<JsonObject>() {
+            @Override
+            public void onChanged(JsonObject jsonObject) {
+
+                if (jsonObject != null){
+                    if(progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
+                    Log.d("Logout","logout"+jsonObject);
+
+
+                    if (jsonObject.get("message").getAsString().equalsIgnoreCase("Successfully Logout")){
+                        SaveAppData.saveOperatorLoginData(null);
+                        startActivity(new Intent(VendorOrderlist.this, MainActivity.class));
+                        finish();
+                    }
+                }else{
+                    if(progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
+                    Toast.makeText(VendorOrderlist.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
     }
 
 }

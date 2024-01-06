@@ -131,11 +131,13 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:weightSum="10"
                                 android:orientation="horizontal">
 
                                 <LinearLayout
-                                    android:layout_width="match_parent"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_weight="9"
                                     android:layout_margin="10dp"
                                     android:orientation="horizontal">
 
@@ -186,61 +188,84 @@
                                             android:textSize="15sp" />
                                     </LinearLayout>
                                 </LinearLayout>
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="10dp"
-                                android:layout_marginRight="10dp"
-                                android:orientation="horizontal">
-
                                 <LinearLayout
                                     android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="5dp"
+                                    android:layout_height="match_parent"
                                     android:layout_weight="1"
+                                    android:gravity="center"
                                     android:orientation="vertical">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/payment_mode"
-                                        android:textColor="@color/gray"
-                                        android:textSize="15sp" />
-
-                                    <TextView
-                                        android:id="@+id/tv_paymentmode"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/debit_card"
-                                        android:textColor="@color/black"
-                                        android:textSize="15sp" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="5dp"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/delivery_charges"
-                                        android:textColor="@color/gray"
-                                        android:textSize="15sp" />
-
-                                    <TextView
-                                        android:id="@+id/tv_deliverycharges"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/_230"
-                                        android:textColor="@color/black"
-                                        android:textSize="15sp" />
+                                    <ImageView
+                                        android:id="@+id/whatsapp_img"
+                                        android:layout_width="30dp"
+                                        android:layout_height="30dp"
+                                        android:src="@drawable/whatsapp_icon"
+                                        android:layout_gravity="end|center"
+                                        />
                                 </LinearLayout>
                             </LinearLayout>
+
+                           <LinearLayout
+                               android:layout_width="match_parent"
+                               android:layout_height="wrap_content"
+                               android:weightSum="10"
+                               android:orientation="horizontal">
+                               <LinearLayout
+                                   android:layout_width="0dp"
+                                   android:layout_height="wrap_content"
+                                   android:layout_weight="9"
+                                   android:layout_marginLeft="10dp"
+                                   android:layout_marginRight="10dp"
+                                   android:orientation="horizontal">
+
+                                   <LinearLayout
+                                       android:layout_width="0dp"
+                                       android:layout_height="wrap_content"
+                                       android:layout_marginRight="5dp"
+                                       android:layout_weight="1"
+                                       android:orientation="vertical">
+
+                                       <TextView
+                                           android:layout_width="wrap_content"
+                                           android:layout_height="wrap_content"
+                                           android:text="@string/payment_mode"
+                                           android:textColor="@color/gray"
+                                           android:textSize="15sp" />
+
+                                       <TextView
+                                           android:id="@+id/tv_paymentmode"
+                                           android:layout_width="wrap_content"
+                                           android:layout_height="wrap_content"
+                                           android:text="@string/debit_card"
+                                           android:textColor="@color/black"
+                                           android:textSize="15sp" />
+                                   </LinearLayout>
+
+                                   <LinearLayout
+                                       android:layout_width="0dp"
+                                       android:layout_height="wrap_content"
+                                       android:layout_marginRight="5dp"
+                                       android:layout_weight="1"
+                                       android:orientation="vertical">
+
+                                       <TextView
+                                           android:layout_width="wrap_content"
+                                           android:layout_height="wrap_content"
+                                           android:text="@string/delivery_charges"
+                                           android:textColor="@color/gray"
+                                           android:textSize="15sp" />
+
+                                       <TextView
+                                           android:id="@+id/tv_deliverycharges"
+                                           android:layout_width="wrap_content"
+                                           android:layout_height="wrap_content"
+                                           android:text="@string/_230"
+                                           android:textColor="@color/black"
+                                           android:textSize="15sp" />
+                                   </LinearLayout>
+
+                               </LinearLayout>
+                           </LinearLayout>
+
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 

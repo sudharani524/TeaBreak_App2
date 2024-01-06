@@ -172,6 +172,9 @@ public class MainActivity extends AppCompatActivity {
                                     finish();
                                     break;
                             }*/
+
+                            Log.e("Selected_role_id_login",selected_user_role_id);
+
                             switch (selected_user_role_id) {
                                 case "1":
                                     startActivity(new Intent(MainActivity.this, DashboardActivity.class));
@@ -179,6 +182,10 @@ public class MainActivity extends AppCompatActivity {
                                     break;
                                 case "3":
                                     startActivity(new Intent(MainActivity.this, VendorOrderlist.class));
+                                    finish();
+                                    break;
+                                case "4":
+                                    startActivity(new Intent(MainActivity.this, AccountsDashboard.class));
                                     finish();
                                     break;
                                 default:

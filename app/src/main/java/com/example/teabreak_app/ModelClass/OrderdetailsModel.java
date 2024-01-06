@@ -41,6 +41,94 @@ public class OrderdetailsModel {
     @Expose
     public String image;
 
+
+    @SerializedName("payment_trans_id")
+    @Expose
+    public String payment_trans_id;
+
+    @SerializedName("paid_amount")
+    @Expose
+    public String paid_amount;
+
+    @SerializedName("no_of_order_items")
+    @Expose
+    public String no_of_order_items;
+
+
+    @SerializedName("payment_mode")
+    @Expose
+    public String payment_mode;
+
+
+    @SerializedName("accounts_approve_status")
+    @Expose
+    public String accounts_approve_status;
+
+
+    @SerializedName("online_paid_amount")
+    @Expose
+    public String online_paid_amount;
+
+    @SerializedName("used_wallet_amount")
+    @Expose
+    public String used_wallet_amount;
+
+    public String getUsed_wallet_amount() {
+        return used_wallet_amount;
+    }
+
+    public void setUsed_wallet_amount(String used_wallet_amount) {
+        this.used_wallet_amount = used_wallet_amount;
+    }
+
+    public String getOnline_paid_amount() {
+        return online_paid_amount;
+    }
+
+    public void setOnline_paid_amount(String online_paid_amount) {
+        this.online_paid_amount = online_paid_amount;
+    }
+
+    public String getAccounts_approve_status() {
+        return accounts_approve_status;
+    }
+
+    public void setAccounts_approve_status(String accounts_approve_status) {
+        this.accounts_approve_status = accounts_approve_status;
+    }
+
+    public String getPayment_mode() {
+        return payment_mode;
+    }
+
+    public void setPayment_mode(String payment_mode) {
+        this.payment_mode = payment_mode;
+    }
+
+    public String getNo_of_order_items() {
+        return no_of_order_items;
+    }
+
+    public void setNo_of_order_items(String no_of_order_items) {
+        this.no_of_order_items = no_of_order_items;
+    }
+
+    public String getPaid_amount() {
+        return paid_amount;
+    }
+
+    public void setPaid_amount(String paid_amount) {
+        this.paid_amount = paid_amount;
+    }
+
+    public String getPayment_trans_id() {
+        return payment_trans_id;
+    }
+
+    public void setPayment_trans_id(String payment_trans_id) {
+        this.payment_trans_id = payment_trans_id;
+    }
+
     public String getOrder_item_id() {
         return order_item_id;
     }

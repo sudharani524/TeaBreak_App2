@@ -32,6 +32,18 @@ public class ItemsorderedModel {
     @Expose
     public String pack_of_qty;
 
+    @SerializedName("order_item_id")
+    @Expose
+    public String order_item_id;
+
+    public String getOrder_item_id() {
+        return order_item_id;
+    }
+
+    public void setOrder_item_id(String order_item_id) {
+        this.order_item_id = order_item_id;
+    }
+
     public String getOrder_id() {
         return order_id;
     }

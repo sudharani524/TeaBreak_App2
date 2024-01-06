@@ -47,6 +47,9 @@ public class LoginUserModel implements Serializable {
     public String scroll_msg;
 
 
+    @SerializedName("address")
+    @Expose
+    public String address;
 
     @SerializedName("role_full_name")
     @Expose
@@ -57,6 +60,14 @@ public class LoginUserModel implements Serializable {
 
     public String getRole_full_name() {
         return role_full_name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public void setRole_full_name(String role_full_name) {

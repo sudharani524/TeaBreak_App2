@@ -94,4 +94,10 @@
     <string name="string_permission_quit">Exit App</string>
     <string name="vendor_name">Vendor Name</string>
     <string name="submit">Submit</string>
+
+    <array name="accountant_status">
+        <item>Select</item>
+        <item>Approved</item>
+    </array>
+
 </resources>

@@ -49,6 +49,19 @@ public class OrderHistoryModel implements Serializable {
     @Expose
     public String delivery_type_name;
 
+
+    @SerializedName("used_wallet_amount")
+    @Expose
+    public String used_wallet_amount;
+
+    public String getUsed_wallet_amount() {
+        return used_wallet_amount;
+    }
+
+    public void setUsed_wallet_amount(String used_wallet_amount) {
+        this.used_wallet_amount = used_wallet_amount;
+    }
+
     public String getOrder_id() {
         return order_id;
     }

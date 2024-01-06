@@ -88,6 +88,28 @@ public interface ApiInterface {
 
 
 
+    @Headers("Content-Type: application/json")
+    @POST("apis/edit_dispatcher_order_item_list")
+    Call<JsonObject>edit_dispatcher_order_items_list(@Body JsonObject jsonObject);
+
+
+    @Headers("Content-Type: application/json")
+    @POST("apis/get_accountant_pending_orders_list")
+    Call<JsonObject>get_account_pending_orders_list(@Body JsonObject jsonObject);
+
+
+    @Headers("Content-Type: application/json")
+    @POST("apis/get_accountant_approved_orders_list")
+    Call<JsonObject>get_account_approved_orders_list(@Body JsonObject jsonObject);
+
+    @Headers("Content-Type: application/json")
+    @POST("apis/accountant_update_to_approve_order")
+    Call<JsonObject>accountant_update_to_approve_order(@Body JsonObject jsonObject);
+
+    @Headers("Content-Type: application/json")
+    @POST("apis/update_to_dispatched_order")
+    Call<JsonObject>update_to_dispatch_order(@Body JsonObject jsonObject);
+
 
  /* @FormUrlEncoded
     @POST("login/create_secure_token")
@@ -107,5 +129,9 @@ public interface ApiInterface {
                                                 @Field("accessCode") String param2,
                                                 @Field("requestHash") String param3);*/
 
+
+    @Headers("Content-Type: application/json")
+    @POST("succcess_redirect_url.php")
+    Call<JsonObject> redirect(@Body JsonObject jsonObject);
 
 }

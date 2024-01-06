@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +26,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ccavenue.indiasdk.AvenueOrder;
+import com.ccavenue.indiasdk.AvenuesApplication;
+import com.ccavenue.indiasdk.AvenuesTransactionCallback;
 import com.example.teabreak_app.Adapter.DeliverydetailsAdapter;
 import com.example.teabreak_app.ModelClass.ListItemsModel;
 import com.example.teabreak_app.ModelClass.LoginUserModel;
@@ -42,18 +46,25 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.itextpdf.text.Element;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.parser.Parser;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Checkout extends AppCompatActivity {
+public class Checkout extends AppCompatActivity  implements AvenuesTransactionCallback {
     private ActivityCheckoutBinding binding;
     LinearLayout paymentdetails,deliverydetails,submit;
     ImageView close_btn;
@@ -79,6 +90,17 @@ public class Checkout extends AppCompatActivity {
 
     static String wallet_status="0";
 
+
+    Context mContext;
+    ProgressDialog progress;
+    String Order_id;
+    String  ba1,ba2;
+    String request_hash="",req_id="";
+
+    String gateway_id="",gateway_name="",payment_mode="",workingKey="",merchantId="",accessCode="",status="",last_update_date_time="",requestId="";
+    String responseCode,responseStatus,responseMessage,secureToken,creationTimestamp,secureTokenExpiry,responseHash;
+    private static DecimalFormat df = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +108,8 @@ public class Checkout extends AppCompatActivity {
         binding=ActivityCheckoutBinding.inflate(getLayoutInflater());
         View view=binding.getRoot();
         setContentView(view);
+
+        df = new DecimalFormat("0.00");
 
         viewModel = ViewModelProviders.of(Checkout.this).get(TeaBreakViewModel.class);
         progressDialog=new ProgressDialog(Checkout.this);
@@ -146,8 +170,10 @@ public class Checkout extends AppCompatActivity {
                     delivery_charges.setText( "₹"+Delivery_charges);
 
                     wallet_amt_txt.setText("Wallet Amount is("+"₹"+""+wallet_amount+")");
+
                     t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges));
-                    total_amt.setText(String.valueOf( "₹"+t_amt));
+                    Log.e("df_t_amt_format",df.format(t_amt));
+                    total_amt.setText(String.valueOf( "₹"+df.format(t_amt)));
 
                     close_btn=view_alert.findViewById(R.id.close_btn);
                     submit_btn=view_alert.findViewById(R.id.submit_btn);
@@ -170,11 +196,11 @@ public class Checkout extends AppCompatActivity {
                                wallet_status="1";
                                t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges))-Float.parseFloat(wallet_amount);
                                // Float t_amt_with_wallet=t_amt-Float.parseFloat(wallet_amount);
-                               total_amt.setText(String.valueOf( "₹"+t_amt));
+                               total_amt.setText(String.valueOf( "₹"+df.format(t_amt)));
                            }else{
                                wallet_status="0";
                                t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges));
-                               total_amt.setText(String.valueOf( "₹"+t_amt));
+                               total_amt.setText(String.valueOf( "₹"+df.format(t_amt)));
                            }
                         }
                     });
@@ -198,7 +224,6 @@ public class Checkout extends AppCompatActivity {
                             }
                         }
                     });
-
 
                     dialog.setView(view_alert);
                     dialog.setCancelable(true);
@@ -317,7 +342,7 @@ public class Checkout extends AppCompatActivity {
         }else{
             jsonObject.addProperty("used_wallet_amount","0");
         }
-        jsonObject.addProperty("online_paid_amount",t_amt);
+        jsonObject.addProperty("online_paid_amount",df.format(t_amt));
 
         viewModel.insert_order_api(jsonObject).observe(Checkout.this, new Observer<JsonObject>() {
             @Override
@@ -348,9 +373,13 @@ public class Checkout extends AppCompatActivity {
                             finish();*/
 
                             alertDialog.dismiss();
-                            Intent intent=new Intent(Checkout.this,MerchantCheckoutActivity.class);
+
+                            payment_gateway_details_api_call();
+
+                            /*Intent intent=new Intent(Checkout.this,MerchantCheckoutActivity.class);
                             intent.putExtra("order_no",order_no);
-                            startActivity(intent);
+                            startActivity(intent);*/
+
                         }
 
 
@@ -370,6 +399,204 @@ public class Checkout extends AppCompatActivity {
 
             }
         });
+    }
+
+
+
+    private void payment_gateway_details_api_call() {
+
+        JsonObject object = new JsonObject();
+        object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
+        object.addProperty("user_token",SaveAppData.getLoginData().getToken());
+
+        viewModel.get_payment_details(object).observe(Checkout.this, new Observer<JsonObject>() {
+            @Override
+            public void onChanged(JsonObject jsonObject) {
+
+                if (jsonObject != null){
+                    Log.d("payment_details","payment_details "+jsonObject);
+                    try {
+                        JSONObject jsonObject1=new JSONObject(jsonObject.toString());
+                        //String message=jsonObject1.getString("message");
+                        JSONObject data_object= new JSONObject();
+                        data_object=jsonObject1.getJSONObject("data");
+                        gateway_id=data_object.getString("gateway_id");
+                        gateway_name=data_object.getString("gateway_name");
+                        payment_mode=data_object.getString("payment_mode");
+                        workingKey=data_object.getString("workingKey");
+                        merchantId=data_object.getString("merchantId");
+                        accessCode=data_object.getString("accessCode");
+                        status=data_object.getString("status");
+                        last_update_date_time=data_object.getString("last_update_date_time");
+
+                        requestId=jsonObject1.getString("requestId");
+
+                        Log.e("accessCode_for_secure_token",accessCode);
+                        Log.e("working_key",workingKey);
+                        Log.e("merchantId",merchantId);
+                        Log.e("workingKey",workingKey);
+
+                        request_hash=requestId+workingKey+merchantId;
+                        // request_hash=requestId+"320ECB91D6183CD5D65D9D91E2D2CF2B"+merchantId;
+                        // request_hash=requestId+"C84AF8924DB0262E1362AAD0BEBE59ED"+merchantId; //live
+                        // request_hash=requestId+"5D75051B7F577D861C9ECAD9B619804D"+merchantId; //live
+
+                        // request_hash=req_id+workingKey+merchantId; //live
+
+                        Log.e("request_hash",request_hash);
+                        try {
+                            ba1 =generateReqHash(request_hash);
+                            Log.e("secure_token",ba1);
+                        } catch (NoSuchAlgorithmException e) {
+                            Log.e("Exception",""+e);
+                            throw new RuntimeException(e);
+                        }
+
+
+                      /*  byte[] byteArray = request_hash.getBytes();
+                        ba1 = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                        Log.e("req_hash",ba1);
+*/
+
+                        secure_token_api_call();
+
+                    } catch (JSONException e) {
+                        //throw new RuntimeException(e);
+                        Toast.makeText(Checkout.this, ""+e, Toast.LENGTH_SHORT).show();
+                    }
+
+                }else{
+
+                    Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+    }
+
+
+    private void secure_token_api_call() {
+        Log.e("secure_token","secure_token_mthd");
+        JsonObject object = new JsonObject();
+
+        viewModel.get_secure_token().observe(Checkout.this, new Observer<JsonObject>() {
+            @Override
+            public void onChanged(JsonObject jsonObject) {
+
+                if (jsonObject != null){
+                    Log.d("secure_token_res","secure_token "+jsonObject);
+                    try {
+                        JSONObject jsonObject1=new JSONObject(jsonObject.toString());
+                        Log.e("secure_token_res",jsonObject.toString());
+
+                        if(jsonObject1.getString("text").equalsIgnoreCase("Success")){
+
+                            if(jsonObject1.getString("message")!=null){
+                                secureToken=jsonObject1.getJSONObject("message").getString("secureToken");
+                                responseHash=jsonObject1.getJSONObject("message").getString("responseHash");
+                                responseCode=jsonObject1.getJSONObject("message").getString("responseHash");
+
+                                Log.e("response_hash",responseHash);
+                                request_hash=order_no+"INR"+"1.00"+secureToken;
+                                // request_hash=order_no+"INR"+df.format(t_amt)+secureToken;
+                                try {
+                                    ba2=generateReqHash(request_hash);
+                                    Log.e("ba2",ba2);
+                                } catch (NoSuchAlgorithmException e) {
+                                    Log.e("ba2_Exception",ba2);
+                                    throw new RuntimeException(e);
+                                }
+                                initiatePayment1();
+                            }else{
+                                Toast.makeText(mContext, "Secure token is null...please try again", Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+
+
+                    } catch (JSONException e) {
+                        //throw new RuntimeException(e);
+                        Toast.makeText(Checkout.this, ""+e, Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }else{
+
+                    Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+    }
+
+
+    private void initiatePayment1() {
+
+        AvenueOrder orderDetails = new AvenueOrder();
+        orderDetails.setOrderId(order_no);
+        orderDetails.setRequestHash(ba2);
+        orderDetails.setAccessCode(accessCode);
+        orderDetails.setMerchantId(merchantId);
+        orderDetails.setCurrency("INR");
+        orderDetails.setAmount("1.00");
+
+     //   orderDetails.setAmount(String.valueOf(df.format(t_amt)));
+
+        orderDetails.setRedirectUrl(Constant.SERVER_BASE_URL+"response_handler_url.php");
+     //   orderDetails.setRedirectUrl("https://teabreak.digitalrupay.com/Check_success/response_new");
+      //  orderDetails.setCancelUrl(Constant.SERVER_BASE_URL+"cancelPage.php");
+        orderDetails.setCancelUrl(Constant.SERVER_BASE_URL+"response_handler_url.php");
+     //   orderDetails.setCancelUrl("https://www.testserver.com/cancelPage.php");
+        orderDetails.setCustomerId("9390126304");
+        orderDetails.setPaymentType("all");
+        orderDetails.setMerchantLogo(String.valueOf(R.drawable.teabreakicon));
+        orderDetails.setBillingName(SaveAppData.getLoginData().getName());
+        orderDetails.setBillingAddress("Hyderabad");
+        orderDetails.setBillingCountry("India");
+        orderDetails.setBillingState("Telangana");
+        orderDetails.setBillingCity("Hyderabad");
+        orderDetails.setBillingZip("500016");
+        orderDetails.setBillingTel("9390126304");
+        orderDetails.setBillingEmail("sudhak4585@gmail.com");
+        orderDetails.setDeliveryName("test");
+        orderDetails.setDeliveryAddress("Hyderabad");
+        orderDetails.setDeliveryCountry("India");
+        orderDetails.setDeliveryState("Telangana");
+        orderDetails.setDeliveryCity("Hyderabad");
+        orderDetails.setDeliveryZip("500016");
+        orderDetails.setDeliveryTel("9390126304");
+        orderDetails.setMerchant_param1("test"); //total 5 parameters
+        orderDetails.setMerchant_param2("transaction"); //total 5 parameters
+        orderDetails.setMerchant_param3("1"); //total 5 parameters
+        orderDetails.setMerchant_param4("2"); //total 5 parameters
+        orderDetails.setMerchant_param5("3"); //total 5 parameters
+        orderDetails.setMobileNo("9390126304");
+        orderDetails.setPaymentEnviroment("“app_staging"); //app_live - prod
+
+      /*  orderDetails.setColorPrimary("#008000");
+        orderDetails.setColorAccent("#009688");
+        orderDetails.setColorFont("#fd5c63");*/
+
+        orderDetails.setColorPrimary("color_primary");
+        orderDetails.setColorAccent("color_accent");
+        orderDetails.setColorFont("color_font");
+
+        orderDetails.setBackgroundDrawable(0);
+        // orderDetails.setBackgroundDrawable(R.drawable.img);
+        //To begin transaction through SDK…
+        AvenuesApplication.startTransaction(Checkout.this, orderDetails);
+    }
+
+    private String generateReqHash(String str) throws NoSuchAlgorithmException {
+
+        MessageDigest md = MessageDigest.getInstance("SHA-512");
+        byte[] digest = md.digest(str.getBytes());
+        StringBuilder sb = new StringBuilder();
+        for (byte b : digest) {
+            sb.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
+        }
+        System.out.println(sb);
+        return sb.toString();
     }
 
     private void delivery_mode_api_call() {
@@ -580,4 +807,89 @@ public class Checkout extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onTransactionResponse(Bundle bundle) {
+        Log.e("transaction_res","onTransactionResponse"+bundle.toString());
+        Log.e("transaction_res","onTransactionResponse22"+bundle);
+      //  Log.e("order_status",bundle.getString("order_status"));
+
+        Intent intent=new Intent(Checkout.this,StatusActivity.class);
+        intent.putExtra("orderno",bundle.getString("orderno"));
+        intent.putExtra("tracking_id",bundle.getString("tracking_id"));
+        intent.putExtra("trans_date",bundle.getString("trans_date"));
+        intent.putExtra("billing_name",bundle.getString("billing_name"));
+        intent.putExtra("amount",bundle.getString("amount"));
+        intent.putExtra("bank_ref_no",bundle.getString("bank_ref_no"));
+        intent.putExtra("order_status",bundle.getString("order_status"));
+        startActivity(intent);
+
+      /*  if(bundle.getString("order_status").equalsIgnoreCase("Success")){
+            Log.e("success","success");
+            Log.e("res",bundle.getString("order_status"));
+        }
+*/
+
+    }
+
+/*    private void redirect_api_call() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("encResp", "");
+
+
+
+
+        ApiInterface apiInterface = ApiClient.getClient( Constant.SERVER_BASE_URL).create(ApiInterface.class);
+        Call<JsonObject> redirect_res = apiInterface.redirect(jsonObject);
+
+        redirect_res.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+
+                if(response.body()==null){
+                    Toast.makeText(Checkout.this, "Something went Wrong", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(response.body()!=null){
+
+                    JSONObject jsonObj = null;
+                    try {
+                        jsonObj = new JSONObject(response.body().toString());
+                        String response1=jsonObj.getString("response");
+                        Toast.makeText(mContext, ""+response1, Toast.LENGTH_SHORT).show();
+
+
+                    } catch (JSONException e) {
+                        //throw new RuntimeException(e);
+                        Snackbar.make(Checkout.this,findViewById(android.R.id.content),""+e,Snackbar.LENGTH_LONG).show();
+                    }
+
+                }else{
+                    Toast.makeText(Checkout.this, "null", Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+                if (progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+                Toast.makeText(Checkout.this, ""+t, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }*/
+
+    @Override
+    public void onErrorOccurred(String s) {
+        Log.e("transaction_res","onErrorOccurred "+s);
+    }
+
+    @Override
+    public void onCancelTransaction(String s) {
+        Log.e("transaction_res","onCancelTransaction"+s);
+    }
 }

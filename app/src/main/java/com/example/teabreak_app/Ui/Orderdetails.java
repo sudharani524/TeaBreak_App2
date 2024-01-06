@@ -15,6 +15,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.fonts.Font;
 import android.net.Uri;
 import android.os.Build;
@@ -104,6 +105,13 @@ public class Orderdetails extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(Orderdetails.this,Orders_List_Activity.class));
+            }
+        });
+
+        binding.whatsappImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                receipt();
             }
         });
 
@@ -296,13 +304,15 @@ public class Orderdetails extends AppCompatActivity {
             // Adding Title....
             Font mOrderDetailsTitleFont = null;
 
-         /*   if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+        /*    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
                 mOrderDetailsTitleFont = new Font("urName", mValueFontSize, BaseColor.BLACK);
-            }*/
+            }
+*/
 
             Chunk mOrderDetailsTitleChunk = new Chunk("TeaBreak");
             Paragraph mOrderDetailsTitleParagraph = new Paragraph(mOrderDetailsTitleChunk);
             mOrderDetailsTitleParagraph.setAlignment(Element.ALIGN_CENTER);
+
             document.add(mOrderDetailsTitleParagraph);
             document.add(new Paragraph(""));
 
@@ -320,38 +330,97 @@ public class Orderdetails extends AppCompatActivity {
             // Fields of Order Details...
             // Adding Chunks for Title and value
 
-
             PdfPTable accounts1 = new PdfPTable(2);
             accounts1.setWidths(new float[] {4,8});
             accounts1.setWidthPercentage(100);
             accounts1.addCell(getBillRowCell("Name"));
-            accounts1.addCell(getheaderCellR("Sudha"+"Rani"));
+            accounts1.addCell(getheaderCellR(""+SaveAppData.getLoginData().getLogin_username()));
 
             accounts1.addCell(getBillRowCell("Mobile"));
-            accounts1.addCell(getheaderCellR("9390126304"));
+            accounts1.addCell(getheaderCellR(""+SaveAppData.getLoginData().getUser_mobile()));
 
             accounts1.addCell(getBillRowCell("Address"));
-            accounts1.addCell(getheaderCellR("Hyderabad"));
+            accounts1.addCell(getheaderCellR(""+SaveAppData.getLoginData().getAddress()));
 
-            accounts1.addCell(getBillRowCell("Bill Date"));
-            accounts1.addCell(getheaderCellR("12-19-2023"));
+            accounts1.addCell(getBillRowCell("Order Date"));
+            accounts1.addCell(getheaderCellR(""+order_date));
 
-            accounts1.addCell(getBillRowCell("Receipt No"));
-            accounts1.addCell(getheaderCellR("Invoice"));
+            accounts1.addCell(getBillRowCell("Order No"));
+            accounts1.addCell(getheaderCellR(""+order_no));
 
-
-            accounts1.addCell(getBillRowCell("Basic Pack"));
-            accounts1.addCell(getheaderCellR("100"));
-
+            accounts1.addCell(getBillRowCell(""));
+            accounts1.addCell(getheaderCellR(""));
 
 
 
-            PdfPTable billTable1 = new PdfPTable(2); //one page contains 15 records
+
+
+
+            PdfPTable billTable1 = new PdfPTable(4); //one page contains 15 records
             billTable1.setWidthPercentage(100);
-            billTable1.setWidths(new float[] { 5,2 });
-            billTable1.addCell(getBillHeaderCell("Previous Due"));
-            billTable1.addCell(getBillHeaderCell(getroundedFigure("500")));
+            billTable1.setWidths(new float[] { 5,2,2,2 });
+            billTable1.addCell(getBillHeaderCell2("Item"));
+            billTable1.addCell(getBillHeaderCell2("Quantity"));
+            billTable1.addCell(getBillHeaderCell2("Price"));
+            billTable1.addCell(getBillHeaderCell2("Amount"));
 
+
+            document.add(accounts1);
+            document.add(billTable1);
+            for(int i=0;i<list.size();i++){
+
+                PdfPTable billTable11 = new PdfPTable(4); //one page contains 15 records
+                billTable11.setWidthPercentage(100);
+                billTable11.setWidths(new float[] { 5,2,2,2 });
+                int a=list.size()-1;
+
+                if(i==Integer.valueOf(list.size()-1)){
+                    billTable11.addCell(getBillHeaderCellF(list.get(i).getLine_item_name()));
+                    billTable11.addCell(getBillHeaderCellF(list.get(i).getQuantity()));
+                    billTable11.addCell(getBillHeaderCellF("₹"+list.get(i).getPrice()));
+                    billTable11.addCell(getBillHeaderCellF("₹"+list.get(i).getSub_total_price()));
+                }else{
+
+                    billTable11.addCell(getBillHeaderCell(list.get(i).getLine_item_name()));
+                    billTable11.addCell(getBillHeaderCell(list.get(i).getQuantity()));
+                    billTable11.addCell(getBillHeaderCell("₹"+list.get(i).getPrice()));
+                    billTable11.addCell(getBillHeaderCell("₹"+list.get(i).getSub_total_price()));
+                }
+
+                document.add(billTable11);
+
+            }
+
+            PdfPTable accounts11 = new PdfPTable(4);
+            accounts11.setWidths(new float[] { 5,2,2,2 });
+            accounts11.setWidthPercentage(100);
+
+            accounts11.addCell(getAccountsCell2("Total Amount"));
+            accounts11.addCell(getAccountsCell2(""));
+            accounts11.addCell(getAccountsCell2(""));
+            accounts11.addCell(getAccountsCell2("₹"+Amount));
+
+            document.add(accounts11);
+
+            PdfPTable accounts = new PdfPTable(2);
+            accounts.setWidths(new float[] { 3,2 });
+            accounts.setSpacingBefore(20.0f);
+            accounts.setWidthPercentage(70);
+           /* accounts.addCell(getAccountsCell("Collected By"));
+            accounts.addCell(getAccountsCellR("sudha"+"sdfgh"));*/
+
+            accounts.addCell(getAccountsCell(" "));
+            accounts.addCell(getAccountsCellR(" "));
+
+            PdfPTable validity = new PdfPTable(1);
+            validity.setWidthPercentage(100);
+            validity.addCell(getValidityCell("GENERATED BY DIGITALRUPAY"));
+
+            document.add(accounts);
+            document.add(validity);
+
+
+/*
             PdfPTable billTable12 = new PdfPTable(2); //one page contains 15 records
             billTable12.setWidthPercentage(100);
             billTable12.setWidths(new float[] { 5,2 });
@@ -418,10 +487,11 @@ public class Orderdetails extends AppCompatActivity {
 
             PdfPTable validity = new PdfPTable(1);
             validity.setWidthPercentage(100);
-            validity.addCell(getValidityCell("GENERATED BY DIGITALRUPAY"));
+            validity.addCell(getValidityCell("GENERATED BY DIGITALRUPAY"));*/
 
-            document.add(accounts1);
-            document.add(billTable11);
+
+         //   document.add(accounts1);
+           /* document.add(billTable11);
             document.add(billTable1);
             document.add(billTable21);
             document.add(billTable22);
@@ -432,7 +502,7 @@ public class Orderdetails extends AppCompatActivity {
             document.add(billTable5);
             document.add(billTable6);
             document.add(accounts);
-            document.add(validity);
+            document.add(validity);*/
 
 
             Log.e("document",document.toString());
@@ -505,7 +575,22 @@ public class Orderdetails extends AppCompatActivity {
         return cell;
     }
 
-
+    public static PdfPCell getAccountsCell2(String text) {
+        FontSelector fs = new FontSelector();
+        com.itextpdf.text.Font font = FontFactory.getFont(FontFactory.HELVETICA, 18);
+        font.setColor(BaseColor.BLACK.BLACK);
+        font.setStyle(com.itextpdf.text.Font.BOLD);
+        fs.addFont(font);
+        Phrase phrase = fs.process(text);
+        PdfPCell cell = new PdfPCell (phrase);
+        cell.setBorderWidthRight(0);
+        cell.setBorderWidthLeft(0);
+        cell.setBorderWidthBottom(0);
+        cell.setBorderWidthTop(0);
+        cell.setPadding (5.0f);
+        cell.setHorizontalAlignment (Element.ALIGN_CENTER);
+        return cell;
+    }
     public static PdfPCell getBillHeaderCellF(String text) {
         FontSelector fs = new FontSelector();
         com.itextpdf.text.Font font = FontFactory.getFont(FontFactory.HELVETICA, 18);
@@ -541,6 +626,20 @@ public class Orderdetails extends AppCompatActivity {
         FontSelector fs = new FontSelector();
         com.itextpdf.text.Font font = FontFactory.getFont(FontFactory.HELVETICA, 18);
         font.setColor(BaseColor.BLACK);
+        fs.addFont(font);
+        Phrase phrase = fs.process(text);
+        PdfPCell cell = new PdfPCell (phrase);
+        cell.setHorizontalAlignment (Element.ALIGN_CENTER);
+        cell.setBorderWidthBottom(0);
+        cell.setPadding (10.0f);
+        return cell;
+    }
+
+    public static PdfPCell getBillHeaderCell2(String text) {
+        FontSelector fs = new FontSelector();
+        com.itextpdf.text.Font font = FontFactory.getFont(FontFactory.HELVETICA, 18);
+        font.setColor(BaseColor.BLACK);
+        font.setStyle(com.itextpdf.text.Font.BOLD);
         fs.addFont(font);
         Phrase phrase = fs.process(text);
         PdfPCell cell = new PdfPCell (phrase);

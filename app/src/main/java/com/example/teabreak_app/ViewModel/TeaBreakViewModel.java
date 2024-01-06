@@ -34,6 +34,11 @@ public class TeaBreakViewModel extends ViewModel {
     private MutableLiveData<JsonObject> secure_token_status;
     private MutableLiveData<JsonObject> Order_list_details;
     private MutableLiveData<JsonObject> Orders_items_list;
+    private MutableLiveData<JsonObject> edit_dispatcher_order_items_status;
+    private MutableLiveData<JsonObject> accountant_pending_orders_list;
+    private MutableLiveData<JsonObject> accountant_approved_orders_list;
+    private MutableLiveData<JsonObject> accountant_update_approve_order_status;
+    private MutableLiveData<JsonObject> update_to_dispatch_order_status;
 
 
     public LiveData<JsonObject> get_list_items() {
@@ -147,6 +152,134 @@ public class TeaBreakViewModel extends ViewModel {
         ordered_list_items_api_call(jsonObject);
         return Orders_items_list;
     }
+
+    public LiveData<JsonObject>edit_dipatcher_items_order(JsonObject jsonObject){
+        edit_dispatcher_order_items_status = new MutableLiveData<JsonObject>(jsonObject);
+        edit_dispatcher_order_item_api_call(jsonObject);
+        return edit_dispatcher_order_items_status;
+    }
+
+
+    public LiveData<JsonObject>get_accountant_pending_order_details(JsonObject jsonObject){
+        accountant_pending_orders_list = new MutableLiveData<JsonObject>(jsonObject);
+        get_accountant_pending_order_details_api_call(jsonObject);
+        return accountant_pending_orders_list;
+    }
+
+    public LiveData<JsonObject>get_accountant_approved_order_details(JsonObject jsonObject){
+        accountant_approved_orders_list = new MutableLiveData<JsonObject>(jsonObject);
+        get_accountant_approved_order_details_api_call(jsonObject);
+        return accountant_approved_orders_list;
+    }
+
+
+    public LiveData<JsonObject>accountant_update_approve_order(JsonObject jsonObject){
+        accountant_update_approve_order_status = new MutableLiveData<JsonObject>(jsonObject);
+        accountant_update_approve_order_api_call(jsonObject);
+        return accountant_update_approve_order_status;
+    }
+
+    public LiveData<JsonObject>update_dispatch_order(JsonObject jsonObject){
+        update_to_dispatch_order_status = new MutableLiveData<JsonObject>(jsonObject);
+        update_to_dispatch_order_api_call(jsonObject);
+        return update_to_dispatch_order_status;
+    }
+
+    private void update_to_dispatch_order_api_call(JsonObject jsonObject) {
+        ApiInterface apiInterface=ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
+        Call<JsonObject>update_dispatch_order= apiInterface.update_to_dispatch_order(jsonObject);
+        update_dispatch_order.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.body()!= null){
+                    update_to_dispatch_order_status.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("TAG_NAME", t.toString());
+            }
+        });
+    }
+
+    private void accountant_update_approve_order_api_call(JsonObject jsonObject) {
+        ApiInterface apiInterface=ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
+        Call<JsonObject>approve_order= apiInterface.accountant_update_to_approve_order(jsonObject);
+        approve_order.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.body()!= null){
+                    accountant_update_approve_order_status.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("TAG_NAME", t.toString());
+            }
+        });
+    }
+
+
+    private void get_accountant_pending_order_details_api_call(JsonObject jsonObject) {
+        ApiInterface apiInterface=ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
+        Call<JsonObject>pending_order_list= apiInterface.get_account_pending_orders_list(jsonObject);
+        pending_order_list.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.body()!= null){
+                    accountant_pending_orders_list.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("TAG_NAME", t.toString());
+            }
+        });
+    }
+
+
+    private void get_accountant_approved_order_details_api_call(JsonObject jsonObject) {
+        ApiInterface apiInterface=ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
+        Call<JsonObject>approved_order_list= apiInterface.get_account_approved_orders_list(jsonObject);
+        approved_order_list.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.body()!= null){
+                    accountant_approved_orders_list.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("TAG_NAME", t.toString());
+            }
+        });
+    }
+
+
+    private void edit_dispatcher_order_item_api_call(JsonObject jsonObject) {
+        ApiInterface apiInterface=ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
+        Call<JsonObject>edit_dispatcher= apiInterface.edit_dispatcher_order_items_list(jsonObject);
+        edit_dispatcher.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.body()!= null){
+                    edit_dispatcher_order_items_status.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("TAG_NAME", t.toString());
+            }
+        });
+    }
+
+
+
     private void ordered_list_items_api_call(JsonObject jsonObject) {
         ApiInterface apiInterface=ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
         Call<JsonObject>Items_list= apiInterface.Items_ordered_list(jsonObject);

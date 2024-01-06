@@ -30,9 +30,13 @@ import com.example.teabreak_app.ViewModel.TeaBreakViewModel;
 import com.example.teabreak_app.repository.ApiClient;
 import com.example.teabreak_app.repository.ApiInterface;
 import com.google.gson.JsonObject;
+import com.itextpdf.text.Element;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.parser.Parser;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -123,7 +127,7 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
                            responseCode=jsonObject1.getJSONObject("message").getString("responseHash");
 
                            Log.e("response_hash",responseHash);
-                           request_hash=Order_id+"INR"+"10.00"+secureToken;
+                           request_hash=Order_id+"INR"+"1.00"+secureToken;
                            try {
                                ba2=generateReqHash(request_hash);
                                Log.e("ba2",ba2);
@@ -251,6 +255,40 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
         }
     }*/
 
+
+//   String xmlResponse=bundle.getString("response");
+
+/*    public static String convertXmlToJson(String xmlString) {
+        try {
+            // Parse XML using Jsoup
+            Document document = Jsoup.parse(xmlString, "", Parser.xmlParser());
+
+            // Convert XML to JSON using a recursive function
+            JSONObject jsonObject = convertElementToJson((Element) document);
+
+            // Return the JSON string
+            return jsonObject.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private static JSONObject convertElementToJson(Element element) {
+        JSONObject jsonObject = new JSONObject();
+
+        for (Element child : element.children()) {
+            // Recursively convert child elements to JSON
+            jsonObject.put(child.tagName(), child.children().isEmpty()
+                    ? child.text()
+                    : convertElementToJson(child));
+        }
+
+        return jsonObject;
+    }
+    */
+
+
     private void initiatePayment1() {
 
         AvenueOrder orderDetails = new AvenueOrder();
@@ -259,15 +297,23 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
         orderDetails.setAccessCode(accessCode);
         orderDetails.setMerchantId(merchantId);
         orderDetails.setCurrency("INR");
-        orderDetails.setAmount("10.00");
+        orderDetails.setAmount("1.00");
        // orderDetails.setRedirectUrl("redirect_url");
-        orderDetails.setRedirectUrl(Constant.SERVER_BASE_URL+"redirectPage.php");
+
+     //   orderDetails.setRedirectUrl(Constant.SERVER_BASE_URL+"redirectPage.php");
        // orderDetails.setCancelUrl("cancel_url");
        // orderDetails.setCancelUrl("https://www.testserver.com/cancelPage.php");
-        orderDetails.setCancelUrl(Constant.SERVER_BASE_URL+"cancelPage.php");
+
+     //   orderDetails.setCancelUrl(Constant.SERVER_BASE_URL+"cancelPage.php");
+
+
+        orderDetails.setRedirectUrl("https://www.testserver.com/redirectPage.php");
+        orderDetails.setCancelUrl("https://www.testserver.com/cancelPage.php");
+
+
         orderDetails.setCustomerId("9390126304");
-        orderDetails.setPaymentType(payment_mode);
-        orderDetails.setMerchantLogo("merchant_logo");
+        orderDetails.setPaymentType("all");
+        orderDetails.setMerchantLogo(String.valueOf(R.drawable.logo));
         orderDetails.setBillingName(SaveAppData.getLoginData().getName());
         orderDetails.setBillingAddress("Hyderabad");
         orderDetails.setBillingCountry("India");
@@ -290,10 +336,15 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
         orderDetails.setMerchant_param5("3"); //total 5 parameters
         orderDetails.setMobileNo("9390126304");
         orderDetails.setPaymentEnviroment("“app_staging"); //app_live - prod
-        orderDetails.setColorPrimary("color_primary");
-        orderDetails.setColorAccent("color_accent");
-        orderDetails.setColorFont("color_font");
+
+        orderDetails.setColorPrimary("#008000");
+      //  orderDetails.setColorPrimary("color_primary");
+        orderDetails.setColorAccent("#009688");
+      //  orderDetails.setColorAccent("color_accent");
+        orderDetails.setColorFont("#fd5c63");
+      //  orderDetails.setColorFont("color_font");
         orderDetails.setBackgroundDrawable(0);
+       // orderDetails.setBackgroundDrawable(R.drawable.img);
         //To begin transaction through SDK…
         AvenuesApplication.startTransaction(MerchantCheckoutActivity.this, orderDetails);
 

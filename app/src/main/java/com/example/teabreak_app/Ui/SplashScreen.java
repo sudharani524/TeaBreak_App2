@@ -21,8 +21,21 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void run() {
                 if(SaveAppData.getLoginData()!=null){
-                    startActivity(new Intent(SplashScreen.this, DashboardActivity.class));
-                    finish();
+
+                    if(SaveAppData.getLoginData().getRole_id().equalsIgnoreCase("2")){
+                        startActivity(new Intent(SplashScreen.this, DashboardActivity.class));
+                        finish();
+                    } else if (SaveAppData.getLoginData().getRole_id().equalsIgnoreCase("3")) {
+                        startActivity(new Intent(SplashScreen.this, VendorOrderlist.class));
+                        finish();
+                    } else if (SaveAppData.getLoginData().getRole_id().equalsIgnoreCase("4")) {
+                        startActivity(new Intent(SplashScreen.this, AccountsDashboard.class));
+                        finish();
+                    } else{
+                        startActivity(new Intent(SplashScreen.this, DashboardActivity.class));
+                        finish();
+                    }
+
                 }else{
                     startActivity(new Intent(SplashScreen.this, MainActivity.class));
                     finish();
