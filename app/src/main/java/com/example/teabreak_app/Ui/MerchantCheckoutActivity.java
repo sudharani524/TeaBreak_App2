@@ -8,9 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -21,7 +19,6 @@ import androidx.lifecycle.ViewModelProviders;
 import com.ccavenue.indiasdk.AvenueOrder;
 import com.ccavenue.indiasdk.AvenuesApplication;
 import com.ccavenue.indiasdk.AvenuesTransactionCallback;
-import com.example.teabreak_app.ModelClass.Order_delivery_type;
 import com.example.teabreak_app.ModelClass.orderDetails;
 import com.example.teabreak_app.R;
 import com.example.teabreak_app.Utils.Constant;
@@ -30,13 +27,9 @@ import com.example.teabreak_app.ViewModel.TeaBreakViewModel;
 import com.example.teabreak_app.repository.ApiClient;
 import com.example.teabreak_app.repository.ApiInterface;
 import com.google.gson.JsonObject;
-import com.itextpdf.text.Element;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.parser.Parser;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -51,6 +44,7 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
     Context mContext;
     ProgressDialog progress;
     String Order_id;
+    String Order_id_2;
     String  ba1,ba2;
     private TeaBreakViewModel viewModel;
     String request_hash="",req_id="";
@@ -141,7 +135,7 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
 
                     } catch (JSONException e) {
                         //throw new RuntimeException(e);
-                        Toast.makeText(MerchantCheckoutActivity.this, ""+e, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MerchantCheckoutActivity.this, "Exception.."+e, Toast.LENGTH_SHORT).show();
                     }
 
 

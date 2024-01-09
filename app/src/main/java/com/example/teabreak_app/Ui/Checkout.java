@@ -8,9 +8,9 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,7 +22,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,29 +30,22 @@ import com.ccavenue.indiasdk.AvenuesApplication;
 import com.ccavenue.indiasdk.AvenuesTransactionCallback;
 import com.example.teabreak_app.Adapter.DeliverydetailsAdapter;
 import com.example.teabreak_app.ModelClass.ListItemsModel;
-import com.example.teabreak_app.ModelClass.LoginUserModel;
 import com.example.teabreak_app.ModelClass.Order_delivery_type;
-import com.example.teabreak_app.ModelClass.UsersRolesModel;
 import com.example.teabreak_app.R;
 import com.example.teabreak_app.Utils.Constant;
 import com.example.teabreak_app.Utils.SaveAppData;
 import com.example.teabreak_app.ViewModel.TeaBreakViewModel;
 import com.example.teabreak_app.databinding.ActivityCheckoutBinding;
-import com.example.teabreak_app.databinding.ActivityListItemsBinding;
 import com.example.teabreak_app.repository.ApiClient;
 import com.example.teabreak_app.repository.ApiInterface;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.itextpdf.text.Element;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.parser.Parser;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -74,6 +66,8 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
     ProgressDialog progressDialog;
     ArrayAdapter order_type_adapter;
     ArrayList<Order_delivery_type> order_list=new ArrayList<>();
+    ArrayList<Order_delivery_type> transport_list=new ArrayList<>();
+    ArrayList<String> transport_names=new ArrayList<>();
     ArrayList<ListItemsModel> cart_list=new ArrayList<>();
     DeliverydetailsAdapter deliverydetailsAdapter;
 
@@ -82,8 +76,9 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
     String t_amount,Delivery_charges;
 
     String order_no;
+    String order_no2;
     Float t_amt;
-    String availability_date="";
+   static String availability_date="";
     ArrayList<String> as_dates;
     TextView delivery_date;
     static String wallet_amount="";
@@ -100,6 +95,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
     String gateway_id="",gateway_name="",payment_mode="",workingKey="",merchantId="",accessCode="",status="",last_update_date_time="",requestId="";
     String responseCode,responseStatus,responseMessage,secureToken,creationTimestamp,secureTokenExpiry,responseHash;
     private static DecimalFormat df = null;
+    AppCompatButton cancel_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,13 +114,17 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
         wallet_amount_api_call();
 
         Log.e("wallet_amt",wallet_amount);
+        ordered_Items_list_api_call();
         delivery_mode_api_call();
 
         t_amount=getIntent().getStringExtra("t_amount");
         Delivery_charges=getIntent().getStringExtra("delivery_charges");
+        Log.e("Delivery_charges",Delivery_charges);
 
 
-        ordered_Items_list_api_call();
+
+
+        transport_type_api_call();
 
         binding.total.setText( "₹"+t_amount);
         binding.charges.setText( "₹"+Delivery_charges);
@@ -155,86 +155,180 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                     return;
                 }
 
-                if(!selected_delivery_mode_id.equalsIgnoreCase("")){
-                    AlertDialog.Builder dialog=new AlertDialog.Builder(Checkout.this);
-                    View view_alert= LayoutInflater.from(Checkout.this).inflate(R.layout.paymentdetails,null);
-                    paymentdetails=view_alert.findViewById(R.id.paymentdetails);
-                    TextView amount=view_alert.findViewById(R.id.amount);
-                    TextView total_amt=view_alert.findViewById(R.id.Total);
-                    TextView wallet_amt_txt=view_alert.findViewById(R.id.wallet_amt_txt);
 
-                    CheckBox checkBox=view_alert.findViewById(R.id.myCheckbox);
-                    TextView delivery_charges=view_alert.findViewById(R.id.tv_delivery_charges);
+                 if(!selected_delivery_mode_id.equalsIgnoreCase("")){
 
-                    amount.setText( "₹"+t_amount);
-                    delivery_charges.setText( "₹"+Delivery_charges);
+                     if(selected_delivery_mode_id.equalsIgnoreCase("2")){
+                         for(int i=0;i<cart_list.size();i++){
+                             if(cart_list.get(i).getLine_item_name().contains("Toast") || cart_list.get(i).getLine_item_name().contains("Cream Roll") || cart_list.get(i).getLine_item_name().contains("Cups")){
+                                 //  Toast.makeText(Checkout.this, "Please Remove the Items Toast,Cream Roll,Cups for courier delivery", Toast.LENGTH_SHORT).show();
 
-                    wallet_amt_txt.setText("Wallet Amount is("+"₹"+""+wallet_amount+")");
+                                 AlertDialog.Builder dialog=new AlertDialog.Builder(Checkout.this);
+                                 dialog.setCancelable(false);
+                                 dialog.setMessage("Toast,Cream,Cups are not delivered by courier");
 
-                    t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges));
-                    Log.e("df_t_amt_format",df.format(t_amt));
-                    total_amt.setText(String.valueOf( "₹"+df.format(t_amt)));
+                                 dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                     @Override
+                                     public void onClick(DialogInterface dialog, int which) {
+                                         dialog.dismiss();
+                                     }
+                                 });
 
-                    close_btn=view_alert.findViewById(R.id.close_btn);
-                    submit_btn=view_alert.findViewById(R.id.submit_btn);
+                                 dialog.create();
+                                 dialog.show();
 
-
-                 /*   checkBox.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges))-Float.parseFloat(wallet_amount);
-                         //   Float t_amt_with_wallet=t_amt-Float.parseFloat(wallet_amount);
-                            total_amt.setText(String.valueOf(t_amt));
-                        }
-                    });*/
-
-
-                    checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                           if(checkBox.isChecked()){
-                               wallet_status="1";
-                               t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges))-Float.parseFloat(wallet_amount);
-                               // Float t_amt_with_wallet=t_amt-Float.parseFloat(wallet_amount);
-                               total_amt.setText(String.valueOf( "₹"+df.format(t_amt)));
-                           }else{
-                               wallet_status="0";
-                               t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges));
-                               total_amt.setText(String.valueOf( "₹"+df.format(t_amt)));
-                           }
-                        }
-                    });
-
-
-                    close_btn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            alertDialog.dismiss();
-                        }
-                    });
-
-                    submit_btn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if(selected_delivery_mode_id.equalsIgnoreCase("")){
-                                Toast.makeText(Checkout.this, "Please Select the delivery mode", Toast.LENGTH_SHORT).show();
-                                return;
-                            }else{
-                                create_order_api_call();
-                            }
-                        }
-                    });
-
-                    dialog.setView(view_alert);
-                    dialog.setCancelable(true);
-                    alertDialog = dialog.create();
-                    alertDialog.show();
+                             }else{
+                                 pay_method();
+                             }
+                         }
+                     }
+                   pay_method();
 
                 }
                 else{
                     Toast.makeText(Checkout.this, "Please Select the delivery mode", Toast.LENGTH_SHORT).show();
                 }
 
+
+            }
+        });
+    }
+
+    private void pay_method() {
+        AlertDialog.Builder dialog=new AlertDialog.Builder(Checkout.this);
+        View view_alert= LayoutInflater.from(Checkout.this).inflate(R.layout.paymentdetails,null);
+        paymentdetails=view_alert.findViewById(R.id.paymentdetails);
+        TextView amount=view_alert.findViewById(R.id.amount);
+        TextView total_amt=view_alert.findViewById(R.id.Total);
+        TextView wallet_amt_txt=view_alert.findViewById(R.id.wallet_amt_txt);
+
+        CheckBox checkBox=view_alert.findViewById(R.id.myCheckbox);
+        TextView delivery_charges=view_alert.findViewById(R.id.tv_delivery_charges);
+
+        amount.setText( "₹"+t_amount);
+
+        if(Selected_deliverymode.equalsIgnoreCase("Courier")){
+            delivery_charges.setText( "₹"+Delivery_charges);
+            //cart_list.contains("Toast","Cream Roll","Cups",);
+
+        }else{
+            delivery_charges.setText( "0");
+        }
+
+        close_btn=view_alert.findViewById(R.id.close_btn);
+        cancel_btn=view_alert.findViewById(R.id.cancel);
+        submit_btn=view_alert.findViewById(R.id.submit_btn);
+
+
+        wallet_amt_txt.setText("Wallet Amount is("+"₹"+""+wallet_amount+")");
+
+        if(selected_delivery_mode_id.equalsIgnoreCase("2")){
+            t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges));
+        }else{
+            t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat("0"));
+        }
+
+        Log.e("df_t_amt_format",df.format(t_amt));
+        total_amt.setText(String.valueOf( "₹"+df.format(t_amt)));
+
+
+
+        cancel_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("cancel","cancel_btn_click");
+                alertDialog.dismiss();
+            }
+        });
+
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(checkBox.isChecked()){
+                    wallet_status="1";
+                    t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges))-Float.parseFloat(wallet_amount);
+                    // Float t_amt_with_wallet=t_amt-Float.parseFloat(wallet_amount);
+                    total_amt.setText(String.valueOf( "₹"+df.format(t_amt)));
+                }else{
+                    wallet_status="0";
+                    t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges));
+                    total_amt.setText(String.valueOf( "₹"+df.format(t_amt)));
+                }
+            }
+        });
+
+
+        close_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("close","close");
+               alertDialog.dismiss();
+            }
+        });
+
+        submit_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(selected_delivery_mode_id.equalsIgnoreCase("")){
+                    Toast.makeText(Checkout.this, "Please Select the delivery mode", Toast.LENGTH_SHORT).show();
+                    return;
+                }else{
+                    create_order_api_call();
+                }
+            }
+        });
+
+        dialog.setView(view_alert);
+        dialog.setCancelable(true);
+        alertDialog = dialog.create();
+        alertDialog.show();
+    }
+
+    private void transport_type_api_call() {
+
+        viewModel.get_transport_type().observe(Checkout.this, new Observer<JsonObject>() {
+            @Override
+            public void onChanged(JsonObject jsonObject) {
+
+                if (jsonObject != null){
+                    Log.d("wallet_api_method","wallet_api "+jsonObject);
+                    try {
+                        JSONObject jsonObject1=new JSONObject(jsonObject.toString());
+                        String message=jsonObject1.getString("response");
+                        JSONArray jsonArray=new JSONArray();
+                        jsonArray=jsonObject1.getJSONArray("data");
+
+                        Order_delivery_type order_delivery_type2=new Order_delivery_type();
+                        order_delivery_type2.setTransport_name("");
+                        order_delivery_type2.setTransport_id("");
+                        order_delivery_type2.setTransport_address("");
+                        transport_list.add(order_delivery_type2);
+                        transport_names.clear();
+                        transport_list.clear();
+
+                        if(message.equalsIgnoreCase("success")){
+                            for(int i=0;i<jsonArray.length();i++){
+                                Order_delivery_type order_delivery_type = new Gson().fromJson(jsonArray.getJSONObject(i).toString(), new TypeToken<Order_delivery_type>() {
+                                }.getType());
+
+                                transport_list.add(order_delivery_type);
+                                transport_names.add(order_delivery_type.getTransport_name());
+                            }
+
+                        }
+
+
+
+                    } catch (JSONException e) {
+                        //throw new RuntimeException(e);
+                        Toast.makeText(Checkout.this, ""+e, Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }else{
+
+                    Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -361,7 +455,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
 
                         JSONObject data_object=new JSONObject();
                         data_object=jsonObject1.getJSONObject("data");
-                        order_no=data_object.getString("order_no");
+                        order_no2=data_object.getString("order_no");
 
 
                         Toast.makeText(Checkout.this, "data"+message, Toast.LENGTH_SHORT).show();
@@ -372,6 +466,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                            /* startActivity(new Intent(Checkout.this,Cartlist_Activity.class));
                             finish();*/
 
+                            Log.e("success","success");
                             alertDialog.dismiss();
 
                             payment_gateway_details_api_call();
@@ -477,8 +572,11 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
 
     private void secure_token_api_call() {
         Log.e("secure_token","secure_token_mthd");
-        JsonObject object = new JsonObject();
+       // JsonObject object = new JsonObject();
+       // object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
 
+
+      //  viewModel.get_secure_token(object).observe(Checkout.this, new Observer<JsonObject>() {
         viewModel.get_secure_token().observe(Checkout.this, new Observer<JsonObject>() {
             @Override
             public void onChanged(JsonObject jsonObject) {
@@ -492,13 +590,16 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                         if(jsonObject1.getString("text").equalsIgnoreCase("Success")){
 
                             if(jsonObject1.getString("message")!=null){
+                                Log.e("message","msg not null");
                                 secureToken=jsonObject1.getJSONObject("message").getString("secureToken");
                                 responseHash=jsonObject1.getJSONObject("message").getString("responseHash");
-                                responseCode=jsonObject1.getJSONObject("message").getString("responseHash");
+                                responseCode=jsonObject1.getJSONObject("message").getString("responseCode");
+                               // order_no=jsonObject1.getJSONObject("order_id").toString();
 
                                 Log.e("response_hash",responseHash);
-                                request_hash=order_no+"INR"+"1.00"+secureToken;
+                                request_hash=order_no2+"INR"+"1.00"+secureToken;
                                 // request_hash=order_no+"INR"+df.format(t_amt)+secureToken;
+                                Log.e("s_token",request_hash);
                                 try {
                                     ba2=generateReqHash(request_hash);
                                     Log.e("ba2",ba2);
@@ -516,7 +617,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
 
                     } catch (JSONException e) {
                         //throw new RuntimeException(e);
-                        Toast.makeText(Checkout.this, ""+e, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Checkout.this, "EXception"+e, Toast.LENGTH_SHORT).show();
                     }
 
 
@@ -533,7 +634,8 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
     private void initiatePayment1() {
 
         AvenueOrder orderDetails = new AvenueOrder();
-        orderDetails.setOrderId(order_no);
+        orderDetails.setOrderId(order_no2);
+        Log.e("order",order_no2);
         orderDetails.setRequestHash(ba2);
         orderDetails.setAccessCode(accessCode);
         orderDetails.setMerchantId(merchantId);
@@ -606,7 +708,6 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
         jsonObject.addProperty("user_token", SaveAppData.getLoginData().getToken());
         jsonObject.addProperty("user_id",SaveAppData.getLoginData().getUser_id() );
 
-
         ApiInterface apiInterface = ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
         Call<JsonObject> delivery_type = apiInterface.order_delivery_type(jsonObject);
 
@@ -636,6 +737,8 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
 
                         order_list.clear();
                         order_type.clear();
+
+
                         Order_delivery_type order_delivery_type2=new Order_delivery_type();
                         order_delivery_type2.setCat_id("");
                         order_delivery_type2.setSub_cat_id("");
@@ -665,6 +768,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                                 Selected_deliverymode  = binding.deliverymode.getSelectedItem().toString();
                                 selected_delivery_mode_id  =order_list.get(i).getSub_cat_id();
                                 if(Selected_deliverymode.equalsIgnoreCase("Vehicle Delivery")){
+                               // if(selected_delivery_mode_id.equalsIgnoreCase("1")){
 
                                     Log.e("vehicle_delivery","vehicle_delivery");
                                     AlertDialog.Builder dialog=new AlertDialog.Builder(Checkout.this);
@@ -675,7 +779,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                                     order_delivery_date_api_call();
                                     Log.e("future_date",availability_date);
 
-                                    delivery_date.setText(availability_date);
+
 
                                     submit=view_alert.findViewById(R.id.submit_btn);
                                     submit.setOnClickListener(new View.OnClickListener() {
@@ -699,10 +803,17 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                                 if(Selected_deliverymode.equalsIgnoreCase("Courier")){
                                     binding.type.setVisibility(View.VISIBLE);
                                     binding.deliverycharges.setVisibility(View.VISIBLE);
+                                    binding.charges.setText(Delivery_charges);
+                                  /*  if(cart_list.get(i).getLine_item_name().contains("Toast") || cart_list.get(i).getLine_item_name().contains("Cream Roll") || cart_list.get(i).getLine_item_name().contains("Cups")){
+                                        Toast.makeText(Checkout.this, "Please Remove the Items(Toast) for courier", Toast.LENGTH_SHORT).show();
+                                    }*/
+
                                 }
                                 else {
                                     binding.type.setVisibility(View.GONE);
                                     binding.deliverycharges.setVisibility(View.GONE);
+                                    binding.charges.setText("0");
+
                                 }
 
                             }
@@ -742,6 +853,8 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
 
         progressDialog.show();
 
+        Log.e("transport_date","transport_api_call");
+
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("user_token", SaveAppData.getLoginData().getToken());
         jsonObject.addProperty("user_id",SaveAppData.getLoginData().getUser_id() );
@@ -772,12 +885,16 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                       Log.e("dates_array",""+jsonArray.length());
                       as_dates=new ArrayList<>();
 
-                      for(int i=0;i<=jsonArray.length();i++){
+
+                   /*   for(int i=0;i<=jsonArray.length();i++){
                           as_dates.add((String) jsonArray.get(i));
-                          availability_date=availability_date+jsonArray.get(i)+",";
+                          availability_date=availability_date+jsonArray.get(i);
                           Log.e("availability_date",availability_date);
-                          delivery_date.setText(availability_date);
-                      }
+                      }*/
+
+                      availability_date= jsonArray.get(0).toString();
+
+                      delivery_date.setText(availability_date);
 
 
                       Log.e("availability_dateeeee",availability_date);
@@ -807,13 +924,35 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
         });
     }
 
+
+    private JSONObject convertBundleToJsonObject(Bundle bundle) {
+        JSONObject jsonObject = new JSONObject();
+
+        if (bundle != null) {
+            for (String key : bundle.keySet()) {
+                try {
+                    // Add key-value pairs to the JSONObject
+                    jsonObject.put(key, bundle.get(key));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        Log.e("jsonObject", String.valueOf(jsonObject));
+        return jsonObject;
+    }
     @Override
     public void onTransactionResponse(Bundle bundle) {
         Log.e("transaction_res","onTransactionResponse"+bundle.toString());
         Log.e("transaction_res","onTransactionResponse22"+bundle);
       //  Log.e("order_status",bundle.getString("order_status"));
 
-        Intent intent=new Intent(Checkout.this,StatusActivity.class);
+        JSONObject jsonObject = convertBundleToJsonObject(bundle);
+
+        insert_payment_api_call(jsonObject);
+
+     /*   Intent intent=new Intent(Checkout.this,StatusActivity.class);
         intent.putExtra("orderno",bundle.getString("orderno"));
         intent.putExtra("tracking_id",bundle.getString("tracking_id"));
         intent.putExtra("trans_date",bundle.getString("trans_date"));
@@ -821,14 +960,110 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
         intent.putExtra("amount",bundle.getString("amount"));
         intent.putExtra("bank_ref_no",bundle.getString("bank_ref_no"));
         intent.putExtra("order_status",bundle.getString("order_status"));
-        startActivity(intent);
+        startActivity(intent);*/
 
-      /*  if(bundle.getString("order_status").equalsIgnoreCase("Success")){
-            Log.e("success","success");
-            Log.e("res",bundle.getString("order_status"));
+
+
+    }
+
+    private void
+    insert_payment_api_call(JSONObject bundle) {
+
+        progressDialog.show();
+        JsonObject object = new JsonObject();
+
+
+        object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
+        try {
+            object.addProperty("trans_date", bundle.getString("trans_date"));
+            object.addProperty("delivery_state", bundle.getString("delivery_state"));
+            object.addProperty("delivery_country", bundle.getString("delivery_country"));
+            object.addProperty("billing_city", bundle.getString("billing_city"));
+            object.addProperty("amount", bundle.getString("amount"));
+            object.addProperty("billing_name", bundle.getString("billing_name"));
+            object.addProperty("bin_country", bundle.getString("bin_country"));
+            object.addProperty("billing_email", bundle.getString("billing_email"));
+            object.addProperty("billing_notes", bundle.getString("billing_notes"));
+            object.addProperty("billing_state", bundle.getString("billing_state"));
+            object.addProperty("status_code", bundle.getString("status_code"));
+            object.addProperty("billing_address", bundle.getString("billing_address"));
+            object.addProperty("payment_mode", bundle.getString("payment_mode"));
+            object.addProperty("delivery_city", bundle.getString("delivery_city"));
+            object.addProperty("delivery_name", bundle.getString("delivery_name"));
+            object.addProperty("card_name", bundle.getString("card_name"));
+            object.addProperty("status_message", bundle.getString("status_message"));
+            object.addProperty("billing_tel", bundle.getString("billing_tel"));
+            object.addProperty("billing_zip", bundle.getString("billing_zip"));
+            object.addProperty("mer_amount", bundle.getString("mer_amount"));
+            object.addProperty("bank_ref_no", bundle.getString("bank_ref_no"));
+            object.addProperty("delivery_address", bundle.getString("delivery_address"));
+            object.addProperty("currency", bundle.getString("currency"));
+            object.addProperty("delivery_tel", bundle.getString("delivery_tel"));
+            object.addProperty("delivery_zip", bundle.getString("delivery_zip"));
+            object.addProperty("order_status", bundle.getString("order_status"));
+            object.addProperty("order_id", bundle.getString("order_id"));
+            object.addProperty("billing_country", bundle.getString("billing_country"));
+            object.addProperty("tracking_id", bundle.getString("tracking_id"));
+
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
         }
+
+
+      /*  String s=String.valueOf(bundle).replace("\"","");
+        object.addProperty("msg", s.replace(":","="));
 */
 
+        viewModel.insert_payments(object).observe(Checkout.this, new Observer<JsonObject>() {
+            @Override
+            public void onChanged(JsonObject jsonObject) {
+
+                if (jsonObject != null){
+                    if(progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
+                    Log.d("Checkout","logout"+jsonObject);
+
+                    try {
+                        JSONObject jsonObject1=new JSONObject(jsonObject.toString());
+                        Log.e("insrt_message",jsonObject1.getString("message"));
+                        if(jsonObject1.getString("message").equalsIgnoreCase("success")){
+                            Intent intent=new Intent(Checkout.this,StatusActivity.class);
+                            intent.putExtra("orderno",jsonObject1.getJSONObject("insrtMsg").getString("order_id"));
+                            intent.putExtra("tracking_id",jsonObject1.getJSONObject("insrtMsg").getString("transaction_id"));
+                            intent.putExtra("trans_date",jsonObject1.getJSONObject("insrtMsg").getString("payment_date_time"));
+                            intent.putExtra("billing_name",jsonObject1.getString("vendor_name"));
+                            intent.putExtra("amount",jsonObject1.getJSONObject("insrtMsg").getString("paid_amount"));
+                            intent.putExtra("bank_ref_no",jsonObject1.getString("bank_ref_no"));
+                            intent.putExtra("order_status",jsonObject1.getString("order_status"));
+
+
+                            startActivity(intent);
+                            finish();
+
+                           /* intent.putExtra("tracking_id",bundle.getString("tracking_id"));
+                            intent.putExtra("trans_date",bundle.getString("trans_date"));
+                            intent.putExtra("billing_name",bundle.getString("billing_name"));
+                            intent.putExtra("amount",bundle.getString("amount"));
+                            intent.putExtra("bank_ref_no",bundle.getString("bank_ref_no"));
+                            intent.putExtra("order_status",bundle.getString("order_status"));*/
+
+                        }
+
+                    } catch (JSONException e) {
+                        Log.e("Exception","Exception"+e.toString());
+                     //   throw new RuntimeException(e);
+                    }
+
+                }else{
+                    if(progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
+                    Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
     }
 
 /*    private void redirect_api_call() {
@@ -891,5 +1126,6 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
     @Override
     public void onCancelTransaction(String s) {
         Log.e("transaction_res","onCancelTransaction"+s);
+
     }
 }

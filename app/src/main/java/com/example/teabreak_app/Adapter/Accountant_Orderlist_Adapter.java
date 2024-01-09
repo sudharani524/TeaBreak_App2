@@ -53,7 +53,7 @@ public class Accountant_Orderlist_Adapter extends RecyclerView.Adapter<Accountan
         holder.paid_amount.setText("₹"+od_list.get(position).getPaid_amount());
         holder.wallet_used_amt.setText("₹"+od_list.get(position).getUsed_wallet_amount());
         holder.time_stamp.setText(od_list.get(position).getOrder_date_time());
-        holder.vendor_name.setText(SaveAppData.getLoginData().getUsername());
+        holder.vendor_name.setText(od_list.get(position).getVendor_name());
         holder.no_of_items.setText(od_list.get(position).getNo_of_order_items());
 
 

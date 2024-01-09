@@ -53,8 +53,6 @@ public class Approved_Order_List_Fragment extends Fragment {
 
         approved_order_list_api_call();
 
-
-
         return root;
     }
 

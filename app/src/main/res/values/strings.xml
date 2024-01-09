@@ -10,7 +10,7 @@
     <string name="back">Back</string>
     <string name="next">Next</string>
     <string name="delivery_mode">Delivery Mode</string>
-    <string name="delivery_type">Delivery Type</string>
+    <string name="delivery_type">Delivery Mode</string>
     <string name="delivery_charges">Delivery Charges</string>
     <string name="coloon">:</string>
     <string name="_0">0</string>
@@ -61,7 +61,7 @@
     <string name="change_password">Change Password</string>
     <string name="home">Home</string>
     <string name="logout">Logout</string>
-    <string name="orders_details">Orders Details</string>
+    <string name="orders_details">Order Details</string>
     <string name="payment">Payment</string>
     <string name="search">Search</string>
     <string name="quantity_update">Quantity Update</string>
@@ -70,7 +70,7 @@
     <string name="cancel">Cancel</string>
     <string name="enter_quantity">Enter Quantity</string>
     <string name="add_to_cart">Add to cart</string>
-    <string name="singleitem">Singleitem</string>
+    <string name="singleitem">Single Item</string>
     <array name="Deliverymode">
         <item>Select</item>
         <item>Pick Up</item>

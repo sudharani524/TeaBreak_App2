@@ -35,6 +35,7 @@ import com.example.teabreak_app.ViewModel.TeaBreakViewModel;
 import com.example.teabreak_app.databinding.ActivityListItemsBinding;
 import com.example.teabreak_app.repository.CartInterface;
 import com.example.teabreak_app.repository.ListItemInterface;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -101,6 +102,8 @@ public class ListItems_Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(ListItems_Activity.this,DashboardActivity.class));
+                finish();
+                return;
             }
         });
         binding.etSearchfilter.addTextChangedListener(new TextWatcher() {
@@ -235,8 +238,15 @@ public class ListItems_Activity extends AppCompatActivity {
                                     @Override
                                     public void onClick(View v) {
                                         ordecount=quanity.getText().toString();
-                                        Log.e("ordercount",ordecount.toString());
-                                        add_cart_api_call();
+                                        if(Integer.parseInt(ordecount)>99){
+                                            Snackbar.make(ListItems_Activity.this,findViewById(android.R.id.content),"Please Enter the quantity below 99",Snackbar.LENGTH_LONG).show();
+                                            return;
+                                        }
+                                        else{
+                                            Log.e("ordercount",ordecount.toString());
+                                            add_cart_api_call();
+                                        }
+
                                     }
                                 });
                                 clear_btn.setOnClickListener(new View.OnClickListener() {

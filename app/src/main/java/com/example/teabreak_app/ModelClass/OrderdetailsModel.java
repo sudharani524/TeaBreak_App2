@@ -73,6 +73,18 @@ public class OrderdetailsModel {
     @Expose
     public String used_wallet_amount;
 
+    @SerializedName("vendor_name")
+    @Expose
+    public String vendor_name;
+
+    public String getVendor_name() {
+        return vendor_name;
+    }
+
+    public void setVendor_name(String vendor_name) {
+        this.vendor_name = vendor_name;
+    }
+
     public String getUsed_wallet_amount() {
         return used_wallet_amount;
     }

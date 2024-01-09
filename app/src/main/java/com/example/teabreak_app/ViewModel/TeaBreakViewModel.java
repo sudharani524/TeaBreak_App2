@@ -39,6 +39,8 @@ public class TeaBreakViewModel extends ViewModel {
     private MutableLiveData<JsonObject> accountant_approved_orders_list;
     private MutableLiveData<JsonObject> accountant_update_approve_order_status;
     private MutableLiveData<JsonObject> update_to_dispatch_order_status;
+    private MutableLiveData<JsonObject> insert_payments_status;
+    private MutableLiveData<JsonObject> transport_type_status;
 
 
     public LiveData<JsonObject> get_list_items() {
@@ -97,14 +99,11 @@ public class TeaBreakViewModel extends ViewModel {
         order_history_api_call(jsonObject);
         return Order_history_details;
     }
-
-
     public LiveData<JsonObject> dlt_item_api(JsonObject jsonObject) {
         dlt_item_status = new MutableLiveData<JsonObject>(jsonObject);
         dlt_item_api_call(jsonObject);
         return dlt_item_status;
     }
-
     public LiveData<JsonObject> check_token_status_api(JsonObject jsonObject) {
         check_token_status = new MutableLiveData<JsonObject>();
         check_token_status_api_call(jsonObject);
@@ -115,9 +114,6 @@ public class TeaBreakViewModel extends ViewModel {
         wallet_histor_api_call(jsonObject);
         return Wallet_history_details;
     }
-
-
-
     public LiveData<JsonObject> get_wallet_amt(JsonObject jsonObject) {
         wallet_amt_status = new MutableLiveData<JsonObject>();
         wallet_amount_api_call(jsonObject);
@@ -137,11 +133,18 @@ public class TeaBreakViewModel extends ViewModel {
         return secure_token_status;
     }*/
 
+   /* public LiveData<JsonObject> get_secure_token(JsonObject object) {
+        secure_token_status = new MutableLiveData<JsonObject>(object);
+        secure_token_api_call(object);
+        return secure_token_status;
+    }*/
+
     public LiveData<JsonObject> get_secure_token() {
         secure_token_status = new MutableLiveData<JsonObject>();
         secure_token_api_call();
         return secure_token_status;
     }
+
     public LiveData<JsonObject> get_ordered_list(JsonObject jsonObject) {
         Order_list_details = new MutableLiveData<JsonObject>(jsonObject);
         ordered_list_api_call(jsonObject);
@@ -184,6 +187,56 @@ public class TeaBreakViewModel extends ViewModel {
         update_to_dispatch_order_api_call(jsonObject);
         return update_to_dispatch_order_status;
     }
+
+    public LiveData<JsonObject>insert_payments(JsonObject jsonObject){
+        insert_payments_status = new MutableLiveData<JsonObject>(jsonObject);
+        insert_payments_api_call(jsonObject);
+        return insert_payments_status;
+    }
+
+
+    public LiveData<JsonObject>get_transport_type(){
+        transport_type_status = new MutableLiveData<JsonObject>();
+        transport_api_call();
+        return transport_type_status;
+    }
+
+    private void transport_api_call() {
+        ApiInterface apiInterface=ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
+        Call<JsonObject>transport= apiInterface.transport_type();
+        transport.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.body()!= null){
+                    transport_type_status.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("TAG_NAME", t.toString());
+            }
+        });
+    }
+
+    private void insert_payments_api_call(JsonObject jsonObject) {
+        ApiInterface apiInterface=ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
+        Call<JsonObject>insert_paymentss= apiInterface.insert_payment(jsonObject);
+        insert_paymentss.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.body()!= null){
+                    insert_payments_status.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("TAG_NAME", t.toString());
+            }
+        });
+    }
+
 
     private void update_to_dispatch_order_api_call(JsonObject jsonObject) {
         ApiInterface apiInterface=ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);

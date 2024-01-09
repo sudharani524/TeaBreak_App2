@@ -56,7 +56,7 @@
               <TextView
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:text="Successfully Your Payment Has Done"
+                  android:text="Payment Completed Successfully"
                   android:gravity="center"
                   android:textStyle="bold"
                   android:textSize="25dp"
@@ -277,7 +277,7 @@
                    android:layout_weight="3"
                    android:backgroundTint="@color/lightred"
                    android:layout_margin="10dp"
-                   android:text="Redirect To ListItems Screen"
+                   android:text="Redirect To List Items Screen"
                    android:textAllCaps="false"
                    android:textColor="@color/white"/>
 

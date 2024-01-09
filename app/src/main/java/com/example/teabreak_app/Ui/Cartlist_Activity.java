@@ -34,6 +34,7 @@ import com.example.teabreak_app.ViewModel.TeaBreakViewModel;
 import com.example.teabreak_app.databinding.ActivityCartlistBinding;
 import com.example.teabreak_app.repository.CartInterface;
 import com.example.teabreak_app.repository.ListItemInterface;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -105,6 +106,8 @@ public class Cartlist_Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(Cartlist_Activity.this,ListItems_Activity.class));
+                finish();
+                return;
             }
         });
         binding.etSearchfilter.addTextChangedListener(new TextWatcher() {
@@ -118,6 +121,21 @@ public class Cartlist_Activity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 String text = binding.etSearchfilter.getText().toString().toLowerCase(Locale.getDefault());
+
+             /*   if (text.length() == 1) {
+                    cart_list.clear();
+                    cart_list.add(ListItemsModel);
+                }
+
+                charText = charText.toLowerCase(Locale.getDefault());
+                slm.clear();
+
+                if (charText.length() == 0) {
+                    slm.addAll(Itemslist);
+                    notifyDataSetChanged();
+                }
+*/
+
                 if (Cartfilterlist){
                     if (adapter != null) {
                         adapter.filter(text);
@@ -159,27 +177,27 @@ public class Cartlist_Activity extends AppCompatActivity {
                         JSONArray jsonArray1=new JSONArray();
                         jsonArray1=jsonObject1.getJSONArray("sub_totals");
 
-
                         Toast.makeText(Cartlist_Activity.this, ""+message, Toast.LENGTH_SHORT).show();
+
                         for(int i=0;i<jsonArray.length();i++){
                             ListItemsModel listItemsModel = new Gson().fromJson(jsonArray.get(i).toString(), new TypeToken<ListItemsModel>() {
                             }.getType());
                             cart_list.add(listItemsModel);
                         }
+
                         for(int i=0;i<jsonArray1.length();i++){
                             Log.e("array",jsonArray1.toString());
                             ListItemsModel listItemsModel = new Gson().fromJson(jsonArray1.get(i).toString(), new TypeToken<ListItemsModel>() {
                             }.getType());
                             Pricelist.add(listItemsModel);
                         }
-                        for (int i = 0; i < Pricelist.size(); i++) {
 
+                        for (int i = 0; i < Pricelist.size(); i++) {
                              total = Pricelist.get(i).getSub_total();
                             Log.d("subtotal", total);
                             binding.tAmount.setText("₹"+total);
                             Delivery_charges=Pricelist.get(i).getAll_sub_total_delivery_charges();
                             Log.d("Delivery Charges",Delivery_charges);
-
                         }
 
 
@@ -270,8 +288,15 @@ public class Cartlist_Activity extends AppCompatActivity {
                                             @Override
                                             public void onClick(View v) {
                                                 ordecount=quanity.getText().toString();
-                                                Log.e("ordercount",ordecount.toString());
-                                                add_cart_api_call(ordecount,holder.itemView.findViewById(R.id.price),position);
+                                                if(Integer.parseInt(ordecount)>99){
+                                                    Snackbar.make(Cartlist_Activity.this,findViewById(android.R.id.content),"Please Enter the quantity below 99",Snackbar.LENGTH_LONG).show();
+                                                    return;
+                                                }
+                                                else{
+                                                    Log.e("ordercount",ordecount.toString());
+                                                    add_cart_api_call(ordecount,holder.itemView.findViewById(R.id.price),position);
+                                                }
+
                                             }
                                         });
                                         clear_btn.setOnClickListener(new View.OnClickListener() {

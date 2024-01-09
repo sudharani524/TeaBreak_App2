@@ -58,6 +58,67 @@ public class LoginUserModel implements Serializable {
     @Expose
     public String wallet_amount;
 
+    @SerializedName("country")
+    @Expose
+    public String country;
+
+
+    @SerializedName("state")
+    @Expose
+    public String state;
+
+    @SerializedName("city")
+    @Expose
+    public String city;
+
+    @SerializedName("pincode")
+    @Expose
+    public String pincode;
+
+    @SerializedName("outlet_name")
+    @Expose
+    public String outlet_name;
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getPincode() {
+        return pincode;
+    }
+
+    public void setPincode(String pincode) {
+        this.pincode = pincode;
+    }
+
+    public String getOutlet_name() {
+        return outlet_name;
+    }
+
+    public void setOutlet_name(String outlet_name) {
+        this.outlet_name = outlet_name;
+    }
+
     public String getRole_full_name() {
         return role_full_name;
     }

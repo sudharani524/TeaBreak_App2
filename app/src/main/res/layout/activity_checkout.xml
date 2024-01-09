@@ -85,7 +85,6 @@
             <Spinner
                 android:id="@+id/deliverymode"
                 android:layout_width="match_parent"
-                android:entries="@array/Deliverymode"
                 android:layout_height="30dp" />
 
         </LinearLayout>

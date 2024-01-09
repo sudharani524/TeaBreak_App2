@@ -119,7 +119,7 @@ public interface ApiInterface {
                                     @Field("requestHash") String param3);*/
 
     @Headers("Content-Type: application/json")
-    @GET("login/create_secure_token")
+    @POST("login/create_secure_token")
     Call<JsonObject> secure_token_generation_api();
 
 
@@ -133,5 +133,13 @@ public interface ApiInterface {
     @Headers("Content-Type: application/json")
     @POST("succcess_redirect_url.php")
     Call<JsonObject> redirect(@Body JsonObject jsonObject);
+
+    @Headers("Content-Type: application/json")
+    @POST("login/insert_payments")
+    Call<JsonObject> insert_payment(@Body JsonObject jsonObject);
+
+    @Headers("Content-Type: application/json")
+    @POST("login/transportation_list")
+    Call<JsonObject> transport_type();
 
 }

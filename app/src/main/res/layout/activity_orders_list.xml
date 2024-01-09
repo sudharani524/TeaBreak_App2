@@ -42,7 +42,7 @@
                     android:layout_weight="0.8"
                     android:layout_gravity="center|left"
                     android:gravity="center|left"
-                    android:text="Orders History"
+                    android:text="Order History"
                     android:layout_marginStart="30dp"
                     android:textColor="@color/white"
                     android:textSize="18sp" />

@@ -192,7 +192,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 }
                 else if(id ==R.id.logout){
                     AlertDialog logoutDialog = new AlertDialog.Builder(DashboardActivity.this).setTitle("logout")
-                            .setMessage("Are you really want to logout")
+                            .setMessage("Are you sure you want to logout")
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -291,12 +291,14 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                                 selected_line_item_id=list.get(position).getLine_item_id();
                                 selected_price=list.get(position).getPrice();
                                 selected_qty=list.get(position).getPack_of_qty();
+
                                 if(s.equalsIgnoreCase("card")){
                                     Intent intent=new Intent(DashboardActivity.this, SingleList_Item.class);
                                     intent.putExtra("img",list.get(position).getImage());
                                     intent.putExtra("name",list.get(position).getLine_item_name());
                                     intent.putExtra("price",list.get(position).getPrice());
                                     intent.putExtra("qty",list.get(position).getPack_of_qty());
+                                    intent.putExtra("line_item_id",list.get(position).getLine_item_id());
                                     startActivity(intent);
                                 }
 
@@ -389,7 +391,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         }
         else if(id ==R.id.logout){
             AlertDialog logoutDialog = new AlertDialog.Builder(DashboardActivity.this).setTitle("logout")
-                    .setMessage("Are you really want to logout")
+                    .setMessage("Are you sure you want to logout")
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

@@ -34,6 +34,54 @@ public class Order_delivery_type implements Serializable {
     public String sub_cat_date_created;
 
 
+    @SerializedName("transport_id")
+    @Expose
+    public String transport_id;
+
+    @SerializedName("transport_name")
+    @Expose
+    public String transport_name;
+
+    @SerializedName("transport_address")
+    @Expose
+    public String transport_address;
+
+    @SerializedName("status")
+    @Expose
+    public String status;
+
+    public String getTransport_id() {
+        return transport_id;
+    }
+
+    public void setTransport_id(String transport_id) {
+        this.transport_id = transport_id;
+    }
+
+    public String getTransport_name() {
+        return transport_name;
+    }
+
+    public void setTransport_name(String transport_name) {
+        this.transport_name = transport_name;
+    }
+
+    public String getTransport_address() {
+        return transport_address;
+    }
+
+    public void setTransport_address(String transport_address) {
+        this.transport_address = transport_address;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public String getSub_cat_id() {
         return sub_cat_id;
     }

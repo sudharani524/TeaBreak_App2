@@ -1,8 +1,10 @@
 package com.example.teabreak_app.Fragments;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -119,8 +121,28 @@ public class Pending_Orders_List_Fragment extends Fragment {
                                 alertDialog = dialog.create();
                                 alertDialog.show();*/
 
-                                edit_btn=v.findViewById(R.id.orders_edit_btn);
-                                approved_api_call(position);
+                                AlertDialog.Builder dialog=new AlertDialog.Builder(getContext());
+                                dialog.setCancelable(false);
+                                dialog.setMessage("Are you sure you want approve this order");
+                                dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        edit_btn=v.findViewById(R.id.orders_edit_btn);
+                                        approved_api_call(position);
+                                    }
+                                });
+
+                                dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+                                dialog.create();
+                                dialog.show();
+
+
                             }
                         });
                         rv_pending_orders_list.setAdapter(accountantOrderlistAdapter);

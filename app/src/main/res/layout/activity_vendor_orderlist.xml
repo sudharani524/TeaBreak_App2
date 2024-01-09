@@ -25,14 +25,14 @@
                 android:weightSum="1"
                 android:orientation="horizontal">
 
-                <ImageView
+              <!--  <ImageView
                     android:id="@+id/back_btn"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.1"
                     android:padding="2dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/backarrow" />
+                    android:src="@drawable/backarrow" />-->
 
                 <TextView
                     android:id="@+id/tlbar_title"
@@ -41,7 +41,7 @@
                     android:layout_weight="0.8"
                     android:layout_gravity="center|left"
                     android:gravity="center|left"
-                    android:text="Orders List"
+                    android:text="Order List"
                     android:layout_marginStart="30dp"
                     android:textColor="@color/white"
                     android:textSize="18sp" />

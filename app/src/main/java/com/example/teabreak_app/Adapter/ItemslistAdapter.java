@@ -149,8 +149,14 @@ public class ItemslistAdapter extends RecyclerView.Adapter<ItemslistAdapter.View
         } else {
             for (ListItemsModel ts : Itemslist) {
 
-                if (ts.getLine_item_name().trim().toLowerCase(Locale.getDefault()).contains(charText) ||
+              /*  if (ts.getLine_item_name().trim().toLowerCase(Locale.getDefault()).contains(charText) ||
                         ts.getQuantity().trim().toLowerCase(Locale.getDefault()).contains(charText)) {
+                    slm.add(ts);
+
+                }*/
+
+
+                if (ts.getLine_item_name().trim().toLowerCase(Locale.getDefault()).contains(charText)) {
                     slm.add(ts);
 
                 }

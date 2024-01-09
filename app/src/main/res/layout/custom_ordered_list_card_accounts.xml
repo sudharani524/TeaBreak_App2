@@ -44,7 +44,7 @@
                        android:layout_width="0dp"
                        android:layout_height="wrap_content"
                        android:layout_weight="1.4"
-                       android:text="Order Id" />
+                       android:text="Order ID" />
 
                    <TextView
                        android:layout_width="0dp"
@@ -76,7 +76,7 @@
                        android:layout_width="0dp"
                        android:layout_height="wrap_content"
                        android:layout_weight="1.4"
-                       android:text="Transaction Id" />
+                       android:text="Transaction ID" />
 
                    <TextView
                        android:layout_width="0dp"
@@ -203,7 +203,7 @@
                        android:layout_width="0dp"
                        android:layout_height="wrap_content"
                        android:layout_weight="1.4"
-                       android:text="Time Stamp" />
+                       android:text="Payment Date" />
 
                    <TextView
                        android:layout_width="0dp"
