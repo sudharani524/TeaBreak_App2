@@ -149,7 +149,7 @@ public class Cartlist_Activity extends AppCompatActivity {
     }
 
     private void cart_list_api_call() {
-
+//        cart_list.clear();
         JsonObject object = new JsonObject();
 
         object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
@@ -161,15 +161,12 @@ public class Cartlist_Activity extends AppCompatActivity {
 
                 if (jsonObject != null){
                     Log.d("TAG","add_cart "+jsonObject);
-
                     cart_list.clear();
-
                     try {
                         JSONObject jsonObject1=new JSONObject(jsonObject.toString());
                         JSONArray jsonArray=new JSONArray();
                         jsonArray=jsonObject1.getJSONArray("data");
                         String message=jsonObject1.getString("message");
-
                         JSONArray jsonArray1=new JSONArray();
                         jsonArray1=jsonObject1.getJSONArray("sub_totals");
 
