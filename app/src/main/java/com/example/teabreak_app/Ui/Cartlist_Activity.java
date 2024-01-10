@@ -40,6 +40,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Objects;
 
 public class Cartlist_Activity extends AppCompatActivity {
 
@@ -275,6 +276,66 @@ public class Cartlist_Activity extends AppCompatActivity {
         Log.d("TAG","line_id : "+filtered_List.get(position).getLine_item_id());
         Log.d("TAG","line_id_price : "+filtered_List.get(position).getPrice());
 
+        if(Objects.equals(s, "Del")){
+            Log.e("dlt_click","dlt_click");
+            dlt_item_api_call(position,filtered_List);
+            return;
+        }
+
+        if(Objects.equals(s, "Add")){
+            Log.e("add","add_click");
+            AlertDialog.Builder dialog=new AlertDialog.Builder(Cartlist_Activity.this);
+            View view_alert= LayoutInflater.from(Cartlist_Activity.this).inflate(R.layout.quantityupdate,null);
+            paymentdetails=view_alert.findViewById(R.id.quantitydetails);
+            close_btn=view_alert.findViewById(R.id.close_btn);
+            submit_btn=view_alert.findViewById(R.id.submit_btn);
+            clear_btn=view_alert.findViewById(R.id.clearButton);
+            quanity=view_alert.findViewById(R.id.quanity);
+            cancel=view_alert.findViewById(R.id.Cancel);
+            submit_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ordecount=quanity.getText().toString();
+                    if (ordecount.isEmpty()){
+                        Toast.makeText(Cartlist_Activity.this, "Enter Qty", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if(Integer.parseInt(ordecount)>99){
+                        Snackbar.make(Cartlist_Activity.this,findViewById(android.R.id.content),"Please Enter the quantity below 99",Snackbar.LENGTH_LONG).show();
+                        return;
+                    }
+                    else{
+                        Log.e("ordercount",ordecount.toString());
+                        add_cart_api_call(ordecount,holder.itemView.findViewById(R.id.price),position);
+                    }
+
+                }
+            });
+            clear_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    quanity.setText("");
+                }
+            });
+            close_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    alertDialog.dismiss();
+                }
+            });
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    alertDialog.dismiss();
+                }
+            });
+            dialog.setView(view_alert);
+            dialog.setCancelable(false);
+            alertDialog = dialog.create();
+            alertDialog.show();
+            return;
+        }
+
 
         //errorMessage(holder.itemView.findViewById(R.id.sp_qty),s);
         TextView textView=holder.itemView.findViewById(R.id.price);
@@ -289,7 +350,7 @@ public class Cartlist_Activity extends AppCompatActivity {
                                     add_cart_api_call(s,holder.itemView.findViewById(R.id.price),position);
                                 }*/
 
-        ImageView iv_dlt=holder.itemView.findViewById(R.id.iv_delete);
+        /*ImageView iv_dlt=holder.itemView.findViewById(R.id.iv_delete);
         Log.d("cartdelete","delete");
 
         iv_dlt.setOnClickListener(new View.OnClickListener() {
@@ -299,75 +360,27 @@ public class Cartlist_Activity extends AppCompatActivity {
                 dlt_item_api_call();
             }
         });
+*/
+       /* LinearLayout add_cart=holder.itemView.findViewById(R.id.add_cart);
 
-        LinearLayout add_cart=holder.itemView.findViewById(R.id.add_cart);
-
-                               /* iv_dlt.setOnClickListener(new View.OnClickListener() {
+                               *//* iv_dlt.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
                                         Log.e("dlt_click","dlt_click");
                                         dlt_item_api_call();
                                     }
-                                });*/
+                                });*//*
 
         add_cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder dialog=new AlertDialog.Builder(Cartlist_Activity.this);
-                View view_alert= LayoutInflater.from(Cartlist_Activity.this).inflate(R.layout.quantityupdate,null);
-                paymentdetails=view_alert.findViewById(R.id.quantitydetails);
-                close_btn=view_alert.findViewById(R.id.close_btn);
-                submit_btn=view_alert.findViewById(R.id.submit_btn);
-                clear_btn=view_alert.findViewById(R.id.clearButton);
-                quanity=view_alert.findViewById(R.id.quanity);
-                cancel=view_alert.findViewById(R.id.Cancel);
-                submit_btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ordecount=quanity.getText().toString();
-                        if (ordecount.isEmpty()){
-                            Toast.makeText(Cartlist_Activity.this, "Enter Qty", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        if(Integer.parseInt(ordecount)>99){
-                            Snackbar.make(Cartlist_Activity.this,findViewById(android.R.id.content),"Please Enter the quantity below 99",Snackbar.LENGTH_LONG).show();
-                            return;
-                        }
-                        else{
-                            Log.e("ordercount",ordecount.toString());
-                            add_cart_api_call(ordecount,holder.itemView.findViewById(R.id.price),position);
-                        }
 
-                    }
-                });
-                clear_btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        quanity.setText("");
-                    }
-                });
-                close_btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        alertDialog.dismiss();
-                    }
-                });
-                cancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        alertDialog.dismiss();
-                    }
-                });
-                dialog.setView(view_alert);
-                dialog.setCancelable(false);
-                alertDialog = dialog.create();
-                alertDialog.show();
             }
         });
-
+*/
     }
 
-    private void dlt_item_api_call() {
+    private void dlt_item_api_call(int position, ArrayList<ListItemsModel> filtered_List) {
 
         Log.e("dlt_api","dlt_api");
         JsonObject object = new JsonObject();
@@ -393,6 +406,11 @@ public class Cartlist_Activity extends AppCompatActivity {
 
                         Toast.makeText(Cartlist_Activity.this, ""+message, Toast.LENGTH_SHORT).show();
                         if(message.equalsIgnoreCase("Success")){
+                            Log.d("TAG","delete api call sucess : "+cart_list.size());
+                            Log.d("TAG","delete api call sucess1 : "+filtered_List.size());
+                            filtered_List.remove(position);
+                            itemslistAdapter.notifyDataSetChanged();
+                            Log.d("TAG","delete api call sucess2 : "+filtered_List.size());
                             cart_list_api_call();
                         }
 

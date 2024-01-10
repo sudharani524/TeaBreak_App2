@@ -130,6 +130,20 @@ public class ItemslistAdapter extends RecyclerView.Adapter<ItemslistAdapter.View
 
         }
 
+        holder.iv_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cartInterface.OnItemClick(position,holder,"Del");
+            }
+        });
+
+        holder.add_cart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cartInterface.OnItemClick(position,holder,"Add");
+            }
+        });
+
 
 
     }
