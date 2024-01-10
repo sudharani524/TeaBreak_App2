@@ -3,18 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="10"
     android:orientation="vertical"
     tools:context=".Ui.ListItems_Activity">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="45dp"
         android:id="@+id/ll"
         android:orientation="vertical">
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="45dp"
             android:id="@+id/toolbar"
             android:elevation="4dp"
             android:background="@color/red"
@@ -48,7 +46,7 @@
     <EditText
         android:id="@+id/et_Searchfilter"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
         android:layout_below="@id/ll"
@@ -60,46 +58,51 @@
         android:maxLines="1"
         android:minHeight="48dp"
         android:padding="5dp" />
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvListItems"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="8.6"
-        tools:listitem="@layout/custom_list_item_activity"
-        android:layout_margin="5dp"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="0.5"
-        android:layout_alignParentBottom="true"
-        android:gravity="bottom"
-        android:layout_margin="10dp">
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/previous"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="start"
-            android:layout_marginStart="10dp"
-            android:textColor="#228B22"
-            android:background="@drawable/bg2"
-            android:textAllCaps="false"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:text="@string/back"/>
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/Proceed"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="end"
-            android:layout_marginStart="30dp"
-            android:background="@drawable/bg2"
-            android:textColor="#228B22"
-            android:textAllCaps="false"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:text="Next"/>
-    </LinearLayout>
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:weightSum="10"
+      android:orientation="vertical">
+      <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/rvListItems"
+          android:layout_width="match_parent"
+          android:layout_height="0dp"
+          android:layout_weight="9.5"
+          tools:listitem="@layout/custom_list_item_activity"
+          android:layout_margin="5dp"/>
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          android:layout_weight="0.5"
+          android:gravity="center"
+          android:layout_margin="10dp">
+          <androidx.appcompat.widget.AppCompatButton
+              android:id="@+id/previous"
+              android:layout_width="150dp"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="10dp"
+              android:layout_gravity="center"
+              android:layout_marginStart="10dp"
+              android:textColor="#228B22"
+              android:background="@drawable/bg2"
+              android:textAllCaps="false"
+              android:textStyle="bold"
+              android:textSize="18sp"
+              android:text="@string/back"/>
+          <androidx.appcompat.widget.AppCompatButton
+              android:id="@+id/Proceed"
+              android:layout_width="150dp"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="10dp"
+              android:layout_gravity="center"
+              android:layout_marginStart="30dp"
+              android:background="@drawable/bg2"
+              android:textColor="#228B22"
+              android:textAllCaps="false"
+              android:textStyle="bold"
+              android:textSize="18sp"
+              android:text="Next"/>
+      </LinearLayout>
+  </LinearLayout>
 </LinearLayout>

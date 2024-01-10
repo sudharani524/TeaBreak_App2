@@ -115,6 +115,7 @@ public class Cartlist_Activity extends AppCompatActivity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
             @Override
+            
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
 
@@ -122,19 +123,6 @@ public class Cartlist_Activity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 String text = binding.etSearchfilter.getText().toString().toLowerCase(Locale.getDefault());
 
-             /*   if (text.length() == 1) {
-                    cart_list.clear();
-                    cart_list.add(ListItemsModel);
-                }
-
-                charText = charText.toLowerCase(Locale.getDefault());
-                slm.clear();
-
-                if (charText.length() == 0) {
-                    slm.addAll(Itemslist);
-                    notifyDataSetChanged();
-                }
-*/
 
                 if (Cartfilterlist){
                     if (adapter != null) {

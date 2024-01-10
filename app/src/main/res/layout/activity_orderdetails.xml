@@ -235,7 +235,7 @@
                                            android:id="@+id/tv_paymentmode"
                                            android:layout_width="wrap_content"
                                            android:layout_height="wrap_content"
-                                           android:text="@string/debit_card"
+                                           android:text=""
                                            android:textColor="@color/black"
                                            android:textSize="15sp" />
                                    </LinearLayout>
@@ -258,7 +258,7 @@
                                            android:id="@+id/tv_deliverycharges"
                                            android:layout_width="wrap_content"
                                            android:layout_height="wrap_content"
-                                           android:text="@string/_230"
+                                           android:text=""
                                            android:textColor="@color/black"
                                            android:textSize="15sp" />
                                    </LinearLayout>

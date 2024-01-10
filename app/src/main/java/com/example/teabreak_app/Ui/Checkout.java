@@ -640,39 +640,37 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
         orderDetails.setAccessCode(accessCode);
         orderDetails.setMerchantId(merchantId);
         orderDetails.setCurrency("INR");
-        orderDetails.setAmount("1.00");
+      //  orderDetails.setAmount("1.00");
 
-     //   orderDetails.setAmount(String.valueOf(df.format(t_amt)));
+        orderDetails.setAmount(String.valueOf(df.format(t_amt)));
 
         orderDetails.setRedirectUrl(Constant.SERVER_BASE_URL+"response_handler_url.php");
-     //   orderDetails.setRedirectUrl("https://teabreak.digitalrupay.com/Check_success/response_new");
-      //  orderDetails.setCancelUrl(Constant.SERVER_BASE_URL+"cancelPage.php");
         orderDetails.setCancelUrl(Constant.SERVER_BASE_URL+"response_handler_url.php");
-     //   orderDetails.setCancelUrl("https://www.testserver.com/cancelPage.php");
-        orderDetails.setCustomerId("9390126304");
+        orderDetails.setCustomerId(SaveAppData.getLoginData().getUser_mobile());
         orderDetails.setPaymentType("all");
         orderDetails.setMerchantLogo(String.valueOf(R.drawable.teabreakicon));
-        orderDetails.setBillingName(SaveAppData.getLoginData().getName());
-        orderDetails.setBillingAddress("Hyderabad");
-        orderDetails.setBillingCountry("India");
-        orderDetails.setBillingState("Telangana");
-        orderDetails.setBillingCity("Hyderabad");
-        orderDetails.setBillingZip("500016");
-        orderDetails.setBillingTel("9390126304");
-        orderDetails.setBillingEmail("sudhak4585@gmail.com");
-        orderDetails.setDeliveryName("test");
-        orderDetails.setDeliveryAddress("Hyderabad");
-        orderDetails.setDeliveryCountry("India");
-        orderDetails.setDeliveryState("Telangana");
-        orderDetails.setDeliveryCity("Hyderabad");
-        orderDetails.setDeliveryZip("500016");
-        orderDetails.setDeliveryTel("9390126304");
+        orderDetails.setBillingName(SaveAppData.getLoginData().getLogin_username());
+        Log.e("billing_name",SaveAppData.getLoginData().getName());
+        orderDetails.setBillingAddress(SaveAppData.getLoginData().getAddress());
+        orderDetails.setBillingCountry(SaveAppData.getLoginData().getCountry());
+        orderDetails.setBillingState(SaveAppData.getLoginData().getState());
+        orderDetails.setBillingCity(SaveAppData.getLoginData().getCity());
+        orderDetails.setBillingZip(SaveAppData.getLoginData().getPincode());
+        orderDetails.setBillingTel(SaveAppData.getLoginData().getUser_mobile());
+        orderDetails.setBillingEmail(SaveAppData.getLoginData().getUser_email());
+        orderDetails.setDeliveryName(SaveAppData.getLoginData().getLogin_username());
+        orderDetails.setDeliveryAddress(SaveAppData.getLoginData().getAddress());
+        orderDetails.setDeliveryCountry(SaveAppData.getLoginData().getCountry());
+        orderDetails.setDeliveryState(SaveAppData.getLoginData().getState());
+        orderDetails.setDeliveryCity(SaveAppData.getLoginData().getCity());
+        orderDetails.setDeliveryZip(SaveAppData.getLoginData().getPincode());
+        orderDetails.setDeliveryTel(SaveAppData.getLoginData().getUser_mobile());
         orderDetails.setMerchant_param1("test"); //total 5 parameters
         orderDetails.setMerchant_param2("transaction"); //total 5 parameters
         orderDetails.setMerchant_param3("1"); //total 5 parameters
         orderDetails.setMerchant_param4("2"); //total 5 parameters
         orderDetails.setMerchant_param5("3"); //total 5 parameters
-        orderDetails.setMobileNo("9390126304");
+        orderDetails.setMobileNo(SaveAppData.getLoginData().getUser_mobile());
         orderDetails.setPaymentEnviroment("“app_staging"); //app_live - prod
 
       /*  orderDetails.setColorPrimary("#008000");

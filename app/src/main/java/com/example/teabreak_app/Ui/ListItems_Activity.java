@@ -88,6 +88,7 @@ public class ListItems_Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(ListItems_Activity.this, DashboardActivity.class));
+                finish();
 
             }
         });
@@ -95,6 +96,7 @@ public class ListItems_Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(ListItems_Activity.this,Cartlist_Activity.class));
+                finish();
 
             }
         });
