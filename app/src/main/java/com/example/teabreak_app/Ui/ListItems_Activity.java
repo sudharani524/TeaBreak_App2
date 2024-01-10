@@ -2,13 +2,11 @@ package com.example.teabreak_app.Ui;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,7 +32,6 @@ import com.example.teabreak_app.Utils.SaveAppData;
 import com.example.teabreak_app.ViewModel.TeaBreakViewModel;
 import com.example.teabreak_app.databinding.ActivityListItemsBinding;
 import com.example.teabreak_app.repository.CartInterface;
-import com.example.teabreak_app.repository.ListItemInterface;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -51,8 +48,7 @@ public class ListItems_Activity extends AppCompatActivity {
     private ActivityListItemsBinding binding;
     ProgressDialog progressDialog;
     private TeaBreakViewModel viewModel;
-    ItemslistAdapter ItemslistAdapter,adapter;
-    boolean Listfilter=false;
+    ItemslistAdapter ItemslistAdapter;
     LinearLayout paymentdetails;
     ImageView close_btn,clear_btn;
     AlertDialog alertDialog;
@@ -63,6 +59,7 @@ public class ListItems_Activity extends AppCompatActivity {
     TextView tv_qty;
 
     ArrayList<ListItemsModel> list=new ArrayList<>();
+    ArrayList<ListItemsModel> filteredList=new ArrayList<>();
     String selected_line_item_id="",selected_price="",selected_qty="";
 
     @Override
@@ -119,17 +116,40 @@ public class ListItems_Activity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 String text = binding.etSearchfilter.getText().toString().toLowerCase(Locale.getDefault());
-                if (Listfilter){
-                    if (adapter != null) {
-                        adapter.filter(text);
-                        adapter.notifyDataSetChanged();
-                    }
+
+                if(text.isEmpty()){
+                    ItemslistAdapter=new ItemslistAdapter(list, ListItems_Activity.this, "list_items", new CartInterface() {
+                        @Override
+                        public void OnItemClick(int position, com.example.teabreak_app.Adapter.ItemslistAdapter.ViewHolder holder, String s) {
+
+                            adapterClickEvent(position,holder,s, list);
+
+                        }
+                    });
+
                 }else {
-                    if (ItemslistAdapter != null) {
-                        ItemslistAdapter.filter(text);
-                        ItemslistAdapter.notifyDataSetChanged();
+
+                    filteredList.clear();
+
+                    for (ListItemsModel ts : list) {
+
+                        if (ts.getLine_item_name().trim().toLowerCase(Locale.getDefault()).contains(text)) {
+                            filteredList.add(ts);
+                        }
                     }
+                    ItemslistAdapter=new ItemslistAdapter(filteredList, ListItems_Activity.this, "list_items", new CartInterface() {
+                        @Override
+                        public void OnItemClick(int position, com.example.teabreak_app.Adapter.ItemslistAdapter.ViewHolder holder, String s) {
+
+                            adapterClickEvent(position,holder,s, filteredList);
+
+                        }
+                    });
+
                 }
+                binding.rvListItems.setAdapter(ItemslistAdapter);
+                ItemslistAdapter.notifyDataSetChanged();
+
             }
         });
 
@@ -155,6 +175,7 @@ public class ListItems_Activity extends AppCompatActivity {
                         Toast.makeText(ListItems_Activity.this, ""+text, Toast.LENGTH_SHORT).show();
 
                         if(message.equalsIgnoreCase("success")){
+                            list.clear();
                             for(int i=0;i<jsonArray.length();i++){
                                 ListItemsModel listItemsModel = new Gson().fromJson(jsonArray.get(i).toString(), new TypeToken<ListItemsModel>() {
                                 }.getType());
@@ -222,57 +243,9 @@ public class ListItems_Activity extends AppCompatActivity {
                         ItemslistAdapter=new ItemslistAdapter(list, ListItems_Activity.this, "list_items", new CartInterface() {
                             @Override
                             public void OnItemClick(int position, com.example.teabreak_app.Adapter.ItemslistAdapter.ViewHolder holder, String s) {
-                                selected_line_item_id=list.get(position).getLine_item_id();
-                                selected_price=list.get(position).getPrice();
-                                //selected_qty=list.get(position).getPack_of_qty();
 
-                                 tv_qty=holder.itemView.findViewById(R.id.Quantity);
+                                adapterClickEvent(position,holder,s,list);
 
-                                AlertDialog.Builder dialog=new AlertDialog.Builder(ListItems_Activity.this);
-                                View view_alert= LayoutInflater.from(ListItems_Activity.this).inflate(R.layout.quantityupdate,null);
-                                paymentdetails=view_alert.findViewById(R.id.quantitydetails);
-                                close_btn=view_alert.findViewById(R.id.close_btn);
-                                submit_btn=view_alert.findViewById(R.id.submit_btn);
-                                clear_btn=view_alert.findViewById(R.id.clearButton);
-                                quanity=view_alert.findViewById(R.id.quanity);
-                                cancel=view_alert.findViewById(R.id.Cancel);
-                                submit_btn.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        ordecount=quanity.getText().toString();
-                                        if(Integer.parseInt(ordecount)>99){
-                                            Snackbar.make(ListItems_Activity.this,findViewById(android.R.id.content),"Please Enter the quantity below 99",Snackbar.LENGTH_LONG).show();
-                                            return;
-                                        }
-                                        else{
-                                            Log.e("ordercount",ordecount.toString());
-                                            add_cart_api_call();
-                                        }
-
-                                    }
-                                });
-                                clear_btn.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        quanity.setText("");
-                                    }
-                                });
-                                close_btn.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        alertDialog.dismiss();
-                                    }
-                                });
-                                cancel.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        alertDialog.dismiss();
-                                    }
-                                });
-                                dialog.setView(view_alert);
-                                dialog.setCancelable(false);
-                                alertDialog = dialog.create();
-                                alertDialog.show();
                             }
                         });
 
@@ -295,6 +268,69 @@ public class ListItems_Activity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void adapterClickEvent(int position, com.example.teabreak_app.Adapter.ItemslistAdapter.ViewHolder holder, String s, ArrayList<ListItemsModel> filtered_List) {
+
+        selected_line_item_id= filtered_List.get(position).getLine_item_id();
+        selected_price= filtered_List.get(position).getPrice();
+        //selected_qty=list.get(position).getPack_of_qty();
+
+
+        Log.d("TAG","line_id : "+filtered_List.get(position).getLine_item_id());
+        Log.d("TAG","line_id_price : "+filtered_List.get(position).getPrice());
+
+        tv_qty=holder.itemView.findViewById(R.id.Quantity);
+
+        AlertDialog.Builder dialog=new AlertDialog.Builder(ListItems_Activity.this);
+        View view_alert= LayoutInflater.from(ListItems_Activity.this).inflate(R.layout.quantityupdate,null);
+        paymentdetails=view_alert.findViewById(R.id.quantitydetails);
+        close_btn=view_alert.findViewById(R.id.close_btn);
+        submit_btn=view_alert.findViewById(R.id.submit_btn);
+        clear_btn=view_alert.findViewById(R.id.clearButton);
+        quanity=view_alert.findViewById(R.id.quanity);
+        cancel=view_alert.findViewById(R.id.Cancel);
+        submit_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ordecount=quanity.getText().toString();
+                if (ordecount.isEmpty()){
+                    Toast.makeText(ListItems_Activity.this, "Enter Qty", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(Integer.parseInt(ordecount)>99){
+                    Snackbar.make(ListItems_Activity.this,findViewById(android.R.id.content),"Please Enter the quantity below 99",Snackbar.LENGTH_LONG).show();
+                    return;
+                }
+                else{
+                    Log.e("ordercount",ordecount.toString());
+                    add_cart_api_call();
+                }
+
+            }
+        });
+        clear_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                quanity.setText("");
+            }
+        });
+        close_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+        dialog.setView(view_alert);
+        dialog.setCancelable(false);
+        alertDialog = dialog.create();
+        alertDialog.show();
     }
 
     private void add_cart_api_call() {

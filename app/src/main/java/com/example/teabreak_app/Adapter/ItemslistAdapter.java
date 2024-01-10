@@ -133,38 +133,7 @@ public class ItemslistAdapter extends RecyclerView.Adapter<ItemslistAdapter.View
 
 
     }
-    public void filter(String charText){
 
-        if (charText.length() == 1) {
-            this.Itemslist.clear();
-            this.Itemslist.addAll(slm);
-        }
-
-        charText = charText.toLowerCase(Locale.getDefault());
-        slm.clear();
-
-        if (charText.length() == 0) {
-            slm.addAll(Itemslist);
-            notifyDataSetChanged();
-        } else {
-            for (ListItemsModel ts : Itemslist) {
-
-              /*  if (ts.getLine_item_name().trim().toLowerCase(Locale.getDefault()).contains(charText) ||
-                        ts.getQuantity().trim().toLowerCase(Locale.getDefault()).contains(charText)) {
-                    slm.add(ts);
-
-                }*/
-
-
-                if (ts.getLine_item_name().trim().toLowerCase(Locale.getDefault()).contains(charText)) {
-                    slm.add(ts);
-
-                }
-            }
-            notifyDataSetChanged();
-        }
-
-    }
     @Override
     public int getItemCount() {
         return slm.size();
