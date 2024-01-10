@@ -181,8 +181,10 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                                  pay_method();
                              }
                          }
+                     }else{
+                         pay_method();
                      }
-                   pay_method();
+
 
                 }
                 else{

@@ -126,7 +126,6 @@ public class Cartlist_Activity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 String text = binding.etSearchfilter.getText().toString().toLowerCase(Locale.getDefault());
 
-
                 if (Cartfilterlist){
                     if (adapter != null) {
                         adapter.filter(text);
@@ -138,6 +137,12 @@ public class Cartlist_Activity extends AppCompatActivity {
                         itemslistAdapter.notifyDataSetChanged();
                     }
                 }
+                if(text.length()==0){
+                    itemslistAdapter.filter("");
+                    itemslistAdapter.notifyDataSetChanged();
+                }
+
+
             }
         });
 
