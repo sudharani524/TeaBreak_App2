@@ -27,6 +27,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     List<OrderHistoryModel> ls=new ArrayList<>();
     List<OrderHistoryModel> Orderslist=new ArrayList<>();
     Context context;
+    String delivery;
     OrderdetailsInterface orderdetailsInterface;
     public OrderHistoryAdapter(List<OrderHistoryModel> ls, Context context,OrderdetailsInterface orderdetailsInterface) {
         this.ls = ls;
@@ -47,6 +48,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
        holder.totalamount.setText( "₹"+ls.get(position).getTotal_amount());
        holder.WalletusedAmount.setText( "₹"+ls.get(position).getUsed_wallet_amount());
       holder.deliverytype.setText(ls.get(position).getDelivery_type_name());
+      holder.PaymentMode.setText(ls.get(position).getPayment_mode());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,6 +56,16 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
 
             }
         });
+        delivery=ls.get(position).getDelivery_type_name();
+        Log.d("deliverytype",delivery);
+        if(delivery.equalsIgnoreCase("Courier")){
+            holder.DeliveryCharges.setText(ls.get(position).getTotal_delivery_charges());
+        }
+        else{
+            holder.DeliveryCharges.setText("0");
+        }
+
+
 
     }
     public void filter(String charText){
@@ -91,8 +103,9 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView ordernumber,deliverytype,totalamount,date,WalletusedAmount;
+        TextView ordernumber,deliverytype,totalamount,date,WalletusedAmount,PaymentMode,DeliveryCharges;
         ImageView iv_whatsapp_share;
+        String Delivery;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ordernumber=itemView.findViewById(R.id.ordernumber);
@@ -101,6 +114,8 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
             WalletusedAmount=itemView.findViewById(R.id.WalletusedAmount);
             date=itemView.findViewById(R.id.orderdate);
             iv_whatsapp_share=itemView.findViewById(R.id.iv_whatsapp_share);
+            PaymentMode=itemView.findViewById(R.id.paymentmode);
+            DeliveryCharges=itemView.findViewById(R.id.deliveryCharges);
 
         }
     }

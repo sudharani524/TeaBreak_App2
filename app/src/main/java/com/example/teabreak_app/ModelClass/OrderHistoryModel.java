@@ -53,6 +53,12 @@ public class OrderHistoryModel implements Serializable {
     @SerializedName("used_wallet_amount")
     @Expose
     public String used_wallet_amount;
+    @SerializedName("payment_mode")
+    @Expose
+    public String payment_mode;
+    @SerializedName("total_delivery_charges")
+    @Expose
+    public String total_delivery_charges;
 
     public String getUsed_wallet_amount() {
         return used_wallet_amount;
@@ -172,5 +178,21 @@ public class OrderHistoryModel implements Serializable {
 
     public void setDelivery_type_name(String delivery_type_name) {
         this.delivery_type_name = delivery_type_name;
+    }
+
+    public String getPayment_mode() {
+        return payment_mode;
+    }
+
+    public void setPayment_mode(String payment_mode) {
+        this.payment_mode = payment_mode;
+    }
+
+    public String getTotal_delivery_charges() {
+        return total_delivery_charges;
+    }
+
+    public void setTotal_delivery_charges(String total_delivery_charges) {
+        this.total_delivery_charges = total_delivery_charges;
     }
 }

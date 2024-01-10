@@ -65,7 +65,7 @@ import java.util.Locale;
 
 public class Orderdetails extends AppCompatActivity {
     private ActivityOrderdetailsBinding binding;
-    String order_no,Amount,order_date,delivery_mode,order_id;
+    String order_no,Amount,order_date,delivery_mode,order_id,payment,delivery;
     ProgressDialog progressDialog;
     private TeaBreakViewModel viewModel;
    Orderdetailsadapter orderdetailsadapter;
@@ -88,14 +88,24 @@ public class Orderdetails extends AppCompatActivity {
         progressDialog.setCancelable(false);
         order_no=getIntent().getStringExtra("order_no");
         Amount=getIntent().getStringExtra("Amount");
+
         Log.d("amount",Amount);
         order_date=getIntent().getStringExtra("order_date");
         delivery_mode=getIntent().getStringExtra("delivery_mode");
         order_id=getIntent().getStringExtra("order_id");
+        payment=getIntent().getStringExtra("payment_mode");
+        delivery=getIntent().getStringExtra("delivery_charges");
         binding.orderNum.setText(order_no);
         binding.tvAmount.setText( "₹"+Amount);
         binding.tvOrderDate.setText(order_date);
         binding.tvVehicle.setText(delivery_mode);
+        binding.tvPaymentmode.setText(payment);
+        if(delivery_mode.equalsIgnoreCase("Courier")){
+           binding.tvDeliverycharges.setText(delivery);
+        }
+        else {
+            binding.tvDeliverycharges.setText("0");
+        }
         viewModel = ViewModelProviders.of(Orderdetails.this).get(TeaBreakViewModel.class);
         order_details_list_api_call();
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);

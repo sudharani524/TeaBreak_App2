@@ -83,6 +83,7 @@ public class Orders_List_Activity extends AppCompatActivity {
     boolean Orderfilterlist=false;
     public static final String APPLICATION_ID = "com.example.teabreak_app";
     private PermissionsChecker checker;
+    String Delivery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -657,6 +658,8 @@ public class Orders_List_Activity extends AppCompatActivity {
                             OrderHistoryModel orderHistoryModel = new Gson().fromJson(jsonArray.getJSONObject(i).toString(), new TypeToken<OrderHistoryModel>() {
                             }.getType());
                             list.add(orderHistoryModel);
+                            Delivery=list.get(i).getDelivery_type_name();
+                            Log.d("deliverytype",Delivery);
                             Log.d("list",String.valueOf(list.size()));
                         }
                         Log.d("list2",String.valueOf(list.size()));
@@ -678,6 +681,8 @@ public class Orders_List_Activity extends AppCompatActivity {
                                 intent.putExtra("Amount",list.get(position).getTotal_amount());
                                 intent.putExtra("order_date",list.get(position).getOrder_date_time());
                                 intent.putExtra("delivery_mode",list.get(position).getDelivery_type_name());
+                                intent.putExtra("payment_mode",list.get(position).getPayment_mode());
+                                intent.putExtra("delivery_charges",list.get(position).getTotal_delivery_charges());
                                 Log.d("orderid",list.get(position).getOrder_id());
                                 startActivity(intent);
                             }
