@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:weightSum="10"
+    android:background="@drawable/bg_with_cup"
     tools:context=".Ui.AccountsDashboard">
 
     <LinearLayout
@@ -61,7 +63,7 @@
         </androidx.appcompat.widget.Toolbar>
     </LinearLayout>
 
-    <!--<EditText
+   <!-- <EditText
         android:id="@+id/et_Searchfilter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -79,7 +81,7 @@
         android:padding="5dp" />-->
 
 
-    <com.google.android.material.tabs.TabLayout
+  <!--  <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -92,13 +94,71 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/tab_layout" />
+-->
 
 
-
-   <!-- <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvListItems"
+    <LinearLayout
+        android:id="@id/ll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="10dp"/>-->
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:orientation="vertical">
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_margin="10dp"
+            android:layout_height="150dp"
+            />
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            app:tabBackground="@drawable/slider_dot_selecter"
+            app:tabGravity="center"
+            android:layout_gravity="bottom"
+            app:tabIndicatorHeight="0dp"
+            android:background="@android:color/transparent"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="7"
+        android:orientation="vertical">
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/pending_order_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg2"
+            android:backgroundTint="@color/lightred"
+            android:text="Pending Order List"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:layout_marginRight="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="40dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/approved_order_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg2"
+            android:backgroundTint="@color/lightred"
+            android:text="Approved Order List"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginLeft="40dp"/>
+
+
+    </LinearLayout>
+
+
+
+
 
 </LinearLayout>

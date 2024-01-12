@@ -43,7 +43,7 @@ public class StatusActivity extends AppCompatActivity {
         binding.redirectScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(StatusActivity.this,ListItems_Activity.class));
+                startActivity(new Intent(StatusActivity.this,DashboardActivity.class));
                 finish();
             }
         });

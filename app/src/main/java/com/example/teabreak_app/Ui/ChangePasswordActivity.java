@@ -36,7 +36,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ChangePasswordActivity.this, DashboardActivity.class));
+                onBackPressed();
             }
         });
 
@@ -117,6 +117,12 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     private void changepasswordapi_call() {

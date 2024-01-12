@@ -104,7 +104,7 @@
             android:layout_marginStart="10dp"
             android:layout_weight="1"
             android:textColor="@color/black"
-            android:text="@string/delivery_type"/>
+            android:text="Delivery Type"/>
 
         <LinearLayout
             android:layout_width="0dp"

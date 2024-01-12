@@ -46,12 +46,25 @@ public class OrderedlistModel  implements Serializable {
     @Expose
     public String used_wallet_amount;
 
+
+    @SerializedName("accounts_updated_date_time")
+    @Expose
+    public String accounts_updated_date_time;
+
     public String getUsed_wallet_amount() {
         return used_wallet_amount;
     }
 
     public void setUsed_wallet_amount(String used_wallet_amount) {
         this.used_wallet_amount = used_wallet_amount;
+    }
+
+    public String getAccounts_updated_date_time() {
+        return accounts_updated_date_time;
+    }
+
+    public void setAccounts_updated_date_time(String accounts_updated_date_time) {
+        this.accounts_updated_date_time = accounts_updated_date_time;
     }
 
     public String getOnline_paid_amount() {

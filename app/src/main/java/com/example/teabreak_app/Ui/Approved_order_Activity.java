@@ -1,25 +1,22 @@
-package com.example.teabreak_app.Fragments;
+package com.example.teabreak_app.Ui;
 
-import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.teabreak_app.Adapter.Accountant_Orderlist_Adapter;
 import com.example.teabreak_app.ModelClass.OrderdetailsModel;
 import com.example.teabreak_app.R;
-import com.example.teabreak_app.Ui.Checkout;
 import com.example.teabreak_app.Utils.SaveAppData;
 import com.example.teabreak_app.ViewModel.TeaBreakViewModel;
+import com.example.teabreak_app.databinding.ActivityApprovedOrderBinding;
 import com.example.teabreak_app.repository.ListItemInterface;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
@@ -32,30 +29,41 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Approved_Order_List_Fragment extends Fragment {
-
+public class Approved_order_Activity extends AppCompatActivity {
     RecyclerView rv_pending_orders_list;
     private TeaBreakViewModel viewModel;
     LinearLayoutManager linearLayoutManager;
     Accountant_Orderlist_Adapter accountantOrderlistAdapter;
     ArrayList<OrderdetailsModel> account_order_list=new ArrayList<>();
 
-
+    private ActivityApprovedOrderBinding binding;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View root=inflater.inflate(R.layout.fragment_approved__order__list_, container, false);
-        viewModel = ViewModelProviders.of(getActivity()).get(TeaBreakViewModel.class);
-        rv_pending_orders_list=root.findViewById(R.id.rvapprovedListItems);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding=ActivityApprovedOrderBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        linearLayoutManager=new LinearLayoutManager(getActivity());
+        viewModel = ViewModelProviders.of(Approved_order_Activity.this).get(TeaBreakViewModel.class);
+
+
+        linearLayoutManager=new LinearLayoutManager(Approved_order_Activity.this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        rv_pending_orders_list.setLayoutManager(linearLayoutManager);
+        binding.rvapprovedListItems.setLayoutManager(linearLayoutManager);
 
         approved_order_list_api_call();
 
-        return root;
+        binding.backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     private void approved_order_list_api_call() {
@@ -65,7 +73,7 @@ public class Approved_Order_List_Fragment extends Fragment {
         object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
         object.addProperty("user_token",SaveAppData.getLoginData().getToken());
 
-        viewModel.get_accountant_approved_order_details(object).observe(getActivity(), new Observer<JsonObject>() {
+        viewModel.get_accountant_approved_order_details(object).observe(Approved_order_Activity.this, new Observer<JsonObject>() {
             @Override
             public void onChanged(JsonObject jsonObject) {
                 if (jsonObject != null){
@@ -84,7 +92,7 @@ public class Approved_Order_List_Fragment extends Fragment {
 
                         Log.d("orderdetailslist",String.valueOf(account_order_list.size()));
 
-                        accountantOrderlistAdapter=new Accountant_Orderlist_Adapter(getActivity(), account_order_list,"ApprovedList", new ListItemInterface() {
+                        accountantOrderlistAdapter=new Accountant_Orderlist_Adapter(Approved_order_Activity.this, account_order_list,"ApprovedList", new ListItemInterface() {
                             @Override
                             public void OnItemClick(int position, View v, String s) {
                                /* AlertDialog.Builder dialog=new AlertDialog.Builder(AccountsDashboard.this);
@@ -119,25 +127,24 @@ public class Approved_Order_List_Fragment extends Fragment {
 
                             }
                         });
-                        rv_pending_orders_list.setAdapter(accountantOrderlistAdapter);
+                        binding.rvapprovedListItems.setAdapter(accountantOrderlistAdapter);
                         accountantOrderlistAdapter.notifyDataSetChanged();
 
 
                     } catch (JSONException e) {
                         Log.e("Exception", String.valueOf(e));
-                    //    Toast.makeText(getActivity(), "Exception"+e, Toast.LENGTH_SHORT).show();
+                        //    Toast.makeText(getActivity(), "Exception"+e, Toast.LENGTH_SHORT).show();
                     }
 
 
                 }else{
 
-                    Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(Approved_order_Activity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(Approved_order_Activity.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
 
                 }
             }
         });
 
     }
-
-
 }

@@ -36,6 +36,19 @@ public class ItemsorderedModel {
     @Expose
     public String order_item_id;
 
+
+    @SerializedName("available_quantity")
+    @Expose
+    public String available_quantity;
+
+    public String getAvailable_quantity() {
+        return available_quantity;
+    }
+
+    public void setAvailable_quantity(String available_quantity) {
+        this.available_quantity = available_quantity;
+    }
+
     public String getOrder_item_id() {
         return order_item_id;
     }

@@ -41,10 +41,11 @@ public class Mywallet extends AppCompatActivity {
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(Mywallet.this, DashboardActivity.class));
+              onBackPressed();
             }
         });
     }
+
 
     private static class MyPagerAdapter extends FragmentPagerAdapter {
 

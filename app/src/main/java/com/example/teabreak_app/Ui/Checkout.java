@@ -73,10 +73,10 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
 
     ArrayList<String> order_type=new ArrayList<>();
     private TeaBreakViewModel viewModel;
-    String t_amount,Delivery_charges;
+    String t_amount="",Delivery_charges="";
 
     String order_no;
-    String order_no2;
+    String order_no2="";
     Float t_amt;
    static String availability_date="";
     ArrayList<String> as_dates;
@@ -143,7 +143,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(Checkout.this, Cartlist_Activity.class));
+                onBackPressed();
             }
         });
         binding.Proceed.setOnClickListener(new View.OnClickListener() {
@@ -151,7 +151,8 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
             public void onClick(View view) {
 
                 if(selected_delivery_mode_id.equalsIgnoreCase("")){
-                    Toast.makeText(Checkout.this, "Please Select the delivery mode", Toast.LENGTH_SHORT).show();
+                   //  Toast.makeText(Checkout.this, "Please Select the delivery mode", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Please select the delivery mode",Snackbar.LENGTH_LONG).show();
                     return;
                 }
 
@@ -177,23 +178,33 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                                  dialog.create();
                                  dialog.show();
 
-                             }else{
+                                 return;
+
+                             }/*else{
                                  pay_method();
-                             }
+                             }*/
                          }
-                     }else{
-                         pay_method();
                      }
 
+                     pay_method();
 
-                }
+
+
+                 }
                 else{
-                    Toast.makeText(Checkout.this, "Please Select the delivery mode", Toast.LENGTH_SHORT).show();
-                }
+                 //   Toast.makeText(Checkout.this, "Please Select the delivery mode", Toast.LENGTH_SHORT).show();
+                     Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Please select the delivery mode",Snackbar.LENGTH_LONG).show();
+                 }
 
 
             }
         });
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     private void pay_method() {
@@ -248,17 +259,42 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(checkBox.isChecked()){
                     wallet_status="1";
-                    t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges))-Float.parseFloat(wallet_amount);
+                    if(selected_delivery_mode_id.equalsIgnoreCase("2")){
+                        t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges))-Float.parseFloat(wallet_amount);
+                        Log.e("t_amttt", String.valueOf(t_amt));
+                        total_amt.setText(String.valueOf( "₹"+df.format(t_amt)));
+
+                    }else{
+                        t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat("0.00"))-Float.parseFloat(wallet_amount);
+
+                        Log.e("t_amttt", String.valueOf(t_amt));
+                        total_amt.setText(String.valueOf( "₹"+df.format(t_amt)));
+                    }
+                 //   t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges))-Float.parseFloat(wallet_amount);
                     // Float t_amt_with_wallet=t_amt-Float.parseFloat(wallet_amount);
-                    total_amt.setText(String.valueOf( "₹"+df.format(t_amt)));
+                   // total_amt.setText(String.valueOf( "₹"+df.format(t_amt)));
                 }else{
                     wallet_status="0";
-                    t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges));
-                    total_amt.setText(String.valueOf( "₹"+df.format(t_amt)));
+                    if(selected_delivery_mode_id.equalsIgnoreCase("2")){
+                        t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges));
+                        Log.e("t_amt2", String.valueOf(t_amt));
+                        total_amt.setText(String.valueOf( "₹"+df.format(t_amt)));
+                    }else{
+                        // t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat("0"));
+                        t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat("0"));
+                        total_amt.setText(String.valueOf( "₹"+df.format(t_amt)));
+                        Log.e("t_amt2", String.valueOf(t_amt));
+
+                    }
+                //    t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges));
+                  //  total_amt.setText(String.valueOf( "₹"+df.format(t_amt)));
                 }
             }
         });
 
+      /*  Log.e("t_amt3", String.valueOf(t_amt));
+
+        total_amt.setText(String.valueOf( "₹"+df.format(t_amt)));*/
 
         close_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -272,7 +308,9 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
             @Override
             public void onClick(View v) {
                 if(selected_delivery_mode_id.equalsIgnoreCase("")){
-                    Toast.makeText(Checkout.this, "Please Select the delivery mode", Toast.LENGTH_SHORT).show();
+                //    Toast.makeText(Checkout.this, "Please Select the delivery mode", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Please Select the delivery mode",Snackbar.LENGTH_LONG).show();
+
                     return;
                 }else{
                     create_order_api_call();
@@ -323,13 +361,18 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
 
                     } catch (JSONException e) {
                         //throw new RuntimeException(e);
-                        Toast.makeText(Checkout.this, ""+e, Toast.LENGTH_SHORT).show();
+
+                        Log.e("Exception", String.valueOf(e));
+
+                      //  Toast.makeText(Checkout.this, ""+e, Toast.LENGTH_SHORT).show();
                     }
 
 
                 }else{
 
-                    Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                 //   Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
+
                 }
 
             }
@@ -360,13 +403,17 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
 
                     } catch (JSONException e) {
                         //throw new RuntimeException(e);
-                        Toast.makeText(Checkout.this, ""+e, Toast.LENGTH_SHORT).show();
+                        Log.e("Exception", String.valueOf(e));
+                       // Toast.makeText(Checkout.this, ""+e, Toast.LENGTH_SHORT).show();
                     }
 
 
                 }else{
 
-                    Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                 //   Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
+
+
                 }
 
             }
@@ -375,6 +422,8 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
 
 
     private void ordered_Items_list_api_call() {
+
+        progressDialog.show();
         JsonObject object = new JsonObject();
 
         object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
@@ -383,6 +432,9 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
             @Override
             public void onChanged(JsonObject jsonObject) {
 
+                if(progressDialog.isShowing()){
+                    progressDialog.dismiss();
+                }
                 if (jsonObject != null){
 
                     Log.d("TAG","add_cart "+jsonObject);
@@ -395,7 +447,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
 
                         String message=jsonObject1.getString("message");
 
-                        Toast.makeText(Checkout.this, ""+message, Toast.LENGTH_SHORT).show();
+                     //   Toast.makeText(Checkout.this, ""+message, Toast.LENGTH_SHORT).show();
                         for(int i=0;i<jsonArray.length();i++){
                             ListItemsModel listItemsModel = new Gson().fromJson(jsonArray.get(i).toString(), new TypeToken<ListItemsModel>() {
                             }.getType());
@@ -407,13 +459,16 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
 
 
                     } catch (JSONException e) {
-                        Toast.makeText(Checkout.this, ""+e, Toast.LENGTH_SHORT).show();
+                        Log.e("Exception", String.valueOf(e));
+                     //   Toast.makeText(Checkout.this, ""+e, Toast.LENGTH_SHORT).show();
                     }
 
 
                 }else{
 
-                    Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+               //     Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
+
                 }
 
             }
@@ -460,22 +515,15 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                         order_no2=data_object.getString("order_no");
 
 
-                        Toast.makeText(Checkout.this, "data"+message, Toast.LENGTH_SHORT).show();
+                   //     Toast.makeText(Checkout.this, "data"+message, Toast.LENGTH_SHORT).show();
                         Log.e("message",message);
 
                         if(message.equalsIgnoreCase("success")){
-
-                           /* startActivity(new Intent(Checkout.this,Cartlist_Activity.class));
-                            finish();*/
 
                             Log.e("success","success");
                             alertDialog.dismiss();
 
                             payment_gateway_details_api_call();
-
-                            /*Intent intent=new Intent(Checkout.this,MerchantCheckoutActivity.class);
-                            intent.putExtra("order_no",order_no);
-                            startActivity(intent);*/
 
                         }
 
@@ -483,7 +531,8 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
 
                     } catch (JSONException e) {
                         //throw new RuntimeException(e);
-                        Toast.makeText(Checkout.this, ""+e, Toast.LENGTH_SHORT).show();
+                        Log.e("Exception", String.valueOf(e));
+                      //  Toast.makeText(Checkout.this, ""+e, Toast.LENGTH_SHORT).show();
                     }
 
 
@@ -491,7 +540,9 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                     if(progressDialog.isShowing()){
                         progressDialog.dismiss();
                     }
-                    Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+               //     Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
+
                 }
 
             }
@@ -534,37 +585,39 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                         Log.e("workingKey",workingKey);
 
                         request_hash=requestId+workingKey+merchantId;
-                        // request_hash=requestId+"320ECB91D6183CD5D65D9D91E2D2CF2B"+merchantId;
-                        // request_hash=requestId+"C84AF8924DB0262E1362AAD0BEBE59ED"+merchantId; //live
-                        // request_hash=requestId+"5D75051B7F577D861C9ECAD9B619804D"+merchantId; //live
+                    /*     request_hash=requestId+"320ECB91D6183CD5D65D9D91E2D2CF2B"+merchantId;
+                         request_hash=requestId+"C84AF8924DB0262E1362AAD0BEBE59ED"+merchantId; //live
+                         request_hash=requestId+"5D75051B7F577D861C9ECAD9B619804D"+merchantId; //live
 
-                        // request_hash=req_id+workingKey+merchantId; //live
+                         request_hash=req_id+workingKey+merchantId; //live*/
 
-                        Log.e("request_hash",request_hash);
+                   /*     Log.e("request_hash",request_hash);
                         try {
                             ba1 =generateReqHash(request_hash);
                             Log.e("secure_token",ba1);
                         } catch (NoSuchAlgorithmException e) {
                             Log.e("Exception",""+e);
                             throw new RuntimeException(e);
-                        }
+                        }*/
 
 
-                      /*  byte[] byteArray = request_hash.getBytes();
-                        ba1 = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                        Log.e("req_hash",ba1);
-*/
 
-                        secure_token_api_call();
+
+                      //  secure_token_api_call();
+
+                        genearate_request_hash();
 
                     } catch (JSONException e) {
                         //throw new RuntimeException(e);
-                        Toast.makeText(Checkout.this, ""+e, Toast.LENGTH_SHORT).show();
+                        Log.e("Exception", String.valueOf(e));
+                       //  Toast.makeText(Checkout.this, ""+e, Toast.LENGTH_SHORT).show();
                     }
 
                 }else{
 
-                    Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
+
                 }
 
             }
@@ -572,7 +625,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
     }
 
 
-    private void secure_token_api_call() {
+  /*  private void secure_token_api_call() {
         Log.e("secure_token","secure_token_mthd");
        // JsonObject object = new JsonObject();
        // object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
@@ -600,16 +653,19 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
 
                                 Log.e("response_hash",responseHash);
                                 request_hash=order_no2+"INR"+"1.00"+secureToken;
-                                // request_hash=order_no+"INR"+df.format(t_amt)+secureToken;
+                               //  request_hash=order_no+"INR"+df.format(t_amt)+secureToken;
                                 Log.e("s_token",request_hash);
                                 try {
                                     ba2=generateReqHash(request_hash);
                                     Log.e("ba2",ba2);
+
                                 } catch (NoSuchAlgorithmException e) {
                                     Log.e("ba2_Exception",ba2);
                                     throw new RuntimeException(e);
                                 }
+
                                 initiatePayment1();
+
                             }else{
                                 Toast.makeText(mContext, "Secure token is null...please try again", Toast.LENGTH_SHORT).show();
                             }
@@ -630,12 +686,63 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
 
             }
         });
-    }
+    }*/
 
+    private void genearate_request_hash() {
+        Log.e("generate_hash","generate_hash");
+         JsonObject object = new JsonObject();
+         object.addProperty("order_no", order_no2);
+         object.addProperty("currency", "INR");
+         object.addProperty("amount","1.00");
+    //     object.addProperty("amount",df.format(t_amt));
+
+
+          viewModel.get_request_hash(object).observe(Checkout.this, new Observer<JsonObject>() {
+            @Override
+            public void onChanged(JsonObject jsonObject) {
+
+                if (jsonObject != null){
+                    Log.d("generate_request_hash","generate_request_hash "+jsonObject);
+                    try {
+                        JSONObject jsonObject1=new JSONObject(jsonObject.toString());
+
+                        if(jsonObject1.getString("message").equalsIgnoreCase("Success")){
+
+                            if(jsonObject1.getString("message")!=null){
+
+                                ba2=jsonObject1.getString("requestHash");
+                                Log.e("request_hash_ba2",ba2);
+                                initiatePayment1();
+
+                            }else{
+                              //  Toast.makeText(mContext, "RequestHash is null...please try again", Toast.LENGTH_SHORT).show();
+                                Snackbar.make(Checkout.this,findViewById(android.R.id.content),"RequestHash is null...please try again",Snackbar.LENGTH_LONG).show();
+                            }
+
+                        }
+
+
+                    } catch (JSONException e) {
+                        //throw new RuntimeException(e);
+                        Log.e("Exception", String.valueOf(e));
+                       // Toast.makeText(Checkout.this, "Exception"+e, Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }else{
+
+                 //   Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
+
+                }
+
+            }
+        });
+    }
 
     private void initiatePayment1() {
 
-        AvenueOrder orderDetails = new AvenueOrder();
+    /*    AvenueOrder orderDetails = new AvenueOrder();
         orderDetails.setOrderId(order_no2);
         Log.e("order",order_no2);
         orderDetails.setRequestHash(ba2);
@@ -651,16 +758,98 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
         orderDetails.setCustomerId(SaveAppData.getLoginData().getUser_mobile());
         orderDetails.setPaymentType("all");
         orderDetails.setMerchantLogo(String.valueOf(R.drawable.teabreakicon));
-        orderDetails.setBillingName(SaveAppData.getLoginData().getLogin_username());
-        Log.e("billing_name",SaveAppData.getLoginData().getName());
+        orderDetails.setBillingName(""+SaveAppData.getLoginData().getLogin_username());
+        Log.e("Name",SaveAppData.getLoginData().getLogin_username());
+        orderDetails.setBillingAddress(""+SaveAppData.getLoginData().getAddress());
+        Log.e("address",SaveAppData.getLoginData().getAddress());
+
+        orderDetails.setBillingCountry(""+SaveAppData.getLoginData().getCountry());
+        Log.e("country",SaveAppData.getLoginData().getCountry());
+
+        orderDetails.setBillingState(""+SaveAppData.getLoginData().getState());
+        Log.e("state",SaveAppData.getLoginData().getState());
+
+        orderDetails.setBillingCity(""+SaveAppData.getLoginData().getCity());
+        Log.e("city",SaveAppData.getLoginData().getCity());
+
+        orderDetails.setBillingZip(""+SaveAppData.getLoginData().getPincode());
+        Log.e("pincode",SaveAppData.getLoginData().getPincode());
+
+        orderDetails.setBillingTel(""+SaveAppData.getLoginData().getUser_mobile());
+        Log.e("mobile",SaveAppData.getLoginData().getUser_mobile());
+
+        orderDetails.setBillingEmail(""+SaveAppData.getLoginData().getUser_email());
+        Log.e("email",SaveAppData.getLoginData().getUser_email());
+
+        orderDetails.setDeliveryName(""+SaveAppData.getLoginData().getLogin_username());
+        Log.e("name",SaveAppData.getLoginData().getLogin_username());
+
+        orderDetails.setDeliveryAddress(""+SaveAppData.getLoginData().getAddress());
+        Log.e("address",SaveAppData.getLoginData().getAddress());
+
+        orderDetails.setDeliveryCountry(""+SaveAppData.getLoginData().getCountry());
+        Log.e("country",SaveAppData.getLoginData().getCountry());
+
+        orderDetails.setDeliveryState(""+SaveAppData.getLoginData().getState());
+        Log.e("state",SaveAppData.getLoginData().getState());
+
+        orderDetails.setDeliveryCity(""+SaveAppData.getLoginData().getCity());
+        Log.e("city",SaveAppData.getLoginData().getCity());
+
+        orderDetails.setDeliveryZip(SaveAppData.getLoginData().getPincode());
+        orderDetails.setDeliveryTel(SaveAppData.getLoginData().getUser_mobile());
+        orderDetails.setMerchant_param1("test"); //total 5 parameters
+        orderDetails.setMerchant_param2("transaction"); //total 5 parameters
+        orderDetails.setMerchant_param3("1"); //total 5 parameters
+        orderDetails.setMerchant_param4("2"); //total 5 parameters
+        orderDetails.setMerchant_param5("3"); //total 5 parameters
+        orderDetails.setMobileNo(SaveAppData.getLoginData().getUser_mobile());
+        orderDetails.setPaymentEnviroment("“app_staging"); //app_live - prod
+
+//        orderDetails.setColorPrimary("#008000");
+//        orderDetails.setColorAccent("#009688");
+//        orderDetails.setColorFont("#fd5c63");
+
+        orderDetails.setColorPrimary("color_primary");
+        orderDetails.setColorAccent("color_accent");
+        orderDetails.setColorFont("color_font");
+
+        orderDetails.setBackgroundDrawable(0);
+        // orderDetails.setBackgroundDrawable(R.drawable.img);
+        //To begin transaction through SDK…
+
+
+        AvenuesApplication.startTransaction(Checkout.this, orderDetails);
+*/
+
+
+
+        AvenueOrder orderDetails = new AvenueOrder();
+        orderDetails.setOrderId(order_no2);
+        Log.e("order",order_no2);
+        orderDetails.setRequestHash(ba2);
+        orderDetails.setAccessCode(accessCode);
+        orderDetails.setMerchantId(merchantId);
+        orderDetails.setCurrency("INR");
+     //   orderDetails.setAmount(df.format(t_amt));
+        orderDetails.setAmount("1.00");
+        orderDetails.setRedirectUrl(Constant.SERVER_BASE_URL+"response_handler_url.php");
+        orderDetails.setCancelUrl(Constant.SERVER_BASE_URL+"response_handler_url.php");
+        orderDetails.setCustomerId(SaveAppData.getLoginData().getUser_mobile());
+        orderDetails.setPaymentType("all");
+        orderDetails.setMerchantLogo(String.valueOf(R.drawable.teabreakicon));
+        orderDetails.setBillingName(SaveAppData.getLoginData().getName());
+        Log.e("nameee",SaveAppData.getLoginData().getName());
         orderDetails.setBillingAddress(SaveAppData.getLoginData().getAddress());
         orderDetails.setBillingCountry(SaveAppData.getLoginData().getCountry());
-        orderDetails.setBillingState(SaveAppData.getLoginData().getState());
+        orderDetails.setBillingState(SaveAppData.getLoginData().getCountry());
         orderDetails.setBillingCity(SaveAppData.getLoginData().getCity());
         orderDetails.setBillingZip(SaveAppData.getLoginData().getPincode());
         orderDetails.setBillingTel(SaveAppData.getLoginData().getUser_mobile());
         orderDetails.setBillingEmail(SaveAppData.getLoginData().getUser_email());
-        orderDetails.setDeliveryName(SaveAppData.getLoginData().getLogin_username());
+
+        orderDetails.setDeliveryName(SaveAppData.getLoginData().getName());
+
         orderDetails.setDeliveryAddress(SaveAppData.getLoginData().getAddress());
         orderDetails.setDeliveryCountry(SaveAppData.getLoginData().getCountry());
         orderDetails.setDeliveryState(SaveAppData.getLoginData().getState());
@@ -674,19 +863,16 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
         orderDetails.setMerchant_param5("3"); //total 5 parameters
         orderDetails.setMobileNo(SaveAppData.getLoginData().getUser_mobile());
         orderDetails.setPaymentEnviroment("“app_staging"); //app_live - prod
-
-      /*  orderDetails.setColorPrimary("#008000");
-        orderDetails.setColorAccent("#009688");
-        orderDetails.setColorFont("#fd5c63");*/
-
+//        orderDetails.setColorPrimary("#008000");
+//        orderDetails.setColorAccent("#009688");
+//        orderDetails.setColorFont("#fd5c63");
         orderDetails.setColorPrimary("color_primary");
         orderDetails.setColorAccent("color_accent");
         orderDetails.setColorFont("color_font");
-
         orderDetails.setBackgroundDrawable(0);
-        // orderDetails.setBackgroundDrawable(R.drawable.img);
         //To begin transaction through SDK…
         AvenuesApplication.startTransaction(Checkout.this, orderDetails);
+
     }
 
     private String generateReqHash(String str) throws NoSuchAlgorithmException {
@@ -733,7 +919,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
 
                         JSONArray jsonArray=jsonObj.getJSONArray("data");
 
-                        Toast.makeText(Checkout.this, ""+message, Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(Checkout.this, ""+message, Toast.LENGTH_SHORT).show();
 
                         order_list.clear();
                         order_type.clear();
@@ -832,7 +1018,9 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                     }
 
                 }else{
-                    Toast.makeText(Checkout.this, "null", Toast.LENGTH_SHORT).show();
+                 //   Toast.makeText(Checkout.this, "null", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
+
                 }
 
 
@@ -844,7 +1032,9 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                 if (progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
-                Toast.makeText(Checkout.this, ""+t, Toast.LENGTH_SHORT).show();
+             //   Toast.makeText(Checkout.this, ""+t, Toast.LENGTH_SHORT).show();
+                Snackbar.make(Checkout.this,findViewById(android.R.id.content),""+t,Snackbar.LENGTH_LONG).show();
+
             }
         });
     }
@@ -903,7 +1093,8 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
 
                   } catch (JSONException e) {
                       //throw new RuntimeException(e);
-                      Toast.makeText(Checkout.this, "Exception"+e, Toast.LENGTH_SHORT).show();
+                      Log.e("Exception", String.valueOf(e));
+                    // Toast.makeText(Checkout.this, "Exception"+e, Toast.LENGTH_SHORT).show();
 
                   }
               }else{
@@ -919,7 +1110,9 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                 if (progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
-                Toast.makeText(Checkout.this, ""+t, Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(Checkout.this, ""+t, Toast.LENGTH_SHORT).show();
+                Snackbar.make(Checkout.this,findViewById(android.R.id.content),""+t,Snackbar.LENGTH_LONG).show();
+
             }
         });
     }
@@ -1059,7 +1252,10 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                     if(progressDialog.isShowing()){
                         progressDialog.dismiss();
                     }
-                    Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+               //     Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+
+                    Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
+
                 }
 
             }

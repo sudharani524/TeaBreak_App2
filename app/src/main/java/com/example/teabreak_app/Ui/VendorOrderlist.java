@@ -1,5 +1,6 @@
 package com.example.teabreak_app.Ui;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -7,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -95,7 +97,22 @@ public class VendorOrderlist extends AppCompatActivity {
         binding.logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                logout_api_call();
+                AlertDialog logoutDialog = new AlertDialog.Builder(VendorOrderlist.this).setTitle("logout")
+                        .setMessage("Are you sure you want to logout")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                logout_api_call();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert).setCancelable(false).show();
             }
         });
 
@@ -129,11 +146,13 @@ public class VendorOrderlist extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(binding.etFromDate.getText().toString().equals("")){
-                    Toast.makeText(VendorOrderlist.this, "Please Select From Date", Toast.LENGTH_SHORT).show();
+                 //   Toast.makeText(VendorOrderlist.this, "Please Select From Date", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(VendorOrderlist.this,findViewById(android.R.id.content),"Please Select From Date",Snackbar.LENGTH_LONG).show();
                     return;
                 }
                 if(binding.etToDate.getText().toString().equals("")){
-                    Toast.makeText(VendorOrderlist.this, "Please Select To Date", Toast.LENGTH_SHORT).show();
+                 //   Toast.makeText(VendorOrderlist.this, "Please Select To Date", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(VendorOrderlist.this,findViewById(android.R.id.content),"Please Select To Date",Snackbar.LENGTH_LONG).show();
                     return;
                 }
                 if(checkDates(from_date,to_date)){
@@ -196,13 +215,15 @@ public class VendorOrderlist extends AppCompatActivity {
                                 orderedlistAdapter.notifyDataSetChanged();
 
                             } catch (JSONException e) {
-                                Toast.makeText(VendorOrderlist.this, ""+e, Toast.LENGTH_SHORT).show();
+                                Log.e("Exception", String.valueOf(e));
+                               // Toast.makeText(VendorOrderlist.this, ""+e, Toast.LENGTH_SHORT).show();
                             }
 
 
                         }else{
 
-                            Toast.makeText(VendorOrderlist.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                       //     Toast.makeText(VendorOrderlist.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                            Snackbar.make(VendorOrderlist.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -319,8 +340,9 @@ public class VendorOrderlist extends AppCompatActivity {
                     if(progressDialog.isShowing()){
                         progressDialog.dismiss();
                     }
-                    Toast.makeText(VendorOrderlist.this, "Something went wrong", Toast.LENGTH_SHORT).show();
-                }
+                 //   Toast.makeText(VendorOrderlist.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(VendorOrderlist.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
+               }
 
             }
         });

@@ -134,7 +134,8 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 if(response.body()==null){
-                    Toast.makeText(MainActivity.this, "Something went Wrong", Toast.LENGTH_SHORT).show();
+                 //   Toast.makeText(MainActivity.this, "Something went Wrong", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(MainActivity.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
                     return;
                 }
 
@@ -147,11 +148,11 @@ public class MainActivity extends AppCompatActivity {
                          String msg=jsonObj.getString("msg");
                         JSONObject dataobject=jsonObj.getJSONObject("data");
 
-                        Toast.makeText(MainActivity.this, ""+msg, Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(MainActivity.this, ""+msg, Toast.LENGTH_SHORT).show();
 
                         if(response1.equalsIgnoreCase("Successful") && response1!=null){
                             Log.e("Login_res",response.toString());
-                            Toast.makeText(MainActivity.this, ""+response.toString(), Toast.LENGTH_SHORT).show();
+                         //   Toast.makeText(MainActivity.this, ""+response.toString(), Toast.LENGTH_SHORT).show();
                             //  startActivity(new Intent(MainActivity.this,VAADashboardActivity.class));
                             LoginUserModel operatorLoginData = new Gson().fromJson(jsonObj.getJSONObject("data").toString(), new TypeToken<LoginUserModel>() {
                             }.getType());
@@ -175,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
 
                             Log.e("Selected_role_id_login",selected_user_role_id);
 
-                            switch (selected_user_role_id) {
+                            /*switch (selected_user_role_id) {
                                 case "1":
                                     startActivity(new Intent(MainActivity.this, DashboardActivity.class));
                                     finish();
@@ -192,8 +193,21 @@ public class MainActivity extends AppCompatActivity {
                                     startActivity(new Intent(MainActivity.this, DashboardActivity.class));
                                     finish();
                                     break;
-                            }
+                            }*/
 
+                            if(SaveAppData.getLoginData().getRole_id().equalsIgnoreCase("2")){
+                                startActivity(new Intent(MainActivity.this, DashboardActivity.class));
+                                finish();
+                            } else if (SaveAppData.getLoginData().getRole_id().equalsIgnoreCase("3")) {
+                                startActivity(new Intent(MainActivity.this, VendorOrderlist.class));
+                                finish();
+                            } else if (SaveAppData.getLoginData().getRole_id().equalsIgnoreCase("4")) {
+                                startActivity(new Intent(MainActivity.this, AccountsDashboard.class));
+                                finish();
+                            } else{
+                                startActivity(new Intent(MainActivity.this, DashboardActivity.class));
+                                finish();
+                            }
 
                         }
                     } catch (JSONException e) {
@@ -202,7 +216,8 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 }else{
-                    Toast.makeText(MainActivity.this, "null", Toast.LENGTH_SHORT).show();
+                 //   Toast.makeText(MainActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(MainActivity.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
                 }
 
 
@@ -214,7 +229,8 @@ public class MainActivity extends AppCompatActivity {
                 if (progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
-                Toast.makeText(MainActivity.this, ""+t, Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(MainActivity.this, ""+t, Toast.LENGTH_SHORT).show();
+                Snackbar.make(MainActivity.this,findViewById(android.R.id.content),""+t,Snackbar.LENGTH_LONG).show();
             }
         });
     }
@@ -287,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
                         usersrole_list.add(usersRolesModel1);
 
 
-                        Toast.makeText(MainActivity.this, ""+message, Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(MainActivity.this, ""+message, Toast.LENGTH_SHORT).show();
 
                         if(message.equalsIgnoreCase("Success")){
                             for(int i=0;i<jsonArray.length();i++){
@@ -317,7 +333,8 @@ public class MainActivity extends AppCompatActivity {
 
                     } catch (JSONException e) {
                         //throw new RuntimeException(e);
-                        Toast.makeText(MainActivity.this, ""+e, Toast.LENGTH_SHORT).show();
+                        Log.e("Exception", String.valueOf(e));
+                       // Toast.makeText(MainActivity.this, ""+e, Toast.LENGTH_SHORT).show();
                     }
 
 
@@ -325,7 +342,9 @@ public class MainActivity extends AppCompatActivity {
                     if(progressDialog.isShowing()){
                         progressDialog.dismiss();
                     }
-                    Toast.makeText(MainActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                 //   Toast.makeText(MainActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(MainActivity.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
+
                 }
 
             }

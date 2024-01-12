@@ -46,6 +46,7 @@ import com.example.teabreak_app.databinding.ActivityMainBinding;
 import com.example.teabreak_app.repository.ListItemInterface;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -73,7 +74,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     static String wallet_amount="";
     TextView wallet_amt;
 
-    @SuppressLint("SetTextI18n")
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,7 +121,9 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
         } catch (PackageManager.NameNotFoundException e) {
             // throw new RuntimeException(e);
-            Toast.makeText(this, "version_name"+e, Toast.LENGTH_SHORT).show();
+            Log.e("Excption", String.valueOf(e));
+          //  Toast.makeText(this, "version_name"+e, Toast.LENGTH_SHORT).show();
+
         }
 
         viewModel = ViewModelProviders.of(DashboardActivity.this).get(TeaBreakViewModel.class);
@@ -164,6 +167,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         wallet_amt=(TextView) navHeaderView.findViewById(R.id.wallet_amt);
         wallet_amt.setText("₹"+wallet_amount);
         Log.e("wallet_amounttttttt",wallet_amount);
+        nav_name.setText(SaveAppData.getLoginData().getName());
 
         binding.newDashboarddd.viewAll.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -240,13 +244,15 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
                     } catch (JSONException e) {
                         //throw new RuntimeException(e);
-                        Toast.makeText(DashboardActivity.this, ""+e, Toast.LENGTH_SHORT).show();
+                        Log.e("Exception", String.valueOf(e));
+                       // Toast.makeText(DashboardActivity.this, ""+e, Toast.LENGTH_SHORT).show();
                     }
 
 
                 }else{
 
-                    Toast.makeText(DashboardActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                 //   Toast.makeText(DashboardActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(DashboardActivity.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
                 }
 
             }
@@ -274,7 +280,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                         jsonArray=jsonObject1.getJSONArray("data");
 
 
-                        Toast.makeText(DashboardActivity.this, ""+text, Toast.LENGTH_SHORT).show();
+                    //    Toast.makeText(DashboardActivity.this, ""+text, Toast.LENGTH_SHORT).show();
 
                         if(message.equalsIgnoreCase("success")){
                             for(int i=0;i<jsonArray.length();i++){
@@ -300,6 +306,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                                     intent.putExtra("qty",list.get(position).getPack_of_qty());
                                     intent.putExtra("line_item_id",list.get(position).getLine_item_id());
                                     startActivity(intent);
+
                                 }
 
                                 if(s.equalsIgnoreCase("cart")){
@@ -319,13 +326,15 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
                     } catch (JSONException e) {
                         //throw new RuntimeException(e);
-                        Toast.makeText(DashboardActivity.this, ""+e, Toast.LENGTH_SHORT).show();
+                        Log.e("Excption", String.valueOf(e));
+                        //Toast.makeText(DashboardActivity.this, ""+e, Toast.LENGTH_SHORT).show();
                     }
 
 
                 }else{
 
-                    Toast.makeText(DashboardActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                //    Toast.makeText(DashboardActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(DashboardActivity.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
                 }
 
             }
@@ -354,17 +363,20 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                         String message=jsonObject1.getString("message");
                         String text=jsonObject1.getString("text");
 
-                        Toast.makeText(DashboardActivity.this, ""+text, Toast.LENGTH_SHORT).show();
+                     //   Toast.makeText(DashboardActivity.this, ""+text, Toast.LENGTH_SHORT).show();
 
                     } catch (JSONException e) {
                         //throw new RuntimeException(e);
-                        Toast.makeText(DashboardActivity.this, ""+e, Toast.LENGTH_SHORT).show();
+                        Log.e("Exception", String.valueOf(e));
+                     //   Toast.makeText(DashboardActivity.this, ""+e, Toast.LENGTH_SHORT).show();
                     }
 
 
                 }else{
 
-                    Toast.makeText(DashboardActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                 //   Toast.makeText(DashboardActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(DashboardActivity.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
+
                 }
 
             }
@@ -376,18 +388,26 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
         if (id == R.id.home) {
             startActivity(new Intent(DashboardActivity.this, DashboardActivity.class));
+            finish();
+
         }
         else if (id == R.id.orders){
             startActivity(new Intent(DashboardActivity.this, Orders_List_Activity.class));
+            //finish();
 
         }
         else if (id == R.id.wallet) {
             startActivity(new Intent(DashboardActivity.this, Mywallet.class));
+        //    finish();
+
         } else if (id == R.id.cart) {
             startActivity(new Intent(DashboardActivity.this, Cartlist_Activity.class));
+          //  finish();
         }
         else if(id==R.id.change_pswd){
             startActivity(new Intent(DashboardActivity.this,ChangePasswordActivity.class));
+            //finish();
+
         }
         else if(id ==R.id.logout){
             AlertDialog logoutDialog = new AlertDialog.Builder(DashboardActivity.this).setTitle("logout")
@@ -439,7 +459,9 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                     if(progressDialog.isShowing()){
                         progressDialog.dismiss();
                     }
-                    Toast.makeText(DashboardActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                 //   Toast.makeText(DashboardActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(DashboardActivity.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
+
                 }
 
             }

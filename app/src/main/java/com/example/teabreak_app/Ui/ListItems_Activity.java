@@ -95,14 +95,13 @@ public class ListItems_Activity extends AppCompatActivity {
                 startActivity(new Intent(ListItems_Activity.this,Cartlist_Activity.class));
                 finish();
 
+
             }
         });
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ListItems_Activity.this,DashboardActivity.class));
-                finish();
-                return;
+                onBackPressed();
             }
         });
         binding.etSearchfilter.addTextChangedListener(new TextWatcher() {
@@ -155,12 +154,21 @@ public class ListItems_Activity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
     private void list_items_api_call() {
 
+        progressDialog.show();
         viewModel.get_list_items().observe(ListItems_Activity.this, new Observer<JsonObject>() {
             @Override
             public void onChanged(JsonObject jsonObject) {
 
+                if(progressDialog.isShowing()){
+                    progressDialog.dismiss();
+                }
                 if (jsonObject != null){
 
                     try {
@@ -172,7 +180,7 @@ public class ListItems_Activity extends AppCompatActivity {
                         jsonArray=jsonObject1.getJSONArray("data");
 
 
-                        Toast.makeText(ListItems_Activity.this, ""+text, Toast.LENGTH_SHORT).show();
+                     //   Toast.makeText(ListItems_Activity.this, ""+text, Toast.LENGTH_SHORT).show();
 
                         if(message.equalsIgnoreCase("success")){
                             list.clear();
@@ -257,13 +265,15 @@ public class ListItems_Activity extends AppCompatActivity {
 
                     } catch (JSONException e) {
                         //throw new RuntimeException(e);
-                        Toast.makeText(ListItems_Activity.this, ""+e, Toast.LENGTH_SHORT).show();
+                        Log.e("Exception", String.valueOf(e));
+                      //  Toast.makeText(ListItems_Activity.this, ""+e, Toast.LENGTH_SHORT).show();
                     }
 
 
                 }else{
 
-                    Toast.makeText(ListItems_Activity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(ListItems_Activity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(ListItems_Activity.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
                 }
 
             }
@@ -295,7 +305,10 @@ public class ListItems_Activity extends AppCompatActivity {
             public void onClick(View v) {
                 ordecount=quanity.getText().toString();
                 if (ordecount.isEmpty()){
-                    Toast.makeText(ListItems_Activity.this, "Enter Qty", Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(ListItems_Activity.this, "Enter Qty", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(ListItems_Activity.this,findViewById(android.R.id.content),"Enter Qty",Snackbar.LENGTH_LONG).show();
+
+
                     return;
                 }
                 if(Integer.parseInt(ordecount)>99){
@@ -355,7 +368,7 @@ public class ListItems_Activity extends AppCompatActivity {
                         String message=jsonObject1.getString("message");
                         String text=jsonObject1.getString("text");
 
-                        Toast.makeText(ListItems_Activity.this, ""+text, Toast.LENGTH_SHORT).show();
+                   //     Toast.makeText(ListItems_Activity.this, ""+text, Toast.LENGTH_SHORT).show();
                         if(message.equalsIgnoreCase("Success")){
                             alertDialog.dismiss();
                              tv_qty.setText(ordecount);
@@ -364,13 +377,16 @@ public class ListItems_Activity extends AppCompatActivity {
 
                     } catch (JSONException e) {
                         //throw new RuntimeException(e);
-                        Toast.makeText(ListItems_Activity.this, ""+e, Toast.LENGTH_SHORT).show();
+                        Log.e("Exception", String.valueOf(e));
+                    //    Toast.makeText(ListItems_Activity.this, ""+e, Toast.LENGTH_SHORT).show();
                     }
 
 
                 }else{
 
-                    Toast.makeText(ListItems_Activity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                 //   Toast.makeText(ListItems_Activity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(ListItems_Activity.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
+
                 }
 
             }

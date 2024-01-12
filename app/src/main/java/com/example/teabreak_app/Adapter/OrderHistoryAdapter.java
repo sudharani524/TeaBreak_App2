@@ -45,7 +45,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.ordernumber.setText(ls.get(position).getOrder_no());
        holder.date.setText(ls.get(position).getOrder_date_time());
-       holder.totalamount.setText( "₹"+ls.get(position).getTotal_amount());
+       holder.totalamount.setText( "₹"+ls.get(position).getPaid_amount());
        holder.WalletusedAmount.setText( "₹"+ls.get(position).getUsed_wallet_amount());
       holder.deliverytype.setText(ls.get(position).getDelivery_type_name());
       holder.PaymentMode.setText(ls.get(position).getPayment_mode());
@@ -104,7 +104,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView ordernumber,deliverytype,totalamount,date,WalletusedAmount,PaymentMode,DeliveryCharges;
-        ImageView iv_whatsapp_share;
+      //  ImageView iv_whatsapp_share;
         String Delivery;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -113,7 +113,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
             totalamount=itemView.findViewById(R.id.Totalamount);
             WalletusedAmount=itemView.findViewById(R.id.WalletusedAmount);
             date=itemView.findViewById(R.id.orderdate);
-            iv_whatsapp_share=itemView.findViewById(R.id.iv_whatsapp_share);
+         //   iv_whatsapp_share=itemView.findViewById(R.id.iv_whatsapp_share);
             PaymentMode=itemView.findViewById(R.id.paymentmode);
             DeliveryCharges=itemView.findViewById(R.id.deliveryCharges);
 

@@ -46,13 +46,13 @@
                 android:text="@string/_9812479373"
                 android:layout_weight="1.2"
                 android:textColor="@color/purple"/>
-            <ImageView
+          <!--  <ImageView
                 android:id="@+id/iv_whatsapp_share"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.3"
                 android:src="@drawable/whatsapp_icon"
-                />
+                />-->
             
         </LinearLayout>
             <LinearLayout

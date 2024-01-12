@@ -1,31 +1,31 @@
-package com.example.teabreak_app.Fragments;
-
-import android.annotation.SuppressLint;
-import android.content.DialogInterface;
-import android.os.Bundle;
+package com.example.teabreak_app.Ui;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.teabreak_app.Adapter.Accountant_Orderlist_Adapter;
+import com.example.teabreak_app.Fragments.Pending_Orders_List_Fragment;
 import com.example.teabreak_app.ModelClass.OrderdetailsModel;
 import com.example.teabreak_app.R;
-import com.example.teabreak_app.Ui.AccountsDashboard;
 import com.example.teabreak_app.Utils.SaveAppData;
 import com.example.teabreak_app.ViewModel.TeaBreakViewModel;
+import com.example.teabreak_app.databinding.ActivityPendingOrderBinding;
 import com.example.teabreak_app.repository.ListItemInterface;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -36,45 +36,60 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+public class Pending_order_Activity extends AppCompatActivity {
 
-public class Pending_Orders_List_Fragment extends Fragment {
-
+    private ActivityPendingOrderBinding binding;
     private TeaBreakViewModel viewModel;
     Accountant_Orderlist_Adapter accountantOrderlistAdapter;
     ArrayList<OrderdetailsModel> account_order_list=new ArrayList<>();
     AppCompatButton edit_btn;
     LinearLayoutManager linearLayoutManager;
     RecyclerView rv_pending_orders_list;
+    ProgressDialog progressDialog;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View root=inflater.inflate(R.layout.fragment_pending__orders__list_, container, false);
-        viewModel = ViewModelProviders.of(getActivity()).get(TeaBreakViewModel.class);
-        rv_pending_orders_list=root.findViewById(R.id.rvPendingListItems);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding=ActivityPendingOrderBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        linearLayoutManager=new LinearLayoutManager(getActivity());
+        viewModel = ViewModelProviders.of(Pending_order_Activity.this).get(TeaBreakViewModel.class);
+
+        progressDialog=new ProgressDialog(Pending_order_Activity.this);
+        progressDialog.setMessage("Loading...");
+        progressDialog.setCancelable(false);
+
+        linearLayoutManager=new LinearLayoutManager(Pending_order_Activity.this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        rv_pending_orders_list.setLayoutManager(linearLayoutManager);
+        binding.rvPendingListItems.setLayoutManager(linearLayoutManager);
 
         pending_order_list_api_call();
 
-        return root;
+        binding.backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
     }
 
     private void pending_order_list_api_call() {
 
+        Log.e("pending_list","pending_list");
+        progressDialog.show();
         JsonObject object = new JsonObject();
 
         object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
         object.addProperty("user_token",SaveAppData.getLoginData().getToken());
 
-        viewModel.get_accountant_pending_order_details(object).observe(Pending_Orders_List_Fragment.this, new Observer<JsonObject>() {
+        viewModel.get_accountant_pending_order_details(object).observe(Pending_order_Activity.this, new Observer<JsonObject>() {
             @Override
             public void onChanged(JsonObject jsonObject) {
                 if (jsonObject != null){
 
+                    if(progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
                     try {
                         JSONObject jsonObject1=new JSONObject(jsonObject.toString());
                         JSONArray jsonArray=new JSONArray();
@@ -85,43 +100,15 @@ public class Pending_Orders_List_Fragment extends Fragment {
                             OrderdetailsModel orderdetailsModel = new Gson().fromJson(jsonArray.getJSONObject(i).toString(), new TypeToken<OrderdetailsModel>() {
                             }.getType());
                             account_order_list.add(orderdetailsModel);
-                            Log.d("orderdetailslist",String.valueOf(account_order_list.size()));
                         }
+                        Log.d("orderdetailslist",String.valueOf(account_order_list.size()));
 
-                        accountantOrderlistAdapter=new Accountant_Orderlist_Adapter(getActivity(), account_order_list,"PendingList", new ListItemInterface() {
+                        accountantOrderlistAdapter=new Accountant_Orderlist_Adapter(Pending_order_Activity.this, account_order_list,"PendingList", new ListItemInterface() {
                             @Override
                             public void OnItemClick(int position, View v, String s) {
-                               /* AlertDialog.Builder dialog=new AlertDialog.Builder(AccountsDashboard.this);
-                                View view_alert= LayoutInflater.from(AccountsDashboard.this).inflate(R.layout.custom_card_approve_order,null);
-
-                                edit_btn=v.findViewById(R.id.orders_edit_btn);
-                                AppCompatButton submit_btn=view_alert.findViewById(R.id.submit_btn);
-                                ImageView close_btn=view_alert.findViewById(R.id.close_btn);
-
-                                submit_btn.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        if
-                                        approved_api_call(position);
-                                    }
-                                });
-
-                                close_btn.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        alertDialog.dismiss();
-                                    }
-                                });
 
 
-
-
-                                dialog.setView(view_alert);
-                                dialog.setCancelable(true);
-                                alertDialog = dialog.create();
-                                alertDialog.show();*/
-
-                                AlertDialog.Builder dialog=new AlertDialog.Builder(getContext());
+                                AlertDialog.Builder dialog=new AlertDialog.Builder(Pending_order_Activity.this);
                                 dialog.setCancelable(false);
                                 dialog.setMessage("Are you sure you want approve this order");
                                 dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -145,19 +132,23 @@ public class Pending_Orders_List_Fragment extends Fragment {
 
                             }
                         });
-                        rv_pending_orders_list.setAdapter(accountantOrderlistAdapter);
+                        binding.rvPendingListItems.setAdapter(accountantOrderlistAdapter);
                         accountantOrderlistAdapter.notifyDataSetChanged();
 
 
                     } catch (JSONException e) {
                         Log.e("Exception", String.valueOf(e));
-                    //    Toast.makeText(getActivity(), "Exception"+e, Toast.LENGTH_SHORT).show();
+                        //    Toast.makeText(getActivity(), "Exception"+e, Toast.LENGTH_SHORT).show();
                     }
 
 
                 }else{
+                    if(progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
+                  //  Toast.makeText(Pending_order_Activity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(Pending_order_Activity.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
 
-                    Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -165,6 +156,10 @@ public class Pending_Orders_List_Fragment extends Fragment {
     }
 
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
 
     private void approved_api_call(int position) {
         JsonObject object = new JsonObject();
@@ -174,7 +169,7 @@ public class Pending_Orders_List_Fragment extends Fragment {
         object.addProperty("order_id",account_order_list.get(position).getOrder_id());
         object.addProperty("accounts_approve_status","1");
 
-        viewModel.accountant_update_approve_order(object).observe(getActivity(), new Observer<JsonObject>() {
+        viewModel.accountant_update_approve_order(object).observe(Pending_order_Activity.this, new Observer<JsonObject>() {
             @SuppressLint("ResourceAsColor")
             @Override
             public void onChanged(JsonObject jsonObject) {
@@ -190,23 +185,24 @@ public class Pending_Orders_List_Fragment extends Fragment {
                             edit_btn.setTextColor(R.color.black);
                             edit_btn.setEnabled(false);
                             edit_btn.setClickable(false);
-                            pending_order_list_api_call();
-                            Toast.makeText(getActivity(), ""+jsonObject1.getString("text"), Toast.LENGTH_SHORT).show();
+                         //   Toast.makeText(Pending_order_Activity.this, ""+jsonObject1.getString("text"), Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(Pending_order_Activity.this,AccountsDashboard.class));
+                            finish();
                         }
 
                     } catch (JSONException e) {
-                        Toast.makeText(getActivity(), "Exception"+e, Toast.LENGTH_SHORT).show();
+                        Log.e("Exception",e.toString());
+                      //  Toast.makeText(Pending_order_Activity.this, "Exception"+e, Toast.LENGTH_SHORT).show();
                     }
 
 
                 }else{
 
-                    Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(Pending_order_Activity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(Pending_order_Activity.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
                 }
             }
         });
     }
-
-
 
 }

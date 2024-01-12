@@ -63,13 +63,17 @@ public class SingleList_Item extends AppCompatActivity {
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(SingleList_Item.this,DashboardActivity.class));
-                finish();
+               onBackPressed();
             }
         });
 
     }
 
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 
     private void add_cart_api_call() {
         JsonObject object = new JsonObject();

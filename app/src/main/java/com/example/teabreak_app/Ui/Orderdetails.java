@@ -32,6 +32,7 @@ import com.example.teabreak_app.Utils.SaveAppData;
 import com.example.teabreak_app.ViewModel.TeaBreakViewModel;
 import com.example.teabreak_app.databinding.ActivityOrderdetailsBinding;
 import com.google.android.datatransport.BuildConfig;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -115,6 +116,7 @@ public class Orderdetails extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(Orderdetails.this,Orders_List_Activity.class));
+                finish();
             }
         });
 
@@ -194,7 +196,7 @@ public class Orderdetails extends AppCompatActivity {
                         APPLICATION_ID+ ".fileprovider", outputFile);
 
             }catch (Exception e){
-                Toast.makeText(Orderdetails.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(Orderdetails.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                 Log.e("file_exception","Exception"+e.getLocalizedMessage());
             }
         }
@@ -331,7 +333,7 @@ public class Orderdetails extends AppCompatActivity {
            /* if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
                 mOrdermobileFont = new Font("urName", mHeadingFontSize, mColorAccent);
             }*/
-            Chunk mOrdermobileChunk = new Chunk("9390126304");
+            Chunk mOrdermobileChunk = new Chunk(SaveAppData.getLoginData().getUser_mobile());
             Paragraph mOrdermobileParagraph = new Paragraph(mOrdermobileChunk);
             mOrdermobileParagraph.setAlignment(Element.ALIGN_CENTER);
             document.add(mOrdermobileParagraph);
@@ -738,7 +740,6 @@ public class Orderdetails extends AppCompatActivity {
                             OrderdetailsModel orderdetailsModel = new Gson().fromJson(jsonArray.getJSONObject(i).toString(), new TypeToken<OrderdetailsModel>() {
                             }.getType());
                             list.add(orderdetailsModel);
-                            Log.d("orderdetailslist",String.valueOf(list.size()));
                         }
                         Log.d("orderdetailslist2",String.valueOf(list.size()));
                         orderdetailsadapter=new Orderdetailsadapter(list, Orderdetails.this);
@@ -748,13 +749,16 @@ public class Orderdetails extends AppCompatActivity {
                         orderdetailsadapter.notifyDataSetChanged();
 
                     } catch (JSONException e) {
-                        Toast.makeText(Orderdetails.this, "Exception"+e, Toast.LENGTH_SHORT).show();
+                        Log.e("Exception", String.valueOf(e));
+                      //  Toast.makeText(Orderdetails.this, "Exception"+e, Toast.LENGTH_SHORT).show();
                     }
 
 
                 }else{
 
-                    Toast.makeText(Orderdetails.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+               //     Toast.makeText(Orderdetails.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(Orderdetails.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
+
                 }
             }
         });

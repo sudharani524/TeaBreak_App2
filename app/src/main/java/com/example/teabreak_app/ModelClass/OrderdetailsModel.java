@@ -77,6 +77,20 @@ public class OrderdetailsModel {
     @Expose
     public String vendor_name;
 
+
+    @SerializedName("payment_date_time")
+    @Expose
+    public String payment_date_time;
+
+
+    public String getPayment_date_time() {
+        return payment_date_time;
+    }
+
+    public void setPayment_date_time(String payment_date_time) {
+        this.payment_date_time = payment_date_time;
+    }
+
     public String getVendor_name() {
         return vendor_name;
     }

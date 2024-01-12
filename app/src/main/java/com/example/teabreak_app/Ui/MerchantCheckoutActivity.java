@@ -308,6 +308,7 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
         orderDetails.setCustomerId("9390126304");
         orderDetails.setPaymentType("all");
         orderDetails.setMerchantLogo(String.valueOf(R.drawable.logo));
+
         orderDetails.setBillingName(SaveAppData.getLoginData().getName());
         orderDetails.setBillingAddress("Hyderabad");
         orderDetails.setBillingCountry("India");
@@ -316,6 +317,8 @@ public class MerchantCheckoutActivity extends AppCompatActivity implements Avenu
         orderDetails.setBillingZip("500016");
         orderDetails.setBillingTel("9390126304");
         orderDetails.setBillingEmail("sudhak4585@gmail.com");
+
+
         orderDetails.setDeliveryName("test");
         orderDetails.setDeliveryAddress("Hyderabad");
         orderDetails.setDeliveryCountry("India");

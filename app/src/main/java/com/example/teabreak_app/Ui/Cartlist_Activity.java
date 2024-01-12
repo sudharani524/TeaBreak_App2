@@ -58,7 +58,7 @@ public class Cartlist_Activity extends AppCompatActivity {
     AlertDialog alertDialog;
     LinearLayout submit_btn,cancel;
     EditText quanity;
-    String ordecount;
+    String ordecount="";
 
     TextView tv_qty;
     String selected_line_item_id="",selected_price="",selected_qty="";
@@ -103,9 +103,7 @@ public class Cartlist_Activity extends AppCompatActivity {
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(Cartlist_Activity.this,ListItems_Activity.class));
-                finish();
-                return;
+               onBackPressed();
             }
         });
         binding.etSearchfilter.addTextChangedListener(new TextWatcher() {
@@ -163,8 +161,15 @@ public class Cartlist_Activity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
     private void cart_list_api_call() {
 //        cart_list.clear();
+
+        progressDialog.show();
         JsonObject object = new JsonObject();
 
         object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
@@ -173,6 +178,10 @@ public class Cartlist_Activity extends AppCompatActivity {
         viewModel.get_cart_list(object).observe(Cartlist_Activity.this, new Observer<JsonObject>() {
             @Override
             public void onChanged(JsonObject jsonObject) {
+
+                if(progressDialog.isShowing()){
+                    progressDialog.dismiss();
+                }
 
                 if (jsonObject != null){
                     Log.d("TAG","add_cart "+jsonObject);
@@ -185,8 +194,11 @@ public class Cartlist_Activity extends AppCompatActivity {
                         JSONArray jsonArray1=new JSONArray();
                         jsonArray1=jsonObject1.getJSONArray("sub_totals");
 
-                        Toast.makeText(Cartlist_Activity.this, ""+message, Toast.LENGTH_SHORT).show();
+                     //   Toast.makeText(Cartlist_Activity.this, ""+message, Toast.LENGTH_SHORT).show();
 
+                        if(jsonArray.length()==0){
+                            Snackbar.make(Cartlist_Activity.this,findViewById(android.R.id.content),"No data found",Snackbar.LENGTH_LONG).show();
+                        }
                         for(int i=0;i<jsonArray.length();i++){
                             ListItemsModel listItemsModel = new Gson().fromJson(jsonArray.get(i).toString(), new TypeToken<ListItemsModel>() {
                             }.getType());
@@ -256,12 +268,16 @@ public class Cartlist_Activity extends AppCompatActivity {
 
                     } catch (JSONException e) {
                         //throw new RuntimeException(e);
-                        Toast.makeText(Cartlist_Activity.this, ""+e, Toast.LENGTH_SHORT).show();
+                        Log.e("Exception","CartList Activity"+e);
+                     //   Toast.makeText(Cartlist_Activity.this, ""+e, Toast.LENGTH_SHORT).show();
                     }
 
 
                 }else{
-                    Toast.makeText(Cartlist_Activity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+               //     Toast.makeText(Cartlist_Activity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+
+                    Snackbar.make(Cartlist_Activity.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
+
                 }
 
             }
@@ -297,11 +313,14 @@ public class Cartlist_Activity extends AppCompatActivity {
                 public void onClick(View v) {
                     ordecount=quanity.getText().toString();
                     if (ordecount.isEmpty()){
-                        Toast.makeText(Cartlist_Activity.this, "Enter Qty", Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(Cartlist_Activity.this, "Enter Qty", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(Cartlist_Activity.this,findViewById(android.R.id.content),"Enter Qty",Snackbar.LENGTH_LONG).show();
+
                         return;
                     }
                     if(Integer.parseInt(ordecount)>99){
                         Snackbar.make(Cartlist_Activity.this,findViewById(android.R.id.content),"Please Enter the quantity below 99",Snackbar.LENGTH_LONG).show();
+
                         return;
                     }
                     else{
@@ -404,7 +423,7 @@ public class Cartlist_Activity extends AppCompatActivity {
                         String message=jsonObject1.getString("message");
                         String text=jsonObject1.getString("text");
 
-                        Toast.makeText(Cartlist_Activity.this, ""+message, Toast.LENGTH_SHORT).show();
+                     //   Toast.makeText(Cartlist_Activity.this, ""+message, Toast.LENGTH_SHORT).show();
                         if(message.equalsIgnoreCase("Success")){
                             Log.d("TAG","delete api call sucess : "+cart_list.size());
                             Log.d("TAG","delete api call sucess1 : "+filtered_List.size());
@@ -416,11 +435,15 @@ public class Cartlist_Activity extends AppCompatActivity {
 
                     } catch (JSONException e) {
                         //throw new RuntimeException(e);
-                        Toast.makeText(Cartlist_Activity.this, ""+e, Toast.LENGTH_SHORT).show();
+                        Log.e("Exception", String.valueOf(e));
+                   //     Toast.makeText(Cartlist_Activity.this, ""+e, Toast.LENGTH_SHORT).show();
+
                     }
 
                 }else{
-                    Toast.makeText(Cartlist_Activity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+               //     Toast.makeText(Cartlist_Activity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(Cartlist_Activity.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
+
                 }
 
 
@@ -458,7 +481,7 @@ public class Cartlist_Activity extends AppCompatActivity {
                         String message=jsonObject1.getString("message");
                         String text=jsonObject1.getString("text");
 
-                        Toast.makeText(Cartlist_Activity.this, ""+text, Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(Cartlist_Activity.this, ""+text, Toast.LENGTH_SHORT).show();
 
                         if(message.equalsIgnoreCase("success")){
 
@@ -475,13 +498,16 @@ public class Cartlist_Activity extends AppCompatActivity {
 
                     } catch (JSONException e) {
                         //throw new RuntimeException(e);
-                        Toast.makeText(Cartlist_Activity.this, ""+e, Toast.LENGTH_SHORT).show();
+                        Log.e("Exception", String.valueOf(e));
+                     //   Toast.makeText(Cartlist_Activity.this, ""+e, Toast.LENGTH_SHORT).show();
                     }
 
 
                 }else{
 
-                    Toast.makeText(Cartlist_Activity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                //    Toast.makeText(Cartlist_Activity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(Cartlist_Activity.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
+
                 }
 
             }

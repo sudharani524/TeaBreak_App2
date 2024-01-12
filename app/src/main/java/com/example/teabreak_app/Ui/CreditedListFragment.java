@@ -95,7 +95,8 @@ public class CreditedListFragment extends Fragment {
                             creditedListAdapter.notifyDataSetChanged();
 
                         } catch (JSONException e) {
-                            Toast.makeText(getContext(), ""+e, Toast.LENGTH_SHORT).show();
+                            Log.e("Exception", String.valueOf(e));
+                          //  Toast.makeText(getContext(), ""+e, Toast.LENGTH_SHORT).show();
                         }
 
 

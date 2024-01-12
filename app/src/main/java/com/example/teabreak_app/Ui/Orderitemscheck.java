@@ -27,6 +27,7 @@ import com.example.teabreak_app.Utils.SaveAppData;
 import com.example.teabreak_app.ViewModel.TeaBreakViewModel;
 import com.example.teabreak_app.databinding.ActivityOrderitemscheckBinding;
 import com.example.teabreak_app.repository.OrderListitems;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -52,15 +53,18 @@ public class Orderitemscheck extends AppCompatActivity {
     EditText quanity;
     String ordecount;
     TextView tv_qty;
-    String total_amt="",delivery_charges="";
+    String total_amt="",delivery_charges="",available_qty="";
     Float t_amt;
     String selected_line_item_id="",selected_price="",selected_qty="",selected_order_item_id="";
     String used_amount="",amount_refunded="",balanced_amount="",order_date_time="",date_created="",wallet_amount="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding=ActivityOrderitemscheckBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+
 
         progressDialog=new ProgressDialog(this);
         progressDialog.setMessage("Loading...");
@@ -80,8 +84,7 @@ public class Orderitemscheck extends AppCompatActivity {
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(Orderitemscheck.this, VendorOrderlist.class));
-
+                onBackPressed();
             }
         });
         binding.Proceed.setOnClickListener(new View.OnClickListener() {
@@ -102,12 +105,19 @@ public class Orderitemscheck extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
     private void update_dispatched_order_api_call() {
         JsonObject object = new JsonObject();
 
         object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
         object.addProperty("user_token",SaveAppData.getLoginData().getToken());
         object.addProperty("order_id",order_id);
+        object.addProperty("dispatched_amount",total_amt);
+        Log.e("t_amt",total_amt);
         object.addProperty("dispatched_status","1");
 
         viewModel.update_dispatch_order(object).observe(Orderitemscheck.this, new Observer<JsonObject>() {
@@ -129,19 +139,24 @@ public class Orderitemscheck extends AppCompatActivity {
                         }
 
                     } catch (JSONException e) {
-                        Toast.makeText(Orderitemscheck.this, "Exception"+e, Toast.LENGTH_SHORT).show();
+                        Log.e("Exception", String.valueOf(e));
+                      //  Toast.makeText(Orderitemscheck.this, "Exception"+e, Toast.LENGTH_SHORT).show();
                     }
 
 
                 }else{
 
-                    Toast.makeText(Orderitemscheck.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+               //     Toast.makeText(Orderitemscheck.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(Orderitemscheck.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
+
                 }
             }
         });
     }
 
     private void order_items_list_api_call() {
+        progressDialog.show();
+
         JsonObject object = new JsonObject();
         Log.d("orderdetailsapicall",object.toString());
         object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
@@ -152,6 +167,10 @@ public class Orderitemscheck extends AppCompatActivity {
         viewModel.get_Ordered_items_list(object).observe(Orderitemscheck.this, new Observer<JsonObject>() {
             @Override
             public void onChanged(JsonObject jsonObject) {
+                if(progressDialog.isShowing()){
+                    progressDialog.dismiss();
+                }
+
                 if (jsonObject != null){
                     Log.d("ordersDetails","Text"+jsonObject);
                     try {
@@ -189,6 +208,7 @@ public class Orderitemscheck extends AppCompatActivity {
                                 tv_qty=holder.itemView.findViewById(R.id.D_Quantity);
                                 tv_qty.setText(list.get(position).getQuantity());
 
+                                available_qty=list.get(position).getAvailable_quantity();
 
                                 Log.d("quantityordered",tv_qty.toString());
 //                                textView.setText("₹"+""+Float.parseFloat(list.get(position).getSub_total_price())*String.valueOf(s));
@@ -213,10 +233,19 @@ public class Orderitemscheck extends AppCompatActivity {
                                                 Log.e("ordercount", ordecount.toString());
 //                                                order_list_api_call(ordecount, holder.itemView.findViewById(R.id.price), position);
 
-                                                if(Integer.parseInt(ordecount)>=Integer.parseInt(tv_qty.getText().toString())){
-                                                    Toast.makeText(Orderitemscheck.this, "Insufficient Quantity.", Toast.LENGTH_SHORT).show();
-                                                }else{
+                                                Log.e("order_cnt",ordecount);
+                                                Log.e("text",tv_qty.getText().toString());
+                                              //  if(Integer.parseInt(ordecount)>Integer.parseInt(list.get(position).getQuantity())){
+                                                if(Integer.parseInt(ordecount)>Integer.parseInt(list.get(position).getAvailable_quantity())){
+                                            //        Toast.makeText(Orderitemscheck.this, "Insufficient Quantity.", Toast.LENGTH_SHORT).show();
+
+                                                    Snackbar.make(Orderitemscheck.this,findViewById(android.R.id.content),"Insufficient Quantity.",Snackbar.LENGTH_LONG).show();
+
+                                                }
+                                                else{
                                                     edit_dispatcher_order_item_api_call(ordecount);
+                                                  //  order_items_list_api_call();
+                                                    alertDialog.dismiss();
                                                 }
 
                                             }
@@ -254,13 +283,17 @@ public class Orderitemscheck extends AppCompatActivity {
                         itemsOrderAdapter.notifyDataSetChanged();
 
                     } catch (JSONException e) {
-                        Toast.makeText(Orderitemscheck.this, "Exception"+e, Toast.LENGTH_SHORT).show();
+                        Log.e("Exception", String.valueOf(e));
+                      //  Toast.makeText(Orderitemscheck.this, "Exception"+e, Toast.LENGTH_SHORT).show();
                     }
 
 
                 }else{
 
-                    Toast.makeText(Orderitemscheck.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                //    Toast.makeText(Orderitemscheck.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+
+                    Snackbar.make(Orderitemscheck.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
+
                 }
             }
         });
@@ -290,7 +323,7 @@ public class Orderitemscheck extends AppCompatActivity {
                         JSONObject jsonObject1=new JSONObject(jsonObject.toString());
 
                         String message=jsonObject1.getString("message");
-                        Toast.makeText(Orderitemscheck.this, ""+message, Toast.LENGTH_SHORT).show();
+                     //   Toast.makeText(Orderitemscheck.this, ""+message, Toast.LENGTH_SHORT).show();
                         if(message.equalsIgnoreCase("success")){
                             alertDialog.dismiss();
                             tv_qty.setText(ordecount);
@@ -304,11 +337,14 @@ public class Orderitemscheck extends AppCompatActivity {
 
 
                     } catch (JSONException e) {
-                        Toast.makeText(Orderitemscheck.this, ""+e, Toast.LENGTH_SHORT).show();
+                        Log.e("Exception", String.valueOf(e));
+                      //  Toast.makeText(Orderitemscheck.this, ""+e, Toast.LENGTH_SHORT).show();
                     }
 
                 }else{
-                    Toast.makeText(Orderitemscheck.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                //    Toast.makeText(Orderitemscheck.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(Orderitemscheck.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
+
                 }
             }
         });

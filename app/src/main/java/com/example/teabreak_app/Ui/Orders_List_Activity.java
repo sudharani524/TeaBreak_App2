@@ -41,6 +41,7 @@ import com.example.teabreak_app.databinding.ActivityOrdersListBinding;
 import com.example.teabreak_app.repository.CartInterface;
 import com.example.teabreak_app.repository.ListItemInterface;
 import com.example.teabreak_app.repository.OrderdetailsInterface;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -106,7 +107,7 @@ public class Orders_List_Activity extends AppCompatActivity {
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(Orders_List_Activity.this,DashboardActivity.class));
+               onBackPressed();
             }
         });
 
@@ -144,6 +145,12 @@ public class Orders_List_Activity extends AppCompatActivity {
         });
     }
 
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
     private void logout_api_call() {
         progressDialog.show();
         JsonObject object = new JsonObject();
@@ -167,12 +174,15 @@ public class Orders_List_Activity extends AppCompatActivity {
                         SaveAppData.saveOperatorLoginData(null);
                         startActivity(new Intent(Orders_List_Activity.this, MainActivity.class));
                         finish();
+                        return;
                     }
                 }else{
                     if(progressDialog.isShowing()){
                         progressDialog.dismiss();
                     }
-                    Toast.makeText(Orders_List_Activity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                 //   Toast.makeText(Orders_List_Activity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(Orders_List_Activity.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
+
                 }
 
             }
@@ -238,7 +248,7 @@ public class Orders_List_Activity extends AppCompatActivity {
                         APPLICATION_ID+ ".fileprovider", outputFile);
 
             }catch (Exception e){
-                Toast.makeText(Orders_List_Activity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+               // Toast.makeText(Orders_List_Activity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                 Log.e("file_exception","Exception"+e.getLocalizedMessage());
             }
         }
@@ -639,6 +649,7 @@ public class Orders_List_Activity extends AppCompatActivity {
 
 
     private void order_list_api_call() {
+        progressDialog.show();
         JsonObject object = new JsonObject();
         Log.d("orderlistapicall",object.toString());
         object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
@@ -646,6 +657,9 @@ public class Orders_List_Activity extends AppCompatActivity {
         viewModel.get_order_items(object).observe(Orders_List_Activity.this, new Observer<JsonObject>() {
             @Override
             public void onChanged(JsonObject jsonObject) {
+                if(progressDialog.isShowing()){
+                    progressDialog.dismiss();
+                }
                 if (jsonObject != null){
                     Log.d("orders","Text"+jsonObject);
                     try {
@@ -666,14 +680,14 @@ public class Orders_List_Activity extends AppCompatActivity {
                         orderHistoryAdapter=new OrderHistoryAdapter(list, Orders_List_Activity.this, new OrderdetailsInterface() {
                             @Override
                             public void OnItemClick(int position, OrderHistoryAdapter.ViewHolder holder, String s) {
-                                ImageView iv_whatsapp_share=holder.itemView.findViewById(R.id.iv_whatsapp_share);
+                             //   ImageView iv_whatsapp_share=holder.itemView.findViewById(R.id.iv_whatsapp_share);
 
-                                iv_whatsapp_share.setOnClickListener(new View.OnClickListener() {
+                               /* iv_whatsapp_share.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
                                         receipt();
                                     }
-                                });
+                                });*/
 
                                 Intent intent=new Intent(Orders_List_Activity.this,Orderdetails.class);
                                 intent.putExtra("order_id",list.get(position).getOrder_id());
@@ -691,13 +705,16 @@ public class Orders_List_Activity extends AppCompatActivity {
                         orderHistoryAdapter.notifyDataSetChanged();
 
                     } catch (JSONException e) {
-                        Toast.makeText(Orders_List_Activity.this, ""+e, Toast.LENGTH_SHORT).show();
+                        Log.e("Exception", String.valueOf(e));
+                  //      Toast.makeText(Orders_List_Activity.this, ""+e, Toast.LENGTH_SHORT).show();
                     }
 
 
                 }else{
 
-                    Toast.makeText(Orders_List_Activity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                //    Toast.makeText(Orders_List_Activity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(Orders_List_Activity.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
+
                 }
             }
         });
