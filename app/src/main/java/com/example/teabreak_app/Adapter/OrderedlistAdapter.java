@@ -44,6 +44,7 @@ public class OrderedlistAdapter extends RecyclerView.Adapter<OrderedlistAdapter.
         holder.date.setText(slm.get(position).getOrder_date_time());
         holder.Wallet_Amount_Used.setText("₹"+slm.get(position).getUsed_wallet_amount());
         holder.approved_date.setText(slm.get(position).getAccounts_updated_date_time());
+        holder.outlet_code.setText(slm.get(position).getOutlet_code());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,7 +61,7 @@ public class OrderedlistAdapter extends RecyclerView.Adapter<OrderedlistAdapter.
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView Ordernumber,VendorName,totalamount,date,quantity,Wallet_Amount_Used,approved_date;
+        TextView Ordernumber,VendorName,totalamount,date,quantity,Wallet_Amount_Used,approved_date,outlet_code;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             Ordernumber=itemView.findViewById(R.id.v_ordernumber);
@@ -70,6 +71,7 @@ public class OrderedlistAdapter extends RecyclerView.Adapter<OrderedlistAdapter.
             date=itemView.findViewById(R.id.V_orderdate);
             quantity=itemView.findViewById(R.id.V_orderquantity);
             approved_date=itemView.findViewById(R.id.V_approved_date);
+            outlet_code=itemView.findViewById(R.id.tv_outlet_code);
 
 
         }

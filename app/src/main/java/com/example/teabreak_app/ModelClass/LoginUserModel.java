@@ -79,6 +79,18 @@ public class LoginUserModel implements Serializable {
     @Expose
     public String outlet_name;
 
+    @SerializedName("outlet_code")
+    @Expose
+    public String outlet_code;
+
+    public String getOutlet_code() {
+        return outlet_code;
+    }
+
+    public void setOutlet_code(String outlet_code) {
+        this.outlet_code = outlet_code;
+    }
+
     public String getCountry() {
         return country;
     }

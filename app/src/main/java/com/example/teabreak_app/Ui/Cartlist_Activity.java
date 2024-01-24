@@ -81,6 +81,9 @@ public class Cartlist_Activity extends AppCompatActivity {
         linearLayoutManager.setOrientation(linearLayoutManager.VERTICAL);
         binding.rvCartList.setLayoutManager(linearLayoutManager);
 
+     /*   if(cart_list.isEmpty() || cart_list.size()==0){
+            Snackbar.make(Cartlist_Activity.this,findViewById(android.R.id.content),"No data found",Snackbar.LENGTH_LONG).show();
+        }*/
         cart_list_api_call();
         binding.Proceed.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,13 +94,14 @@ public class Cartlist_Activity extends AppCompatActivity {
                 intent.putExtra("delivery_charges",Delivery_charges);
                 Log.e("delivery",Delivery_charges);
                 startActivity(intent);
+                finish();
 
             }
         });
         binding.previous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(Cartlist_Activity.this,ListItems_Activity.class));
+               onBackPressed();
             }
         });
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
@@ -196,14 +200,16 @@ public class Cartlist_Activity extends AppCompatActivity {
 
                      //   Toast.makeText(Cartlist_Activity.this, ""+message, Toast.LENGTH_SHORT).show();
 
-                        if(jsonArray.length()==0){
-                            Snackbar.make(Cartlist_Activity.this,findViewById(android.R.id.content),"No data found",Snackbar.LENGTH_LONG).show();
-                        }
                         for(int i=0;i<jsonArray.length();i++){
                             ListItemsModel listItemsModel = new Gson().fromJson(jsonArray.get(i).toString(), new TypeToken<ListItemsModel>() {
                             }.getType());
                             cart_list.add(listItemsModel);
                         }
+
+
+                     /*   if(cart_list.isEmpty() || cart_list.size()==0){
+                            Snackbar.make(Cartlist_Activity.this,findViewById(android.R.id.content),"No data found",Snackbar.LENGTH_LONG).show();
+                        }*/
 
                         for(int i=0;i<jsonArray1.length();i++){
                             Log.e("array",jsonArray1.toString());
@@ -361,6 +367,8 @@ public class Cartlist_Activity extends AppCompatActivity {
         tv_qty=holder.itemView.findViewById(R.id.Quantity);
         textView.setText("₹"+""+Float.parseFloat(cart_list.get(position).getPrice())*Float.parseFloat(s));
 
+        tv_qty.setText(s);
+
         Log.e("priceee",""+Float.parseFloat(filtered_List.get(position).getPrice())*Float.parseFloat(s));
                               /*  if(s.equalsIgnoreCase("Select")){
                                     Toast.makeText(Cartlist_Activity.this, "Please select the quantity", Toast.LENGTH_SHORT).show();
@@ -430,6 +438,14 @@ public class Cartlist_Activity extends AppCompatActivity {
                             filtered_List.remove(position);
                             itemslistAdapter.notifyDataSetChanged();
                             Log.d("TAG","delete api call sucess2 : "+filtered_List.size());
+                            if(position==0){
+                                binding.tAmount.setText("0");
+                            }
+
+                           /* if(cart_list.isEmpty() || cart_list.size()==0){
+                                Snackbar.make(Cartlist_Activity.this,findViewById(android.R.id.content),"No data found",Snackbar.LENGTH_LONG).show();
+                            }*/
+
                             cart_list_api_call();
                         }
 
@@ -486,13 +502,17 @@ public class Cartlist_Activity extends AppCompatActivity {
                         if(message.equalsIgnoreCase("success")){
 
                             alertDialog.dismiss();
-                            tv_qty.setText(ordecount);
+//                            Log.e("qty",s);
+                            //  tv_qty.setText(s);
                             TextView textView= (TextView) v;
                             Log.e("s_qty",cart_list.get(position).getPrice());
                             Log.e("price",s);
                             textView.setText("₹"+""+Float.parseFloat(cart_list.get(position).getPrice())*Float.parseFloat(s));
                             Log.e("t_price",""+Float.parseFloat(cart_list.get(position).getPrice())*Float.parseFloat(s));
 
+                            /*if(cart_list.isEmpty() || cart_list.size()==0){
+                                Snackbar.make(Cartlist_Activity.this,findViewById(android.R.id.content),"No data found",Snackbar.LENGTH_LONG).show();
+                            }*/
                             cart_list_api_call();
                         }
 

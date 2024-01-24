@@ -98,7 +98,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
 
     @Override
     public int getItemCount() {
-        Log.e("listsize", String.valueOf(ls.size()));
+    //    Log.e("listsize", String.valueOf(ls.size()));
         return ls.size();
     }
 

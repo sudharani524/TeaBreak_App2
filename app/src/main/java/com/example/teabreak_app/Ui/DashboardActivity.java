@@ -139,9 +139,13 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         GridLayoutManager gridLayoutManager=new GridLayoutManager(this,2,RecyclerView.VERTICAL,false);
         binding.newDashboarddd.rvListItems.setLayoutManager(gridLayoutManager);
 
-        images_list.add(R.drawable.slider_img);
-        images_list.add(R.drawable.img);
-        images_list.add(R.drawable.img_1);
+        images_list.add(R.drawable.teabreak_slider);
+        images_list.add(R.drawable.teabreak_slider2);
+        images_list.add(R.drawable.slider12);
+        images_list.add(R.drawable.teabreak_slider_img);
+
+       /* images_list.add(R.drawable.img);
+        images_list.add(R.drawable.img_1);*/
 
 
         binding.newDashboarddd.viewPager.setAdapter(new SliderAdapter(this, images_list));
@@ -164,10 +168,12 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         binding.navView.setItemIconTintList(null);
         View navHeaderView = binding.navView.getHeaderView(0);
         TextView nav_name = (TextView) navHeaderView.findViewById(R.id.nav_name);
+        TextView outlet_code = (TextView) navHeaderView.findViewById(R.id.tv_outlet_code);
         wallet_amt=(TextView) navHeaderView.findViewById(R.id.wallet_amt);
         wallet_amt.setText("₹"+wallet_amount);
         Log.e("wallet_amounttttttt",wallet_amount);
         nav_name.setText(SaveAppData.getLoginData().getName());
+        outlet_code.setText(SaveAppData.getLoginData().getOutlet_code());
 
         binding.newDashboarddd.viewAll.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,17 +188,13 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 int id = menuItem.getItemId();
-                if (id == R.id.home) {
-                    startActivity(new Intent(DashboardActivity.this, DashboardActivity.class));
-                }
-                else if (id == R.id.orders){
-                    startActivity(new Intent(DashboardActivity.this,Orders_List_Activity.class));
 
+                if (id == R.id.orders){
+                    startActivity(new Intent(DashboardActivity.this,Orders_List_Activity.class));
                 }
                 else if (id == R.id.cart) {
                     startActivity(new Intent(DashboardActivity.this, Cartlist_Activity.class));
                //     startActivity(new Intent(DashboardActivity.this, MerchantCheckoutActivity.class));
-
                 }
                 else if(id ==R.id.logout){
                     AlertDialog logoutDialog = new AlertDialog.Builder(DashboardActivity.this).setTitle("logout")
@@ -387,8 +389,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         int id = item.getItemId();
 
         if (id == R.id.home) {
-            startActivity(new Intent(DashboardActivity.this, DashboardActivity.class));
-            finish();
+          binding.drawerLayout.close();
 
         }
         else if (id == R.id.orders){
@@ -473,6 +474,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     protected void onStart() {
         super.onStart();
         Constant.check_token_status_api_call(DashboardActivity.this);
+        wallet_amount_api_call();
     }
 
     private class SliderTimer extends TimerTask {

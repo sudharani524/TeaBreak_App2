@@ -123,7 +123,7 @@ public class Pending_Orders_List_Fragment extends Fragment {
 
                                 AlertDialog.Builder dialog=new AlertDialog.Builder(getContext());
                                 dialog.setCancelable(false);
-                                dialog.setMessage("Are you sure you want approve this order");
+                                dialog.setMessage("Are you sure you want to approve this order");
                                 dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {

@@ -100,6 +100,7 @@ public class Orderitemscheck extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(Orderitemscheck.this, VendorOrderlist.class));
+                finish();
             }
         });
 
@@ -167,11 +168,11 @@ public class Orderitemscheck extends AppCompatActivity {
         viewModel.get_Ordered_items_list(object).observe(Orderitemscheck.this, new Observer<JsonObject>() {
             @Override
             public void onChanged(JsonObject jsonObject) {
-                if(progressDialog.isShowing()){
-                    progressDialog.dismiss();
-                }
 
                 if (jsonObject != null){
+                    if(progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
                     Log.d("ordersDetails","Text"+jsonObject);
                     try {
                         JSONObject jsonObject1=new JSONObject(jsonObject.toString());
@@ -208,7 +209,7 @@ public class Orderitemscheck extends AppCompatActivity {
                                 tv_qty=holder.itemView.findViewById(R.id.D_Quantity);
                                 tv_qty.setText(list.get(position).getQuantity());
 
-                                available_qty=list.get(position).getAvailable_quantity();
+                                available_qty=list.get(position).getActually_order_qty();
 
                                 Log.d("quantityordered",tv_qty.toString());
 //                                textView.setText("₹"+""+Float.parseFloat(list.get(position).getSub_total_price())*String.valueOf(s));
@@ -228,6 +229,10 @@ public class Orderitemscheck extends AppCompatActivity {
                                         submit_btn.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
+                                                if(quanity.getText().toString().isEmpty()){
+                                                    Snackbar.make(Orderitemscheck.this,findViewById(android.R.id.content),"Please Enter the Quantity",Snackbar.LENGTH_LONG).show();
+                                                    return;
+                                                }
                                                 ordecount = quanity.getText().toString();
                                                // tv_qty.setText(ordecount);
                                                 Log.e("ordercount", ordecount.toString());
@@ -236,7 +241,8 @@ public class Orderitemscheck extends AppCompatActivity {
                                                 Log.e("order_cnt",ordecount);
                                                 Log.e("text",tv_qty.getText().toString());
                                               //  if(Integer.parseInt(ordecount)>Integer.parseInt(list.get(position).getQuantity())){
-                                                if(Integer.parseInt(ordecount)>Integer.parseInt(list.get(position).getAvailable_quantity())){
+                                                Log.e("acual_qty",list.get(position).getActually_order_qty());
+                                                if(Integer.parseInt(ordecount)>Integer.parseInt(list.get(position).getActually_order_qty())){
                                             //        Toast.makeText(Orderitemscheck.this, "Insufficient Quantity.", Toast.LENGTH_SHORT).show();
 
                                                     Snackbar.make(Orderitemscheck.this,findViewById(android.R.id.content),"Insufficient Quantity.",Snackbar.LENGTH_LONG).show();
@@ -290,6 +296,9 @@ public class Orderitemscheck extends AppCompatActivity {
 
                 }else{
 
+                    if(progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
                 //    Toast.makeText(Orderitemscheck.this, "Something went wrong", Toast.LENGTH_SHORT).show();
 
                     Snackbar.make(Orderitemscheck.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
@@ -325,12 +334,15 @@ public class Orderitemscheck extends AppCompatActivity {
                         String message=jsonObject1.getString("message");
                      //   Toast.makeText(Orderitemscheck.this, ""+message, Toast.LENGTH_SHORT).show();
                         if(message.equalsIgnoreCase("success")){
+                            Log.e("orderlist","order_list");
                             alertDialog.dismiss();
                             tv_qty.setText(ordecount);
-                            used_amount=jsonObject1.getJSONObject("wallet_history").getString("used_amount");
-                            amount_refunded=jsonObject1.getJSONObject("wallet_history").getString("amount_refunded");
-                            balanced_amount=jsonObject1.getJSONObject("wallet_history").getString("balanced_amount");
-                            wallet_amount=jsonObject1.getJSONObject("vendor_wallet").getString("wallet_amount");
+
+                         /*   used_amount=jsonObject1.getJSONObject("edit_dispacth_debited_order_items_details").getString("used_amount");
+                            amount_refunded=jsonObject1.getJSONObject("edit_dispacth_debited_order_items_details").getString("amount_refunded");
+                            balanced_amount=jsonObject1.getJSONObject("edit_dispacth_debited_order_items_details").getString("balanced_amount");
+                            wallet_amount=jsonObject1.getJSONObject("edit_dispacth_debited_order_items_details").getString("wallet_amount");*/
+
                             order_items_list_api_call();
                         }
 

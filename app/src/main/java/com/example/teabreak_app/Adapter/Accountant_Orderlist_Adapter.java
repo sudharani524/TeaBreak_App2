@@ -55,6 +55,7 @@ public class Accountant_Orderlist_Adapter extends RecyclerView.Adapter<Accountan
         holder.time_stamp.setText(od_list.get(position).getPayment_date_time());
         holder.vendor_name.setText(od_list.get(position).getVendor_name());
         holder.no_of_items.setText(od_list.get(position).getNo_of_order_items());
+        holder.outlet_code.setText(od_list.get(position).getOutlet_code());
 
 
         if(list_type.equalsIgnoreCase("PendingList")){
@@ -84,7 +85,7 @@ public class Accountant_Orderlist_Adapter extends RecyclerView.Adapter<Accountan
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView order_id,transaction_id,payment_mode,paid_amount,time_stamp,vendor_name,no_of_items,tv_status,wallet_used_amt;
+        TextView order_id,transaction_id,outlet_code,payment_mode,paid_amount,time_stamp,vendor_name,no_of_items,tv_status,wallet_used_amt;
         AppCompatButton orders_edit_btn;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -94,6 +95,7 @@ public class Accountant_Orderlist_Adapter extends RecyclerView.Adapter<Accountan
             paid_amount=itemView.findViewById(R.id.paid_amount);
             time_stamp=itemView.findViewById(R.id.time_stamp);
             vendor_name=itemView.findViewById(R.id.vendor_name);
+            outlet_code=itemView.findViewById(R.id.tv_outlet_code);
             no_of_items=itemView.findViewById(R.id.no_of_items);
             tv_status=itemView.findViewById(R.id.tv_status);
             orders_edit_btn=itemView.findViewById(R.id.orders_edit_btn);

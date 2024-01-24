@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -35,6 +36,7 @@ public class Approved_order_Activity extends AppCompatActivity {
     LinearLayoutManager linearLayoutManager;
     Accountant_Orderlist_Adapter accountantOrderlistAdapter;
     ArrayList<OrderdetailsModel> account_order_list=new ArrayList<>();
+    ProgressDialog progressDialog;
 
     private ActivityApprovedOrderBinding binding;
     @Override
@@ -42,6 +44,10 @@ public class Approved_order_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding=ActivityApprovedOrderBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        progressDialog=new ProgressDialog(Approved_order_Activity.this);
+        progressDialog.setMessage("Loading...");
+        progressDialog.setCancelable(false);
 
         viewModel = ViewModelProviders.of(Approved_order_Activity.this).get(TeaBreakViewModel.class);
 
@@ -56,6 +62,7 @@ public class Approved_order_Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+                finish();
             }
         });
     }
@@ -68,6 +75,8 @@ public class Approved_order_Activity extends AppCompatActivity {
 
     private void approved_order_list_api_call() {
 
+        progressDialog.show();
+
         JsonObject object = new JsonObject();
 
         object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
@@ -77,6 +86,10 @@ public class Approved_order_Activity extends AppCompatActivity {
             @Override
             public void onChanged(JsonObject jsonObject) {
                 if (jsonObject != null){
+
+                    if(progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
 
                     try {
                         JSONObject jsonObject1=new JSONObject(jsonObject.toString());
@@ -138,6 +151,10 @@ public class Approved_order_Activity extends AppCompatActivity {
 
 
                 }else{
+
+                    if(progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
 
                   //  Toast.makeText(Approved_order_Activity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                     Snackbar.make(Approved_order_Activity.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();

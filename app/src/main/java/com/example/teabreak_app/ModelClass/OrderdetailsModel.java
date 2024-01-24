@@ -82,6 +82,17 @@ public class OrderdetailsModel {
     @Expose
     public String payment_date_time;
 
+    @SerializedName("outlet_code")
+    @Expose
+    public String outlet_code;
+
+    public String getOutlet_code() {
+        return outlet_code;
+    }
+
+    public void setOutlet_code(String outlet_code) {
+        this.outlet_code = outlet_code;
+    }
 
     public String getPayment_date_time() {
         return payment_date_time;

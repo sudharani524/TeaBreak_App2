@@ -41,6 +41,20 @@ public class ItemsorderedModel {
     @Expose
     public String available_quantity;
 
+
+
+    @SerializedName("actually_order_qty")
+    @Expose
+    public String actually_order_qty;
+
+    public String getActually_order_qty() {
+        return actually_order_qty;
+    }
+
+    public void setActually_order_qty(String actually_order_qty) {
+        this.actually_order_qty = actually_order_qty;
+    }
+
     public String getAvailable_quantity() {
         return available_quantity;
     }

@@ -24,21 +24,22 @@ public class StatusActivity extends AppCompatActivity {
      /*   setSupportActionBar(binding.tBar.toolbar);
         binding.tBar.tlbarTitle.setText("Status Activitym");*/
 
-        orderno=getIntent().getStringExtra("bank_ref_no");
         tracking_id=getIntent().getStringExtra("tracking_id");
         trans_date=getIntent().getStringExtra("trans_date");
         billing_name=getIntent().getStringExtra("billing_name");
         amount=getIntent().getStringExtra("amount");
         bank_ref_no=getIntent().getStringExtra("bank_ref_no");
         order_status=getIntent().getStringExtra("order_status");
+        orderno=getIntent().getStringExtra("orderno");
 
-        Log.e("orderno",orderno);
         Log.e("tracking_id",tracking_id);
         Log.e("trans_date",trans_date);
         Log.e("billing_name",billing_name);
         Log.e("amount",amount);
         Log.e("bank_ref_no",bank_ref_no);
         Log.e("order_status",order_status);
+        Log.e("orderno",orderno);
+
 
         binding.redirectScreen.setOnClickListener(new View.OnClickListener() {
             @Override

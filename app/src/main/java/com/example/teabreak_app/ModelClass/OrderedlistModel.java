@@ -46,6 +46,17 @@ public class OrderedlistModel  implements Serializable {
     @Expose
     public String used_wallet_amount;
 
+    @SerializedName("outlet_code")
+    @Expose
+    public String outlet_code;
+
+    public String getOutlet_code() {
+        return outlet_code;
+    }
+
+    public void setOutlet_code(String outlet_code) {
+        this.outlet_code = outlet_code;
+    }
 
     @SerializedName("accounts_updated_date_time")
     @Expose

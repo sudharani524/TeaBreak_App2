@@ -73,7 +73,6 @@ public class AccountsDashboard extends AppCompatActivity {
         progressDialog.setCancelable(false);
 
 /*
-
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         viewPager = (ViewPager) findViewById(R.id.pager);
@@ -82,9 +81,13 @@ public class AccountsDashboard extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 */
 
-        images_list.add(R.drawable.slider_img);
-        images_list.add(R.drawable.img);
-        images_list.add(R.drawable.img_1);
+        images_list.add(R.drawable.teabreak_slider);
+        images_list.add(R.drawable.teabreak_slider2);
+        images_list.add(R.drawable.slider12);
+        images_list.add(R.drawable.teabreak_slider_img);
+
+       /* images_list.add(R.drawable.img);
+        images_list.add(R.drawable.img_1);*/
 
 
         binding.viewPager.setAdapter(new SliderAdapter(this, images_list));

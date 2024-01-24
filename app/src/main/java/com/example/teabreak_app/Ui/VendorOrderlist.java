@@ -71,6 +71,8 @@ public class VendorOrderlist extends AppCompatActivity {
         String m=String.valueOf(month+1);
         String y=String.valueOf(year);
 
+
+
         from_date=y+"-"+m+"-"+d;
         to_date=y+"-"+m+"-"+d;
         viewModel = ViewModelProviders.of(VendorOrderlist.this).get(TeaBreakViewModel.class);
@@ -93,6 +95,9 @@ public class VendorOrderlist extends AppCompatActivity {
                 to_dateselect();
             }
         });
+
+
+        Orderlist_api_call();
 
         binding.logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,75 +167,78 @@ public class VendorOrderlist extends AppCompatActivity {
 
             }
 
-            private void Orderlist_api_call() {
-                progressDialog.show();
-                JsonObject object = new JsonObject();
-                Log.d("object","Orderlistapicall");
-                object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
-                Log.d("userid",SaveAppData.getLoginData().getUser_id());
-                object.addProperty("user_token", SaveAppData.getLoginData().getToken());
-                Log.d("token",SaveAppData.getLoginData().getToken());
-                object.addProperty("from_date",""+binding.etFromDate.getText().toString());
-                Log.d("formdate",binding.etFromDate.getText().toString());
-                object.addProperty("to_date",""+binding.etToDate.getText().toString());
-                viewModel.get_ordered_list(object).observe(VendorOrderlist.this, new Observer<JsonObject>() {
-                    @Override
-                    public void onChanged(JsonObject jsonObject) {
-                        if (jsonObject!= null){
-                            if(progressDialog.isShowing()){
-                                progressDialog.dismiss();
-                            }
-                            Log.d("ordersDetails","Text"+jsonObject);
-                            try {
-                                JSONObject jsonObject1=new JSONObject(jsonObject.toString());
-                                JSONArray jsonArray=new JSONArray();
-                                jsonArray=jsonObject1.getJSONArray("order_list");
-                                Log.d("dataorderdetails",jsonArray.toString());
-                                list.clear();
-                                for(int i=0;i<jsonArray.length();i++){
-                                    Log.d("forloop","loop");
-                                    OrderedlistModel orderedlistModel = new Gson().fromJson(jsonArray.getJSONObject(i).toString(), new TypeToken<OrderedlistModel>() {
-                                    }.getType());
-                                    list.add(orderedlistModel);
-                                    Log.d("orderdetailslist",String.valueOf(list.size()));
-                                }
-                                Log.d("orderdetailslist2",String.valueOf(list.size()));
-//                                orderedlistAdapter=new OrderedlistAdapter(list, VendorOrderlist.this);
-                                orderedlistAdapter=new OrderedlistAdapter(list, VendorOrderlist.this, new itemsorderInterface() {
-                                    @Override
-                                    public void OnItemClick(int position, OrderedlistAdapter.ViewHolder holder, String o) {
-                                        Intent intent=new Intent(VendorOrderlist.this,Orderitemscheck.class);
-                                        intent.putExtra("order_no",list.get(position).getOrder_no());
-                                        intent.putExtra("Amount",list.get(position).getTotal_amount());
-                                        Log.d("Amount",list.get(position).getTotal_amount());
-                                        intent.putExtra("order_date",list.get(position).getOrder_date_time());
-                                        intent.putExtra("orderid",list.get(position).getOrder_id());
-                                        startActivity(intent);
-                                    }
-                                });
 
-                                Log.d("Adapter",String.valueOf(jsonArray.length()));
-                                binding.rv.setAdapter(orderedlistAdapter);
-                                Log.d("recycleview",String.valueOf(jsonArray.length()));
-                                orderedlistAdapter.notifyDataSetChanged();
-
-                            } catch (JSONException e) {
-                                Log.e("Exception", String.valueOf(e));
-                               // Toast.makeText(VendorOrderlist.this, ""+e, Toast.LENGTH_SHORT).show();
-                            }
-
-
-                        }else{
-
-                       //     Toast.makeText(VendorOrderlist.this, "Something went wrong", Toast.LENGTH_SHORT).show();
-                            Snackbar.make(VendorOrderlist.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
-                        }
-                    }
-                });
-            }
         });
 
     }
+
+    private void Orderlist_api_call() {
+        progressDialog.show();
+        JsonObject object = new JsonObject();
+        Log.d("object","Orderlistapicall");
+        object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
+        Log.d("userid",SaveAppData.getLoginData().getUser_id());
+        object.addProperty("user_token", SaveAppData.getLoginData().getToken());
+        Log.d("token",SaveAppData.getLoginData().getToken());
+        object.addProperty("from_date",""+binding.etFromDate.getText().toString());
+        Log.d("formdate",binding.etFromDate.getText().toString());
+        object.addProperty("to_date",""+binding.etToDate.getText().toString());
+        viewModel.get_ordered_list(object).observe(VendorOrderlist.this, new Observer<JsonObject>() {
+            @Override
+            public void onChanged(JsonObject jsonObject) {
+                if (jsonObject!= null){
+                    if(progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
+                    Log.d("ordersDetails","Text"+jsonObject);
+                    try {
+                        JSONObject jsonObject1=new JSONObject(jsonObject.toString());
+                        JSONArray jsonArray=new JSONArray();
+                        jsonArray=jsonObject1.getJSONArray("order_list");
+                        Log.d("dataorderdetails",jsonArray.toString());
+                        list.clear();
+                        for(int i=0;i<jsonArray.length();i++){
+                            Log.d("forloop","loop");
+                            OrderedlistModel orderedlistModel = new Gson().fromJson(jsonArray.getJSONObject(i).toString(), new TypeToken<OrderedlistModel>() {
+                            }.getType());
+                            list.add(orderedlistModel);
+                            Log.d("orderdetailslist",String.valueOf(list.size()));
+                        }
+                        Log.d("orderdetailslist2",String.valueOf(list.size()));
+//                                orderedlistAdapter=new OrderedlistAdapter(list, VendorOrderlist.this);
+                        orderedlistAdapter=new OrderedlistAdapter(list, VendorOrderlist.this, new itemsorderInterface() {
+                            @Override
+                            public void OnItemClick(int position, OrderedlistAdapter.ViewHolder holder, String o) {
+                                Intent intent=new Intent(VendorOrderlist.this,Orderitemscheck.class);
+                                intent.putExtra("order_no",list.get(position).getOrder_no());
+                                intent.putExtra("Amount",list.get(position).getTotal_amount());
+                                Log.d("Amount",list.get(position).getTotal_amount());
+                                intent.putExtra("order_date",list.get(position).getOrder_date_time());
+                                intent.putExtra("orderid",list.get(position).getOrder_id());
+                                startActivity(intent);
+                            }
+                        });
+
+                        Log.d("Adapter",String.valueOf(jsonArray.length()));
+                        binding.rv.setAdapter(orderedlistAdapter);
+                        Log.d("recycleview",String.valueOf(jsonArray.length()));
+                        orderedlistAdapter.notifyDataSetChanged();
+
+                    } catch (JSONException e) {
+                        Log.e("Exception", String.valueOf(e));
+                        // Toast.makeText(VendorOrderlist.this, ""+e, Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }else{
+
+                    //     Toast.makeText(VendorOrderlist.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(VendorOrderlist.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
     public static String getCalculatedDate(String date, String dateFormat, int days) {
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat s = new SimpleDateFormat(dateFormat);

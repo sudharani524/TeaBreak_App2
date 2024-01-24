@@ -28,7 +28,7 @@ public class TeaBreakViewModel extends ViewModel {
     private MutableLiveData<JsonObject> Order_history_details;
     private MutableLiveData<JsonObject> dlt_item_status;
     private MutableLiveData<JsonObject> check_token_status;
-    private MutableLiveData<JsonObject> Wallet_history_details;
+    private MutableLiveData<JsonObject> Wallet_history_details=null;
     private MutableLiveData<JsonObject> wallet_amt_status;
     private MutableLiveData<JsonObject> payment_gateway_details_status;
     private MutableLiveData<JsonObject> secure_token_status;
@@ -45,8 +45,10 @@ public class TeaBreakViewModel extends ViewModel {
 
 
     public LiveData<JsonObject> get_list_items() {
-        list_items_status = new MutableLiveData<JsonObject>();
-        list_items_api_call();
+        if(list_items_status==null){
+            list_items_status = new MutableLiveData<JsonObject>();
+            list_items_api_call();
+        }
         return list_items_status;
     }
 
@@ -111,8 +113,11 @@ public class TeaBreakViewModel extends ViewModel {
         return check_token_status;
     }
     public LiveData<JsonObject> get_wallet_history(JsonObject jsonObject) {
-        Wallet_history_details = new MutableLiveData<JsonObject>(jsonObject);
-        wallet_histor_api_call(jsonObject);
+        if(Wallet_history_details==null){
+            Wallet_history_details = new MutableLiveData<JsonObject>(jsonObject);
+            wallet_histor_api_call(jsonObject);
+        }
+
         return Wallet_history_details;
     }
     public LiveData<JsonObject> get_wallet_amt(JsonObject jsonObject) {

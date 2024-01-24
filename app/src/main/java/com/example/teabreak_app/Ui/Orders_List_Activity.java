@@ -668,13 +668,10 @@ public class Orders_List_Activity extends AppCompatActivity {
                         jsonArray=jsonObject1.getJSONArray("data");
                         Log.d("dataorder",jsonArray.toString());
                         for(int i=0;i<jsonArray.length();i++){
-                            Log.d("forloop","loop");
                             OrderHistoryModel orderHistoryModel = new Gson().fromJson(jsonArray.getJSONObject(i).toString(), new TypeToken<OrderHistoryModel>() {
                             }.getType());
                             list.add(orderHistoryModel);
                             Delivery=list.get(i).getDelivery_type_name();
-                            Log.d("deliverytype",Delivery);
-                            Log.d("list",String.valueOf(list.size()));
                         }
                         Log.d("list2",String.valueOf(list.size()));
                         orderHistoryAdapter=new OrderHistoryAdapter(list, Orders_List_Activity.this, new OrderdetailsInterface() {
@@ -692,7 +689,7 @@ public class Orders_List_Activity extends AppCompatActivity {
                                 Intent intent=new Intent(Orders_List_Activity.this,Orderdetails.class);
                                 intent.putExtra("order_id",list.get(position).getOrder_id());
                                 intent.putExtra("order_no",list.get(position).getOrder_no());
-                                intent.putExtra("Amount",list.get(position).getTotal_amount());
+                                intent.putExtra("Amount",list.get(position).getPaid_amount());
                                 intent.putExtra("order_date",list.get(position).getOrder_date_time());
                                 intent.putExtra("delivery_mode",list.get(position).getDelivery_type_name());
                                 intent.putExtra("payment_mode",list.get(position).getPayment_mode());

@@ -44,7 +44,7 @@
                     android:layout_weight="0.9"
                     android:layout_gravity="center|left"
                     android:gravity="center|left"
-                    android:text="Order List"
+                    android:text="Dashboard"
                     android:layout_marginStart="10dp"
                     android:textColor="@color/white"
                     android:textSize="18sp" />

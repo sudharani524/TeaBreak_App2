@@ -68,6 +68,7 @@ public class Pending_order_Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+                finish();
             }
         });
 
@@ -110,7 +111,7 @@ public class Pending_order_Activity extends AppCompatActivity {
 
                                 AlertDialog.Builder dialog=new AlertDialog.Builder(Pending_order_Activity.this);
                                 dialog.setCancelable(false);
-                                dialog.setMessage("Are you sure you want approve this order");
+                                dialog.setMessage("Are you sure you want to approve this order");
                                 dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {

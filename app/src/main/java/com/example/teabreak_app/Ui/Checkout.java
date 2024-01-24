@@ -86,6 +86,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
     static String wallet_status="0";
 
 
+    boolean a=false;
     Context mContext;
     ProgressDialog progress;
     String Order_id;
@@ -137,6 +138,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(Checkout.this, Cartlist_Activity.class));
+                finish();
 
             }
         });
@@ -146,18 +148,26 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                 onBackPressed();
             }
         });
+
+
         binding.Proceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+
+                if(binding.Proceed.isEnabled()){
+                    binding.Proceed.setEnabled(false);
+                }
                 if(selected_delivery_mode_id.equalsIgnoreCase("")){
                    //  Toast.makeText(Checkout.this, "Please Select the delivery mode", Toast.LENGTH_SHORT).show();
+                    binding.Proceed.setEnabled(true);
                     Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Please select the delivery mode",Snackbar.LENGTH_LONG).show();
                     return;
                 }
 
-
                  if(!selected_delivery_mode_id.equalsIgnoreCase("")){
+
+                     binding.Proceed.setEnabled(true);
 
                      if(selected_delivery_mode_id.equalsIgnoreCase("2")){
                          for(int i=0;i<cart_list.size();i++){
@@ -192,7 +202,8 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
 
                  }
                 else{
-                 //   Toast.makeText(Checkout.this, "Please Select the delivery mode", Toast.LENGTH_SHORT).show();
+                     binding.Proceed.setEnabled(true);
+                     //   Toast.makeText(Checkout.this, "Please Select the delivery mode", Toast.LENGTH_SHORT).show();
                      Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Please select the delivery mode",Snackbar.LENGTH_LONG).show();
                  }
 
@@ -307,6 +318,14 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
         submit_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+               /* if(Integer.valueOf(wallet_amount)>Integer.valueOf("0.00")){
+                    if(!checkBox.isChecked()){
+                        Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Please select the wallet amount",Snackbar.LENGTH_LONG).show();
+                        return;
+                    }
+                }*/
+
                 if(selected_delivery_mode_id.equalsIgnoreCase("")){
                 //    Toast.makeText(Checkout.this, "Please Select the delivery mode", Toast.LENGTH_SHORT).show();
                     Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Please Select the delivery mode",Snackbar.LENGTH_LONG).show();
@@ -486,6 +505,16 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
         jsonObject.addProperty("discount","0");
         jsonObject.addProperty("sub_total_amount",t_amount);
         jsonObject.addProperty("total_delivery_charges",Delivery_charges);
+
+        if(Selected_deliverymode.equalsIgnoreCase("Courier")){
+            jsonObject.addProperty("total_delivery_charges",Delivery_charges);
+
+        }
+        else {
+            jsonObject.addProperty("total_delivery_charges","0");
+
+        }
+
         jsonObject.addProperty("total_amount",Float.parseFloat(t_amount)+Float.parseFloat(Delivery_charges));
         jsonObject.addProperty("wallet_used_status",wallet_status);
         if(wallet_status.equalsIgnoreCase("1")){
@@ -693,8 +722,8 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
          JsonObject object = new JsonObject();
          object.addProperty("order_no", order_no2);
          object.addProperty("currency", "INR");
-         object.addProperty("amount","1.00");
-    //     object.addProperty("amount",df.format(t_amt));
+     //    object.addProperty("amount","1.00");
+         object.addProperty("amount",df.format(t_amt));
 
 
           viewModel.get_request_hash(object).observe(Checkout.this, new Observer<JsonObject>() {
@@ -831,8 +860,8 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
         orderDetails.setAccessCode(accessCode);
         orderDetails.setMerchantId(merchantId);
         orderDetails.setCurrency("INR");
-     //   orderDetails.setAmount(df.format(t_amt));
-        orderDetails.setAmount("1.00");
+        orderDetails.setAmount(df.format(t_amt));
+     //   orderDetails.setAmount("1.00");
         orderDetails.setRedirectUrl(Constant.SERVER_BASE_URL+"response_handler_url.php");
         orderDetails.setCancelUrl(Constant.SERVER_BASE_URL+"response_handler_url.php");
         orderDetails.setCustomerId(SaveAppData.getLoginData().getUser_mobile());
@@ -1220,16 +1249,24 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                     try {
                         JSONObject jsonObject1=new JSONObject(jsonObject.toString());
                         Log.e("insrt_message",jsonObject1.getString("message"));
-                        if(jsonObject1.getString("message").equalsIgnoreCase("success")){
+                        if(jsonObject1.getString("order_status").equalsIgnoreCase("Success")){
+                            Log.e("insert_api","insert_api");
                             Intent intent=new Intent(Checkout.this,StatusActivity.class);
-                            intent.putExtra("orderno",jsonObject1.getJSONObject("insrtMsg").getString("order_id"));
-                            intent.putExtra("tracking_id",jsonObject1.getJSONObject("insrtMsg").getString("transaction_id"));
-                            intent.putExtra("trans_date",jsonObject1.getJSONObject("insrtMsg").getString("payment_date_time"));
-                            intent.putExtra("billing_name",jsonObject1.getString("vendor_name"));
-                            intent.putExtra("amount",jsonObject1.getJSONObject("insrtMsg").getString("paid_amount"));
-                            intent.putExtra("bank_ref_no",jsonObject1.getString("bank_ref_no"));
-                            intent.putExtra("order_status",jsonObject1.getString("order_status"));
+                            intent.putExtra("orderno",""+jsonObject1.getJSONObject("insrtMsg").getString("order_no"));
+                            intent.putExtra("tracking_id",""+jsonObject1.getJSONObject("insrtMsg").getString("transaction_id"));
+                            intent.putExtra("trans_date",""+jsonObject1.getJSONObject("insrtMsg").getString("payment_date_time"));
+                            intent.putExtra("billing_name",""+jsonObject1.getString("vendor_name"));
+                            intent.putExtra("amount",""+jsonObject1.getJSONObject("insrtMsg").getString("paid_amount"));
+                            intent.putExtra("bank_ref_no",""+jsonObject1.getString("bank_ref_no"));
+                            intent.putExtra("order_status",""+jsonObject1.getString("order_status"));
 
+                            Log.e("orderno",jsonObject1.getJSONObject("insrtMsg").getString("order_no"));
+                            Log.e("tracking_id",jsonObject1.getJSONObject("insrtMsg").getString("transaction_id"));
+                            Log.e("trans_date",jsonObject1.getJSONObject("insrtMsg").getString("payment_date_time"));
+                            Log.e("billing_name",jsonObject1.getString("vendor_name"));
+                            Log.e("amount",jsonObject1.getJSONObject("insrtMsg").getString("paid_amount"));
+                            Log.e("bank_ref_no",jsonObject1.getString("bank_ref_no"));
+                            Log.e("order_status",jsonObject1.getString("order_status"));
 
                             startActivity(intent);
                             finish();
@@ -1317,11 +1354,13 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
     @Override
     public void onErrorOccurred(String s) {
         Log.e("transaction_res","onErrorOccurred "+s);
+       // insert_payment_api_call(s);
     }
 
     @Override
     public void onCancelTransaction(String s) {
         Log.e("transaction_res","onCancelTransaction"+s);
+      //  insert_payment_api_call(s);
 
     }
 }
