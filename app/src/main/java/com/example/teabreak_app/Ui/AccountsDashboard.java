@@ -84,7 +84,7 @@ public class AccountsDashboard extends AppCompatActivity {
         images_list.add(R.drawable.teabreak_slider);
         images_list.add(R.drawable.teabreak_slider2);
         images_list.add(R.drawable.slider12);
-        images_list.add(R.drawable.teabreak_slider_img);
+        images_list.add(R.drawable.teabreak_slider_img2);
 
        /* images_list.add(R.drawable.img);
         images_list.add(R.drawable.img_1);*/
