@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Ui.Cartlist_Activity">
+    tools:context="com.glitss.teabreak_app.Ui.Cartlist_Activity">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="45dp"
@@ -74,6 +74,15 @@
             android:layout_margin="5dp"
             android:layout_height="0dp"
             android:layout_weight="8" />
+        <TextView
+            android:id="@+id/tv_no_data_found"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="25dp"
+            android:visibility="gone"
+            android:text=""/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"

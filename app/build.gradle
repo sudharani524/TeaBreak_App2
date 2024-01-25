@@ -5,17 +5,17 @@ plugins {
 }
 
 android {
-    namespace 'com.example.teabreak_app'
+    namespace 'com.glitss.teabreak_app'
     compileSdk 34
     buildFeatures {
         viewBinding = true
     }
 
     defaultConfig {
-        applicationId "com.example.teabreak_app"
+        applicationId "com.glitss.teabreak_app"
         minSdk 26
         targetSdk 33
-        versionCode 1
+        versionCode 2
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

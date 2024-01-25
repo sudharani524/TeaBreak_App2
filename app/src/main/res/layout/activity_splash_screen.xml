@@ -7,5 +7,5 @@
     android:orientation="vertical"
     android:gravity="center"
     android:background="@drawable/splash4"
-    tools:context=".Ui.SplashScreen">
+    tools:context="com.glitss.teabreak_app.Ui.SplashScreen">
 </RelativeLayout>

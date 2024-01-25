@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Ui.VendorOrderlist">
+    tools:context="com.glitss.teabreak_app.Ui.VendorOrderlist">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -142,5 +142,15 @@
         tools:layout_editor_absoluteX="1dp"
         tools:listitem="@layout/vendorordercustomcard"
         tools:layout_editor_absoluteY="1dp"/>
+
+    <TextView
+        android:id="@+id/tv_no_data_found"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="25dp"
+        android:visibility="gone"
+        android:text=""/>
 
 </LinearLayout>

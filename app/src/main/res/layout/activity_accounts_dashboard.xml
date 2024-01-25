@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:weightSum="10"
     android:background="@drawable/bg_with_cup"
-    tools:context=".Ui.AccountsDashboard">
+    tools:context="com.glitss.teabreak_app.Ui.AccountsDashboard">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -16,7 +16,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
-        android:name=".Utils.AppController"
+        android:name="com.glitss.teabreak_app.Utils.AppController"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:enableOnBackInvokedCallback="true"
@@ -31,46 +31,46 @@
         android:theme="@style/Theme.TeaBreak_App"
         tools:targetApi="31">
         <activity
-            android:name=".Ui.Approved_order_Activity"
+            android:name="com.glitss.teabreak_app.Ui.Approved_order_Activity"
             android:exported="false" />
         <activity
-            android:name=".Ui.Pending_order_Activity"
+            android:name="com.glitss.teabreak_app.Ui.Pending_order_Activity"
             android:exported="false" />
         <activity
-            android:name=".Ui.StatusActivity"
+            android:name="com.glitss.teabreak_app.Ui.StatusActivity"
             android:exported="false" />
         <activity
-            android:name=".Ui.AccountsDashboard"
+            android:name="com.glitss.teabreak_app.Ui.AccountsDashboard"
             android:exported="false" />
         <activity
-            android:name=".Ui.PermissionsActivity"
+            android:name="com.glitss.teabreak_app.Ui.PermissionsActivity"
             android:exported="false" />
         <activity
-            android:name=".Ui.SingleList_Item"
+            android:name="com.glitss.teabreak_app.Ui.SingleList_Item"
             android:exported="false" />
         <activity
-            android:name=".Ui.Checkout"
+            android:name="com.glitss.teabreak_app.Ui.Checkout"
             android:exported="false" />
         <activity
-            android:name=".Ui.Orderdetails"
+            android:name="com.glitss.teabreak_app.Ui.Orderdetails"
             android:exported="false" />
         <activity
-            android:name=".Ui.Cart"
+            android:name="com.glitss.teabreak_app.Ui.Cart"
             android:exported="false" />
         <activity
-            android:name=".Ui.Mywallet"
+            android:name="com.glitss.teabreak_app.Ui.Mywallet"
             android:exported="false" />
         <activity
-            android:name=".Ui.Myorders"
+            android:name="com.glitss.teabreak_app.Ui.Myorders"
             android:exported="false" />
         <activity
-            android:name=".Ui.Orderitemscheck"
+            android:name="com.glitss.teabreak_app.Ui.Orderitemscheck"
             android:exported="false" />
         <activity
-            android:name=".Ui.VendorOrderlist"
+            android:name="com.glitss.teabreak_app.Ui.VendorOrderlist"
             android:exported="false" />
         <activity
-            android:name=".Ui.SplashScreen"
+            android:name="com.glitss.teabreak_app.Ui.SplashScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -79,37 +79,37 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Ui.Orders_List_Activity"
+            android:name="com.glitss.teabreak_app.Ui.Orders_List_Activity"
             android:exported="false" />
         <activity
-            android:name=".Ui.Cartlist_Activity"
+            android:name="com.glitss.teabreak_app.Ui.Cartlist_Activity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".Ui.ListItems_Activity"
+            android:name="com.glitss.teabreak_app.Ui.ListItems_Activity"
             android:exported="false" />
         <activity
-            android:name=".Ui.DashboardActivity"
+            android:name="com.glitss.teabreak_app.Ui.DashboardActivity"
             android:exported="false" />
         <activity
-            android:name=".Ui.ChangePasswordActivity"
+            android:name="com.glitss.teabreak_app.Ui.ChangePasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".Ui.CCAvenueActivity"
+            android:name="com.glitss.teabreak_app.Ui.CCAvenueActivity"
             android:exported="false" />
         <activity
-            android:name=".Ui.MerchantCheckoutActivity"
+            android:name="com.glitss.teabreak_app.Ui.MerchantCheckoutActivity"
             android:exported="false" />
         <activity
-            android:name=".Ui.PaymentStatusActivity"
+            android:name="com.glitss.teabreak_app.Ui.PaymentStatusActivity"
             android:exported="false" />
         <activity
-            android:name=".Ui.MainActivity"
+            android:name="com.glitss.teabreak_app.Ui.MainActivity"
             android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.teabreak_app.fileprovider"
+            android:authorities="com.glitss.teabreak_app.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true"
             tools:replace="android:authorities">

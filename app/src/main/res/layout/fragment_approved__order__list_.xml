@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.Approved_Order_List_Fragment">
+    tools:context="com.glitss.teabreak_app.Fragments.Approved_Order_List_Fragment">
 
 
     <androidx.recyclerview.widget.RecyclerView
