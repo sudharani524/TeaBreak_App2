@@ -43,6 +43,11 @@ public class OrderedlistAdapter extends RecyclerView.Adapter<OrderedlistAdapter.
         holder.Wallet_Amount_Used.setText("₹"+slm.get(position).getUsed_wallet_amount());
         holder.approved_date.setText(slm.get(position).getAccounts_updated_date_time());
         holder.outlet_code.setText(slm.get(position).getOutlet_code());
+        holder.delivery_type.setText(slm.get(position).getDelivery_mode());
+        holder.tracking_id.setText(slm.get(position).getTracking_id());
+        holder.payment_status.setText(slm.get(position).getPayment_status());
+
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,6 +65,7 @@ public class OrderedlistAdapter extends RecyclerView.Adapter<OrderedlistAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView Ordernumber,VendorName,totalamount,date,quantity,Wallet_Amount_Used,approved_date,outlet_code;
+        TextView tracking_id,payment_status,delivery_type,payment_mode;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             Ordernumber=itemView.findViewById(R.id.v_ordernumber);
@@ -70,8 +76,12 @@ public class OrderedlistAdapter extends RecyclerView.Adapter<OrderedlistAdapter.
             quantity=itemView.findViewById(R.id.V_orderquantity);
             approved_date=itemView.findViewById(R.id.V_approved_date);
             outlet_code=itemView.findViewById(R.id.tv_outlet_code);
-
+            tracking_id=itemView.findViewById(R.id.tracking_id);
+            payment_status=itemView.findViewById(R.id.payment_status);
+            delivery_type=itemView.findViewById(R.id.delivery_type);
+         //   payment_mode=itemView.findViewById(R.id.payment_mode);
 
         }
     }
+
 }

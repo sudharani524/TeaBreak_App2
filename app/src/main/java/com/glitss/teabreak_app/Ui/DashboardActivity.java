@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -39,6 +40,16 @@ import com.glitss.teabreak_app.repository.ListItemInterface;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.InstallState;
+import com.google.android.play.core.install.InstallStateUpdatedListener;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.InstallStatus;
+import com.google.android.play.core.install.model.UpdateAvailability;
+import com.google.android.play.core.tasks.OnSuccessListener;
+import com.google.android.play.core.tasks.Task;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -64,6 +75,9 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     static String wallet_amount="";
     TextView wallet_amt;
 
+    private AppUpdateManager appUpdateManager;
+    private InstallStateUpdatedListener installStateUpdatedListener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +89,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         progressDialog=new ProgressDialog(this);
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
+
 //        View navHeaderView= binding.navView.getHeaderView(0);
 //        TextView wallet_amount = (TextView) navHeaderView.findViewById(R.id.wallet);
 //        wallet_amount.setText(""+SaveAppData.getLoginData().getWallet_amount());
@@ -92,16 +107,18 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             } else {
 
                 // No explanation needed, we can request the permission.
-
                 ActivityCompat.requestPermissions(DashboardActivity.this,
                         new String[]{Manifest.permission.READ_MEDIA_IMAGES},
                         1);
             }
         }
 
+     //   checkForAppUpdate();
+
+     //   checkfor_App_update();
+
 
         Constant.check_token_status_api_call(DashboardActivity.this);
-
 
         PackageInfo packageInfo = null;
         try {
@@ -125,7 +142,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
 
 
-
         GridLayoutManager gridLayoutManager=new GridLayoutManager(this,2,RecyclerView.VERTICAL,false);
         binding.newDashboarddd.rvListItems.setLayoutManager(gridLayoutManager);
 
@@ -140,6 +156,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
         binding.newDashboarddd.viewPager.setAdapter(new SliderAdapter(this, images_list));
         binding.newDashboarddd.tabs.setupWithViewPager(binding.newDashboarddd.viewPager);
+
 
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new SliderTimer(), 3000, 5000);
@@ -209,9 +226,58 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             }
         });
 
-
-
     }
+
+    private void checkfor_App_update() {
+        Log.e("check_for_update_mthd","check for update method");
+        AppUpdateManager appUpdateManager = AppUpdateManagerFactory.create(DashboardActivity.this);
+
+// Returns an intent object that you use to check for an update.
+        Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
+
+// Checks that the platform will allow the specified type of update.
+        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                    // This example applies an immediate update. To apply a flexible update
+                    // instead, pass in AppUpdateType.FLEXIBLE
+                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                // Request the update.
+
+                try {
+
+                    appUpdateManager.startUpdateFlowForResult(
+                            // Pass the intent that is returned by 'getAppUpdateInfo()'.
+                            appUpdateInfo,
+                            // an activity result launcher registered via registerForActivityResult
+                            AppUpdateType.IMMEDIATE,
+                            // Or pass 'AppUpdateType.FLEXIBLE' to newBuilder() for
+                            // flexible updates.
+                            this,101);
+
+                  /*  appUpdateManager.startUpdateFlowForResult(
+                            // Pass the intent that is returned by 'getAppUpdateInfo()'.
+                            appUpdateInfo,
+                            // an activity result launcher registered via registerForActivityResult
+                            activityResultLauncher,
+                            // Or pass 'AppUpdateType.FLEXIBLE' to newBuilder() for
+                            // flexible updates.
+                            AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE)
+                                    .setAllowAssetPackDeletion(true)
+                                    .build());*/
+
+
+
+
+                } catch (IntentSender.SendIntentException e) {
+                    Log.e("Exception","Exception");
+                    throw new RuntimeException(e);
+
+                    // Toast.makeText(this, ""+e, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
 
     private void wallet_amount_api_call() {
 
@@ -317,10 +383,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                         listItemsAdapter.notifyDataSetChanged();
 
 
-
-
-
-
                     } catch (JSONException e) {
                         //throw new RuntimeException(e);
                         Log.e("Excption", String.valueOf(e));
@@ -337,6 +399,19 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             }
         });
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 101) {
+            if (resultCode != RESULT_OK) {
+                // Log an error
+                unregisterInstallStateUpdListener();
+            }
+        }
+    }
+
+
 
     private void add_cart_api_call() {
         progressDialog.show();
@@ -449,12 +524,12 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                     }
                     Log.d("Logout","logout"+jsonObject);
 
-
                     if (jsonObject.get("message").getAsString().equalsIgnoreCase("Successfully Logout")){
                         SaveAppData.saveOperatorLoginData(null);
                         startActivity(new Intent(DashboardActivity.this, MainActivity.class));
                         finish();
                     }
+
                 }else{
                     if(progressDialog.isShowing()){
                         progressDialog.dismiss();
@@ -491,4 +566,100 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             });
         }
     }
+
+
+
+    private void checkForAppUpdate() {
+        // Creates instance of the manager.
+        AppUpdateManager appUpdateManager = AppUpdateManagerFactory.create(DashboardActivity.this);
+
+        // Returns an intent object that you use to check for an update.
+        Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
+
+        // Create a listener to track request state updates.
+        InstallStateUpdatedListener installStateUpdatedListener = new InstallStateUpdatedListener() {
+            @Override
+            public void onStateUpdate(InstallState installState) {
+                // Show module progress, log state, or install the update.
+                if (installState.installStatus() == InstallStatus.DOWNLOADED)
+                    // After the update is downloaded, show a notification
+                    // and request user confirmation to restart the app.
+                    popupSnackbarForCompleteUpdateAndUnregister();
+            }
+        };
+
+        // Checks that the platform will allow the specified type of update.
+        appUpdateInfoTask.addOnSuccessListener(new OnSuccessListener<AppUpdateInfo>() {
+            @Override
+            public void onSuccess(AppUpdateInfo appUpdateInfo) {
+                if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+                    // Request the update.
+                    if (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
+
+                        // Before starting an update, register a listener for updates.
+                        appUpdateManager.registerListener(installStateUpdatedListener);
+                        // Start an update.
+                        DashboardActivity.this.startAppUpdateFlexible(appUpdateInfo);
+                    } else if (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                        // Start an update.
+                        DashboardActivity.this.startAppUpdateImmediate(appUpdateInfo);
+                    }
+                }
+            }
+        });
+    }
+
+
+    private void startAppUpdateImmediate(AppUpdateInfo appUpdateInfo) {
+        try {
+            appUpdateManager.startUpdateFlowForResult(
+                    appUpdateInfo,
+                    AppUpdateType.IMMEDIATE,
+                    // The current activity making the update request.
+                    this,
+                    // Include a request code to later monitor this update request.
+                    101);
+        } catch (IntentSender.SendIntentException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void startAppUpdateFlexible(AppUpdateInfo appUpdateInfo) {
+        try {
+            appUpdateManager.startUpdateFlowForResult(
+                    appUpdateInfo,
+                    AppUpdateType.FLEXIBLE,
+                    // The current activity making the update request.
+                    this,
+                    // Include a request code to later monitor this update request.
+                    101);
+        } catch (IntentSender.SendIntentException e) {
+            e.printStackTrace();
+            unregisterInstallStateUpdListener();
+        }
+    }
+
+    private void unregisterInstallStateUpdListener() {
+        if (appUpdateManager != null && installStateUpdatedListener != null)
+            appUpdateManager.unregisterListener(installStateUpdatedListener);
+    }
+
+    private void popupSnackbarForCompleteUpdateAndUnregister() {
+        //  Snackbar snackbar = Snackbar.make(drawer, getString("update downloaded"), Snackbar.LENGTH_INDEFINITE);
+
+        Snackbar snackbar = Snackbar.make(DashboardActivity.this,findViewById(android.R.id.content),"Update Downloaded",Snackbar.LENGTH_LONG);
+        snackbar.setAction("Restart", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                appUpdateManager.completeUpdate();
+            }
+        });
+        snackbar.setActionTextColor(getResources().getColor(R.color.black));
+        snackbar.show();
+
+        unregisterInstallStateUpdListener();
+    }
+
+
+
 }

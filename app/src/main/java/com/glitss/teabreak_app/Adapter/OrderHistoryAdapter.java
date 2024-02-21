@@ -44,6 +44,9 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
        holder.WalletusedAmount.setText( "₹"+ls.get(position).getUsed_wallet_amount());
       holder.deliverytype.setText(ls.get(position).getDelivery_type_name());
       holder.PaymentMode.setText(ls.get(position).getPayment_mode());
+      holder.payment_status.setText(ls.get(position).getPayment_success_status_name());
+      holder.order_status.setText(ls.get(position).getOrder_status_name());
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,15 +80,16 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
             ls.addAll(Orderslist);
             notifyDataSetChanged();
         } else {
+
             for (OrderHistoryModel ts : Orderslist) {
 
                 if (ts.getOrder_no().trim().toLowerCase(Locale.getDefault()).contains(charText) ||
                         ts.getOrder_id().trim().toLowerCase(Locale.getDefault()).contains(charText)) {
                     ls.add(ts);
-
                 }
             }
             notifyDataSetChanged();
+
         }
 
     }
@@ -98,7 +102,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView ordernumber,deliverytype,totalamount,date,WalletusedAmount,PaymentMode,DeliveryCharges;
+        TextView ordernumber,deliverytype,totalamount,date,WalletusedAmount,PaymentMode,DeliveryCharges,payment_status,order_status;
       //  ImageView iv_whatsapp_share;
         String Delivery;
         public ViewHolder(@NonNull View itemView) {
@@ -111,6 +115,8 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
          //   iv_whatsapp_share=itemView.findViewById(R.id.iv_whatsapp_share);
             PaymentMode=itemView.findViewById(R.id.paymentmode);
             DeliveryCharges=itemView.findViewById(R.id.deliveryCharges);
+            payment_status=itemView.findViewById(R.id.payment_status);
+            order_status=itemView.findViewById(R.id.order_status);
 
         }
     }

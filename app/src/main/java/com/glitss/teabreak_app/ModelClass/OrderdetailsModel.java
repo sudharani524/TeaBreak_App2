@@ -86,6 +86,44 @@ public class OrderdetailsModel {
     @Expose
     public String outlet_code;
 
+
+    @SerializedName("delivery_mode")
+    @Expose
+    public String delivery_mode;
+
+    @SerializedName("payment_status")
+    @Expose
+    public String payment_status;
+
+    @SerializedName("tracking_id")
+    @Expose
+    public String tracking_id;
+
+
+    public String getDelivery_mode() {
+        return delivery_mode;
+    }
+
+    public void setDelivery_mode(String delivery_mode) {
+        this.delivery_mode = delivery_mode;
+    }
+
+    public String getPayment_status() {
+        return payment_status;
+    }
+
+    public void setPayment_status(String payment_status) {
+        this.payment_status = payment_status;
+    }
+
+    public String getTracking_id() {
+        return tracking_id;
+    }
+
+    public void setTracking_id(String tracking_id) {
+        this.tracking_id = tracking_id;
+    }
+
     public String getOutlet_code() {
         return outlet_code;
     }

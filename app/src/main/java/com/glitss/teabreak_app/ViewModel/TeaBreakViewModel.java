@@ -42,6 +42,7 @@ public class TeaBreakViewModel extends ViewModel {
     private MutableLiveData<JsonObject> insert_payments_status;
     private MutableLiveData<JsonObject> transport_type_status;
     private MutableLiveData<JsonObject> request_hash_status;
+    private MutableLiveData<JsonObject> closed_orders_list_status;
 
 
     public LiveData<JsonObject> get_list_items() {
@@ -211,6 +212,30 @@ public class TeaBreakViewModel extends ViewModel {
         request_hash_status = new MutableLiveData<JsonObject>(jsonObject);
         request_hash_api_call(jsonObject);
         return request_hash_status;
+    }
+
+    public LiveData<JsonObject>closed_orders_list(JsonObject jsonObject){
+        closed_orders_list_status = new MutableLiveData<JsonObject>(jsonObject);
+        closed_orders_list_api_call(jsonObject);
+        return closed_orders_list_status;
+    }
+
+    private void closed_orders_list_api_call(JsonObject jsonObject) {
+        ApiInterface apiInterface= ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
+        Call<JsonObject>closed_order= apiInterface.closed_orders_list(jsonObject);
+        closed_order.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.body()!= null){
+                    closed_orders_list_status.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("TAG_NAME", t.toString());
+            }
+        });
     }
 
 

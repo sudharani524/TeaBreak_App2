@@ -4,7 +4,6 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="176dp"
-    android:gravity="bottom"
     android:background="@color/red"
     android:padding="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
@@ -15,60 +14,74 @@
         android:layout_centerHorizontal="true"
         android:elevation="10dp"
         app:cardCornerRadius="20dp">
-
     </androidx.cardview.widget.CardView>-->
 
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/teabreakicon" />
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/tea_break"
-        android:textColor="@color/white"
-        android:textStyle="bold"/>
-    <TextView
-        android:id="@+id/nav_name"
-        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="-12dp"
+        android:layout_gravity="top">
+        <ImageView
+            android:layout_width="180dp"
+            android:layout_height="50dp"
+            android:padding="5dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/logo_white" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textColor="@color/white"
-        android:textSize="14sp" />
-  <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:weightSum="2"
-      android:layout_gravity="center"
-      android:gravity="center"
-      android:orientation="horizontal">
-      <TextView
-          android:id="@+id/tv_outlet_code"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_weight="1.3"
-          android:text="@string/hello"
-          android:textColor="@color/white"
-          android:textSize="14sp" />
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tea_break"
+            android:textColor="@color/white"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/nav_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="2"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_outlet_code"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.3"
+                android:text="@string/hello"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
 
-      <ImageView
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_weight="0.2"
-          android:src="@drawable/wallet_white"
-          android:layout_gravity="right"/>
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:src="@drawable/wallet_white"
+                android:layout_gravity="right"/>
 
-      <TextView
-          android:id="@+id/wallet_amt"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_weight="0.5"
-          android:text="@string/hello"
-          android:textColor="@color/white"
-          android:layout_gravity="left"
-          android:gravity="left"
-          android:textSize="14sp" />
-  </LinearLayout>
+            <TextView
+                android:id="@+id/wallet_amt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/hello"
+                android:textColor="@color/white"
+                android:layout_gravity="left"
+                android:gravity="left"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

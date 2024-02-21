@@ -204,8 +204,6 @@ public class Pending_order_Activity extends AppCompatActivity {
                         Log.e("Exception",e.toString());
                       //  Toast.makeText(Pending_order_Activity.this, "Exception"+e, Toast.LENGTH_SHORT).show();
                     }
-
-
                 }else{
 
                   //  Toast.makeText(Pending_order_Activity.this, "Something went wrong", Toast.LENGTH_SHORT).show();

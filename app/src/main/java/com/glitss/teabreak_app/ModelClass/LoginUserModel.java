@@ -83,6 +83,18 @@ public class LoginUserModel implements Serializable {
     @Expose
     public String outlet_code;
 
+    @SerializedName("password_status")
+    @Expose
+    public String password_status;
+
+    public String getPassword_status() {
+        return password_status;
+    }
+
+    public void setPassword_status(String password_status) {
+        this.password_status = password_status;
+    }
+
     public String getOutlet_code() {
         return outlet_code;
     }

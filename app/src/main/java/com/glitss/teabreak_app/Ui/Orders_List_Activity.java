@@ -335,7 +335,6 @@ public class Orders_List_Activity extends AppCompatActivity {
             Document document=new Document();
             // Location to save
             PdfWriter.getInstance(document, new FileOutputStream(dest));
-
             // Open to write
             document.open();
 
@@ -381,7 +380,7 @@ public class Orders_List_Activity extends AppCompatActivity {
                 mOrdermobileFont = new Font("urName", mHeadingFontSize, mColorAccent);
             }*/
 
-            Chunk mOrdermobileChunk = new Chunk("9390126304");
+            Chunk mOrdermobileChunk = new Chunk(SaveAppData.getLoginData().getUser_mobile());
             Paragraph mOrdermobileParagraph = new Paragraph(mOrdermobileChunk);
             mOrdermobileParagraph.setAlignment(Element.ALIGN_CENTER);
             document.add(mOrdermobileParagraph);
@@ -399,7 +398,7 @@ public class Orders_List_Activity extends AppCompatActivity {
             accounts1.addCell(getheaderCellR("Sudha"+"Rani"));
 
             accounts1.addCell(getBillRowCell("Mobile"));
-            accounts1.addCell(getheaderCellR("9390126304"));
+            accounts1.addCell(getheaderCellR(SaveAppData.getLoginData().getUser_mobile()));
 
             accounts1.addCell(getBillRowCell("Address"));
             accounts1.addCell(getheaderCellR("Hyderabad"));

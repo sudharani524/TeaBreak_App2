@@ -6,6 +6,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -15,13 +17,17 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.glitss.teabreak_app.Adapter.OrderedlistAdapter;
 import com.glitss.teabreak_app.ModelClass.OrderedlistModel;
+import com.glitss.teabreak_app.R;
 import com.glitss.teabreak_app.Utils.SaveAppData;
 import com.glitss.teabreak_app.ViewModel.TeaBreakViewModel;
 import com.glitss.teabreak_app.databinding.ActivityVendorOrderlistBinding;
@@ -52,6 +58,9 @@ public class VendorOrderlist extends AppCompatActivity {
     ArrayList<OrderedlistModel> list=new ArrayList<>();
     private  TeaBreakViewModel viewModel;
     OrderedlistAdapter orderedlistAdapter;
+    AlertDialog alertDialog;
+    LinearLayout ll_change_pswd,ll_logout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +90,12 @@ public class VendorOrderlist extends AppCompatActivity {
         Log.e("from_date",from_date);
         Log.e("to_date",to_date);
 
+        binding.backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         binding.etFromDate.setText(from_date);
         binding.etToDate.setText(to_date);
@@ -109,7 +124,49 @@ public class VendorOrderlist extends AppCompatActivity {
 
         Orderlist_api_call();
 
-        binding.logoutBtn.setOnClickListener(new View.OnClickListener() {
+   /*     binding.ivScreen.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("MissingInflatedId")
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder dialog=new AlertDialog.Builder(VendorOrderlist.this);
+                View view_alert= LayoutInflater.from(VendorOrderlist.this).inflate(R.layout.custom_layout,null);
+
+               LinearLayout ll_change_pswd=(LinearLayout) view_alert.findViewById(R.id.ll_change_pswd);
+              LinearLayout  ll_logout=(LinearLayout) view_alert.findViewById(R.id.ll_logout);
+                ImageView close_btn=(ImageView) view_alert.findViewById(R.id.close_btn);
+
+                ll_change_pswd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                        startActivity(new Intent(VendorOrderlist.this,ChangePasswordActivity.class));
+                    }
+                });
+                ll_logout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                        logout_api_call();
+                    }
+                });
+
+                close_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                    }
+                });
+
+                dialog.setView(view_alert);
+                dialog.setCancelable(true);
+                alertDialog = dialog.create();
+                alertDialog.show();
+            }
+        });*/
+
+
+
+     /*   binding.logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog logoutDialog = new AlertDialog.Builder(VendorOrderlist.this).setTitle("logout")
@@ -129,7 +186,7 @@ public class VendorOrderlist extends AppCompatActivity {
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert).setCancelable(false).show();
             }
-        });
+        });*/
 
         mDatasetlistner=new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -181,6 +238,8 @@ public class VendorOrderlist extends AppCompatActivity {
         });
 
     }
+
+
 
     private void Orderlist_api_call() {
         progressDialog.show();
@@ -320,10 +379,7 @@ public class VendorOrderlist extends AppCompatActivity {
 
         dialog.show();
     }
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
+
 
     private void to_dateselect() {
         Log.e("date_select"," To date select");
@@ -377,6 +433,11 @@ public class VendorOrderlist extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
 }

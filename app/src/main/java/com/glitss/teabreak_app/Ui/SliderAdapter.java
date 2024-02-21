@@ -24,7 +24,6 @@ public class SliderAdapter extends PagerAdapter {
 
     public SliderAdapter(Context context, List<Integer> url) {
         this.context = context;
-
         this.urlList = url;
     }
 
@@ -64,5 +63,6 @@ public class SliderAdapter extends PagerAdapter {
         View view = (View) object;
         viewPager.removeView(view);
     }
+
 }
 

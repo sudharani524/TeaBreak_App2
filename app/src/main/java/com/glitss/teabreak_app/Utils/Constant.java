@@ -25,11 +25,13 @@ import retrofit2.Response;
 
 public class Constant {
 
-    public static final String SERVER_BASE_URL = "https://teabreak.digitalrupay.com/webservices/";
+  //  public static final String SERVER_BASE_URL = "https://teabreak.digitalrupay.com/webservices/";
+
+    public static final String SERVER_BASE_URL = "https://teabreak.digitalrupay.com/dev/webservices/";
+
 
     public static final String ccavenue_test_url=" https://test.ccavenue.com";
     public static String token_status="";
-
     public static final String MERCHANT_SERVER_URL = "http://122.182.6.212:8080/";
     public static final String CCAVENUE_URL = "https://qasecure.ccavenue.com/transaction.do?command=initiateTransaction";
 
@@ -127,6 +129,6 @@ public class Constant {
             }
         });
 
-    }
 
+    }
 }

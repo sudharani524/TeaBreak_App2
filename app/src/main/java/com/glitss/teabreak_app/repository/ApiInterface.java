@@ -30,6 +30,7 @@ public interface ApiInterface {
     @Headers("Content-Type: application/json")
     @POST("login")
     Call<JsonObject> login(@Body JsonObject jsonObject);
+
     @Headers("Content-Type: application/json")
     @POST("login/user_logout")
     Call<JsonObject>logout (@Body JsonObject jsonObject);
@@ -83,8 +84,6 @@ public interface ApiInterface {
     @Headers("Content-Type: application/json")
     @POST("apis/get_payment_gateway_details")
     Call<JsonObject>payment_gateway_details(@Body JsonObject jsonObject);
-
-
 
     @Headers("Content-Type: application/json")
     @POST("apis/edit_dispatcher_order_item_list")
@@ -147,5 +146,12 @@ public interface ApiInterface {
     @Headers("Content-Type: application/json")
     @GET("login/transportation_list")
     Call<JsonObject> transport_type();
+
+
+    @Headers("Content-Type: application/json")
+    @POST("login/get_dispatcher_order_closed_list")
+    Call<JsonObject> closed_orders_list(@Body JsonObject jsonObject);
+
+
 
 }

@@ -42,8 +42,8 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsAdapter.View
         holder.binding.price.setText("₹"+lim.get(position).getPrice());
         holder.binding.listItemName.setText(lim.get(position).getLine_item_name());
         holder.binding.quantity.setText(lim.get(position).getPack_of_qty());
-
         String img= Constant.SERVER_BASE_URL+lim.get(position).getImage();
+
 //        Log.e("img",img);
         Picasso.get().load(img).fit().centerInside().into(holder.binding.dashboardImg);
 

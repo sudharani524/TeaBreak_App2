@@ -135,6 +135,8 @@ public class Orderitemscheck extends AppCompatActivity {
                             binding.Proceed.setEnabled(false);
                             binding.Proceed.setClickable(false);
                             Toast.makeText(Orderitemscheck.this, ""+jsonObject1.getString("text"), Toast.LENGTH_SHORT).show();
+
+                            startActivity(new Intent(Orderitemscheck.this,VendorDashboardActivity.class));
                             finish();
                             return;
                         }

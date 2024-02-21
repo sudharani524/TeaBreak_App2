@@ -17,6 +17,7 @@ public class ApiClient {
             .create();*/
 
     /* Initializing Retrofit object */
+
     public static Retrofit getClient(String url) {
         API_URL = url;
         Retrofit retrofit = null;

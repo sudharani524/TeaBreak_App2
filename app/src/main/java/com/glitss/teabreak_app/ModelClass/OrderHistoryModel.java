@@ -60,6 +60,30 @@ public class OrderHistoryModel implements Serializable {
     @Expose
     public String total_delivery_charges;
 
+    @SerializedName("order_status_name")
+    @Expose
+    public String order_status_name;
+
+    @SerializedName("payment_success_status_name")
+    @Expose
+    public String payment_success_status_name;
+
+    public String getOrder_status_name() {
+        return order_status_name;
+    }
+
+    public void setOrder_status_name(String order_status_name) {
+        this.order_status_name = order_status_name;
+    }
+
+    public String getPayment_success_status_name() {
+        return payment_success_status_name;
+    }
+
+    public void setPayment_success_status_name(String payment_success_status_name) {
+        this.payment_success_status_name = payment_success_status_name;
+    }
+
     public String getUsed_wallet_amount() {
         return used_wallet_amount;
     }

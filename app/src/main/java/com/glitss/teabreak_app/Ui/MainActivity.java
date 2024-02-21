@@ -1,8 +1,12 @@
 package com.glitss.teabreak_app.Ui;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -11,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -27,6 +32,11 @@ import com.glitss.teabreak_app.repository.ApiInterface;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -37,6 +47,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     String selected_user_role_id="";
     String FCMToken="token";
     private boolean isShowPassword = false;
-    String Walletamount;
+    String Walletamount,app_version="",update_flag="",latest_apk_url="";
 
 
     @Override
@@ -62,7 +73,10 @@ public class MainActivity extends AppCompatActivity {
         binding=ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         viewModel = ViewModelProviders.of(MainActivity.this).get(TeaBreakViewModel.class);
-        
+
+     //   checkfor_App_update();
+
+
         progressDialog=new ProgressDialog(this);
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
@@ -89,20 +103,121 @@ public class MainActivity extends AppCompatActivity {
         binding.loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               if(binding.username.getText().toString().isEmpty()){
-                   Snackbar.make(MainActivity.this,findViewById(android.R.id.content),"Please Enter Username",Snackbar.LENGTH_LONG).show();
-               } else if (binding.OperatorPassword.getText().toString().isEmpty()) {
-                   Snackbar.make(MainActivity.this,findViewById(android.R.id.content),"Please Enter Username",Snackbar.LENGTH_LONG).show();
-               } else if (selected_user_role_id.equalsIgnoreCase("")) {
-                   Snackbar.make(MainActivity.this,findViewById(android.R.id.content),"Please Select Role",Snackbar.LENGTH_LONG).show();
-               }else{
-                   login_api_call();
-               }
+                if(!Objects.equals(app_version, "")){
+                    try{
+                        if(app_version.equalsIgnoreCase(getPackageManager().getPackageInfo(getPackageName(), 0).versionName) || update_flag.equalsIgnoreCase("1")){
+                            if(binding.username.getText().toString().isEmpty()){
+                                Snackbar.make(MainActivity.this,findViewById(android.R.id.content),"Please Enter Username",Snackbar.LENGTH_LONG).show();
+                            } else if (binding.OperatorPassword.getText().toString().isEmpty()) {
+                                Snackbar.make(MainActivity.this,findViewById(android.R.id.content),"Please Enter Username",Snackbar.LENGTH_LONG).show();
+                            } else if (selected_user_role_id.equalsIgnoreCase("")) {
+                                Snackbar.make(MainActivity.this,findViewById(android.R.id.content),"Please Select Role",Snackbar.LENGTH_LONG).show();
+                            }else{
+                                login_api_call();
+                            }
+                        }else{
+                            alertDialogForUpdate();
+                        }
+                    }catch (PackageManager.NameNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
             }
         });
 
-
     }
+
+
+    private void checkfor_App_update() {
+        Log.e("check_for_update_mthd","check for update method");
+        AppUpdateManager appUpdateManager = AppUpdateManagerFactory.create(MainActivity.this);
+
+        // Returns an intent object that you use to check for an update.
+        com.google.android.play.core.tasks.Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
+        // Checks that the platform will allow the specified type of update.
+        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                    // This example applies an immediate update. To apply a flexible update
+                    // instead, pass in AppUpdateType.FLEXIBLE
+                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                // Request the update.
+
+                try {
+
+                    appUpdateManager.startUpdateFlowForResult(
+                            // Pass the intent that is returned by 'getAppUpdateInfo()'.
+                            appUpdateInfo,
+                            // an activity result launcher registered via registerForActivityResult
+                            AppUpdateType.IMMEDIATE,
+                            // Or pass 'AppUpdateType.FLEXIBLE' to newBuilder() for
+                            // flexible updates.
+                            this,101);
+                /*    appUpdateManager.startUpdateFlowForResult(
+                            // Pass the intent that is returned by 'getAppUpdateInfo()'.
+                            appUpdateInfo,
+                            // an activity result launcher registered via registerForActivityResult
+                            activityResultLauncher,
+                            // Or pass 'AppUpdateType.FLEXIBLE' to newBuilder() for
+                            // flexible updates.
+                            AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE)
+                                    .setAllowAssetPackDeletion(true)
+                                    .build());*/
+
+                } catch (IntentSender.SendIntentException e) {
+                    Log.e("Exception","Exception");
+                    throw new RuntimeException(e);
+                    // Toast.makeText(this, ""+e, Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+    }
+
+
+    private void alertDialogForUpdate() {
+
+        String message = "Please update latest version from play store";
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("Notification");
+        builder.setMessage(message);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                if (!Objects.equals(latest_apk_url, "")){
+                    Intent intent = new Intent();
+                    intent.setAction(android.content.Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(latest_apk_url));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    dialog.dismiss();
+/*
+                    String packageName = getPackageName();
+
+                    try {
+                       startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName)));
+                    } catch (android.content.ActivityNotFoundException anfe) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName)));
+                    }*/
+
+                }
+            }
+        });
+        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.dismiss();
+
+            }
+        });
+        builder.setCancelable(false);
+        builder.create();
+        builder.show();
+    }
+
 
     private void login_api_call() {
 
@@ -149,6 +264,7 @@ public class MainActivity extends AppCompatActivity {
                             //  startActivity(new Intent(MainActivity.this,VAADashboardActivity.class));
                             LoginUserModel operatorLoginData = new Gson().fromJson(jsonObj.getJSONObject("data").toString(), new TypeToken<LoginUserModel>() {
                             }.getType());
+
                             SaveAppData.saveOperatorLoginData(operatorLoginData);
 
 
@@ -189,17 +305,51 @@ public class MainActivity extends AppCompatActivity {
                             }*/
 
                             if(SaveAppData.getLoginData().getRole_id().equalsIgnoreCase("2")){
+
                                 startActivity(new Intent(MainActivity.this, DashboardActivity.class));
                                 finish();
+
+                             /*   if(SaveAppData.getLoginData().getPassword_status().equalsIgnoreCase("1")){
+                                    startActivity(new Intent(MainActivity.this, DashboardActivity.class));
+                                    finish();
+                                }else{
+                                    startActivity(new Intent(MainActivity.this, ChangePasswordActivity.class));
+                                    finish();
+                                }*/
+
                             } else if (SaveAppData.getLoginData().getRole_id().equalsIgnoreCase("3")) {
-                                startActivity(new Intent(MainActivity.this, VendorOrderlist.class));
+
+                                startActivity(new Intent(MainActivity.this, VendorDashboardActivity.class));
                                 finish();
+                                /*if(SaveAppData.getLoginData().getPassword_status().equalsIgnoreCase("1")){
+                                    startActivity(new Intent(MainActivity.this, VendorOrderlist.class));
+                                    finish();
+                                }else{
+                                    startActivity(new Intent(MainActivity.this, ChangePasswordActivity.class));
+                                    finish();
+                                }*/
+
                             } else if (SaveAppData.getLoginData().getRole_id().equalsIgnoreCase("4")) {
                                 startActivity(new Intent(MainActivity.this, AccountsDashboard.class));
                                 finish();
+                            /*    if(SaveAppData.getLoginData().getPassword_status().equalsIgnoreCase("1")){
+                                    startActivity(new Intent(MainActivity.this, AccountsDashboard.class));
+                                    finish();
+                                }else{
+                                    startActivity(new Intent(MainActivity.this, ChangePasswordActivity.class));
+                                    finish();
+                                }*/
+
                             } else{
-                                startActivity(new Intent(MainActivity.this, DashboardActivity.class));
+                                startActivity(new Intent(MainActivity.this, VendorDashboardActivity.class));
                                 finish();
+                               /* if(SaveAppData.getLoginData().getPassword_status().equalsIgnoreCase("1")){
+                                    startActivity(new Intent(MainActivity.this, VendorOrderlist.class));
+                                    finish();
+                                }else{
+                                    startActivity(new Intent(MainActivity.this, ChangePasswordActivity.class));
+                                    finish();
+                                }*/
                             }
 
                         }
@@ -245,6 +395,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void generate_fcm_token() {
+
         SharedPreferences pref = this.getSharedPreferences("MyPref", 0); // 0 - for private mode
         FCMToken = pref.getString("FCMToken", null);
 
@@ -299,6 +450,10 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         JSONObject jsonObject1=new JSONObject(jsonObject.toString());
                         String message=jsonObject1.getString("response");
+                        app_version=jsonObject1.getString("app_version");
+                        update_flag=jsonObject1.getString("update_flag");
+                        latest_apk_url=jsonObject1.getString("app_url");
+
                         //String text=jsonObject1.getString("text");
 
                         JSONArray jsonArray=new JSONArray();
@@ -359,6 +514,5 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
 
 }

@@ -133,6 +133,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
         object.addProperty("old_password",binding.tvOldpassword.getText().toString());
         object.addProperty("new_password",binding.tvNewpassword.getText().toString());
         object.addProperty("conf_password",binding.tvCpassword.getText().toString());
+        object.addProperty("password_status","1");
         viewModel.change_password(object).observe(ChangePasswordActivity.this, new Observer<JsonObject>() {
             @Override
             public void onChanged(JsonObject jsonObject) {

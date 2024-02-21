@@ -90,6 +90,19 @@ public class AccountsDashboard extends AppCompatActivity {
             }
         });
 
+        binding.closedOrdersList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(AccountsDashboard.this,ClosedOrdersListActivity.class));
+            }
+        });
+
+        binding.changePswd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(AccountsDashboard.this,ChangePasswordActivity.class));
+            }
+        });
 
         binding.approvedOrderList.setOnClickListener(new View.OnClickListener() {
             @Override
