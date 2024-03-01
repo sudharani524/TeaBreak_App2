@@ -83,7 +83,22 @@ public class SplashScreen extends AppCompatActivity {
                             finish();
                         }*/
 
-                    } else{
+                    }
+                    else if (SaveAppData.getLoginData().getRole_id().equalsIgnoreCase("1")) {
+
+                        startActivity(new Intent(SplashScreen.this, AdminDashBoard.class));
+                        finish();
+
+                      /*  if(SaveAppData.getLoginData().getPassword_status().equalsIgnoreCase("1")){
+                            startActivity(new Intent(SplashScreen.this, AccountsDashboard.class));
+                            finish();
+                        }else{
+                            startActivity(new Intent(SplashScreen.this, ChangePasswordActivity.class));
+                            finish();
+                        }*/
+
+                    }
+                    else{
 
                         startActivity(new Intent(SplashScreen.this, VendorDashboardActivity.class));
                         finish();

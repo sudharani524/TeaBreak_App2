@@ -918,7 +918,6 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
 
     private void delivery_mode_api_call() {
         progressDialog.show();
-
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("user_token", SaveAppData.getLoginData().getToken());
         jsonObject.addProperty("user_id",SaveAppData.getLoginData().getUser_id() );

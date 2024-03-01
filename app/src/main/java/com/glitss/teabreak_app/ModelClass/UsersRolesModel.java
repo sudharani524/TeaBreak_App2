@@ -10,6 +10,15 @@ public class UsersRolesModel implements Serializable {
     @SerializedName("role_id")
     @Expose
     public String role_id;
+    @SerializedName("route_name")
+    @Expose
+    public String route_name;
+    @SerializedName("route_id")
+    @Expose
+    public String route_id;
+    @SerializedName("route_code")
+    @Expose
+    public String route_code;
 
     @SerializedName("role_full_name")
     @Expose
@@ -66,8 +75,31 @@ public class UsersRolesModel implements Serializable {
     public void setRole_status(String role_status) {
         this.role_status = role_status;
     }
+//    RoutesFor Vendor Registeration
 
+    public String getRoute_name() {
+        return route_name;
+    }
 
+    public void setRoute_name(String route_name) {
+        this.route_name = route_name;
+    }
+
+    public String getRoute_id() {
+        return route_id;
+    }
+
+    public void setRoute_id(String route_id) {
+        this.route_id = route_id;
+    }
+
+    public String getRoute_code() {
+        return route_code;
+    }
+
+    public void setRoute_code(String route_code) {
+        this.route_code = route_code;
+    }
     //Farmer Details
 
     @SerializedName("farmer_id")

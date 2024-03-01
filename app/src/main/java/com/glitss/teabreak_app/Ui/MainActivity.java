@@ -329,7 +329,14 @@ public class MainActivity extends AppCompatActivity {
                                     finish();
                                 }*/
 
-                            } else if (SaveAppData.getLoginData().getRole_id().equalsIgnoreCase("4")) {
+                            }
+                            else if (SaveAppData.getLoginData().getRole_id().equalsIgnoreCase("1")) {
+
+                                startActivity(new Intent(MainActivity.this, AdminDashBoard.class));
+                                finish();
+
+                            }
+                            else if (SaveAppData.getLoginData().getRole_id().equalsIgnoreCase("4")) {
                                 startActivity(new Intent(MainActivity.this, AccountsDashboard.class));
                                 finish();
                             /*    if(SaveAppData.getLoginData().getPassword_status().equalsIgnoreCase("1")){

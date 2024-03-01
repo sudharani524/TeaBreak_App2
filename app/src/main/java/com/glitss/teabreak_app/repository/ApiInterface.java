@@ -151,7 +151,12 @@ public interface ApiInterface {
     @Headers("Content-Type: application/json")
     @POST("login/get_dispatcher_order_closed_list")
     Call<JsonObject> closed_orders_list(@Body JsonObject jsonObject);
+    @Headers("Content-Type: application/json")
+    @POST("apis/delivery_route_codes")
+    Call<JsonObject>routes(@Body JsonObject jsonObject);
 
-
+    @Headers("Content-Type: application/json")
+    @POST("apis/create_new_vendor_user")
+    Call<JsonObject>vendor_registration(@Body JsonObject jsonObject);
 
 }
