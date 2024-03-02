@@ -17,7 +17,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.glitss.teabreak_app.ModelClass.UsersRolesModel;
 import com.glitss.teabreak_app.R;
@@ -36,7 +35,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,11 +48,11 @@ public class RegistrationForm extends AppCompatActivity {
     ArrayList<UsersRolesModel> Route_list=new ArrayList<>();
     ArrayList<String> route_type=new ArrayList<>();
     ProgressDialog progressDialog;
+    String concatenatedText;
     Spinner RouteId;
-    private ActivityRegistrationFormBinding binding;
     String Selected_route="",selected_route_id="",selected_route_code="";
     Button submit;
-    EditText vendor_name,vendor_mobile,vendor_email,pincode,address,city,district_name,outlet_name,outlet_code,outlet_address,outlet_id,lat_long,State;
+    EditText vendor_name,vendor_mobile,vendor_email,pincode,address,city,district_name,outlet_name,outlet_code,outlet_address,outlet_id,lat_long,State,Longititude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,10 +74,16 @@ public class RegistrationForm extends AppCompatActivity {
         outlet_id=findViewById(R.id.outletid);
         city=findViewById(R.id.city);
         lat_long=findViewById(R.id.loglat);
-        State=findViewById(R.id.state);
+        State=findViewById(R.id.currentState);
+        Longititude=findViewById(R.id.cordinates);
         progressDialog=new ProgressDialog(RegistrationForm.this);
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
+        String text1 = lat_long.getText().toString();
+        String text2 = Longititude.getText().toString();
+        concatenatedText = text1 + text2;
+        Log.d("concatenatedText",concatenatedText);
+
         vendor_email.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -100,16 +104,9 @@ public class RegistrationForm extends AppCompatActivity {
                 if (!(matcher.matches() == true)) {
                     vendor_email.setError("Invalid email");
                 }
-
-
             }
         });
-
-
-
-
-
-       /* vendor_name.addTextChangedListener(new TextWatcher() {
+        vendor_name.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -122,14 +119,14 @@ public class RegistrationForm extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-               String input=editable.toString();
-               if(!input.matches("[a-zA-Z ]*")){
-                   vendor_name.setText("");
-                   vendor_name.setError("Only Letters are Allowed");
-               }
+                String input=editable.toString();
+                if(!input.matches("[a-zA-Z ]*")){
+                    vendor_name.setText("");
+                    vendor_name.setError("Only Letters are Allowed");
+                }
             }
         });
-*/
+
         back_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -137,12 +134,10 @@ public class RegistrationForm extends AppCompatActivity {
             }
         });
         RoutesApiCall();
-       submit.setOnClickListener(new View.OnClickListener() {
+        submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if(vendor_name.getText().toString().isEmpty()||vendor_email.getText().toString().isEmpty()||vendor_mobile.getText().toString().isEmpty()||outlet_name.getText().toString().isEmpty()||outlet_code.getText().toString().isEmpty()||outlet_id.getText().toString().isEmpty()||pincode.getText().toString().isEmpty()||city.getText().toString().isEmpty()||outlet_code.getText().toString().isEmpty()||district_name.getText().toString().isEmpty()||State.getText().toString().isEmpty()){
-                    Toast.makeText(RegistrationForm.this, "Please Fill Required Fields", Toast.LENGTH_SHORT).show();
                     vendor_name.setBackgroundResource(R.drawable.editext);
                     vendor_email.setBackgroundResource(R.drawable.editext);
                     vendor_mobile.setBackgroundResource(R.drawable.editext);
@@ -153,6 +148,8 @@ public class RegistrationForm extends AppCompatActivity {
                     city.setBackgroundResource(R.drawable.editext);
                     district_name.setBackgroundResource(R.drawable.editext);
                     State.setBackgroundResource(R.drawable.editext);
+                    Toast.makeText(RegistrationForm.this, "Please Fill Required Fields", Toast.LENGTH_SHORT).show();
+
                 }
                 else{
                     vendor_name.setBackgroundResource(android.R.drawable.edit_text);
@@ -164,16 +161,13 @@ public class RegistrationForm extends AppCompatActivity {
                     outlet_id.setBackgroundResource(android.R.drawable.edit_text);
                     city.setBackgroundResource(android.R.drawable.edit_text);
                     district_name.setBackgroundResource(android.R.drawable.edit_text);
-                   State.setBackgroundResource(android.R.drawable.edit_text);
+                    State.setBackgroundResource(android.R.drawable.edit_text);
                     SubmitApi_call();
                 }
             }
         });
 
     }
-
-
-
     private void SubmitApi_call() {
         progressDialog.show();
         JsonObject jsonObject = new JsonObject();
@@ -189,7 +183,7 @@ public class RegistrationForm extends AppCompatActivity {
         jsonObject.addProperty("outlet_name",outlet_name.getText().toString());
         jsonObject.addProperty("outlet_code",outlet_code.getText().toString());
         jsonObject.addProperty("outlet_address",outlet_address.getText().toString());
-        jsonObject.addProperty("lat_long",lat_long.getText().toString());
+        jsonObject.addProperty("lat_long",lat_long.getText().toString()+Longititude.getText().toString());
         jsonObject.addProperty("outlet_id",outlet_id.getText().toString());
         jsonObject.addProperty("route_code",selected_route_code);
         jsonObject.addProperty("state",State.getText().toString());

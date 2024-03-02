@@ -86,9 +86,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Full Name"
+                            android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                             android:background="@drawable/bg"
                             android:imeOptions="actionNext"
-                            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
+                            android:inputType="textCapCharacters"
                             android:padding="10dp"
                             android:textColor="@color/black"
                             android:textSize="18sp" />
@@ -235,7 +236,7 @@
                         android:background="@drawable/bg2"
                         android:orientation="vertical">
                         <EditText
-                            android:id="@+id/State"
+                            android:id="@+id/currentState"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="State"
@@ -281,15 +282,14 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text=" Enter State"
+                        android:text="Enter State"
                         android:textColor="@color/red"
                         android:textSize="15sp" />
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:background="@drawable/bg2"
-                        android:orientation="vertical">`
-
+                        android:orientation="vertical">
                         <EditText
                             android:id="@+id/state"
                             android:layout_width="match_parent"
@@ -302,7 +302,6 @@
                             android:textColor="@color/black"
                             android:textSize="18sp" />
                     </LinearLayout>
-
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/City"
@@ -468,7 +467,7 @@
                         android:id="@+id/latlog"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Enter Latitude and Longititude"
+                        android:text="Enter Latitude"
                         android:textColor="@color/red"
                         android:textSize="15sp" />
                     <EditText
@@ -476,7 +475,31 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="numberDecimal"
-                        android:hint="Enter Coordinates (latitude, longitude)"
+                        android:hint="Enter latitude"
+                        android:background="@drawable/bg"
+                        android:padding="10dp"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/Longititude"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Enter Longititude"
+                        android:textColor="@color/red"
+                        android:textSize="15sp" />
+                    <EditText
+                        android:id="@+id/cordinates"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:hint="Enter longitude"
                         android:background="@drawable/bg"
                         android:padding="10dp"
                         android:textColor="@color/black"
