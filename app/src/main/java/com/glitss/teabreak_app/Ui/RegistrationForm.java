@@ -5,8 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 
 import android.view.View;
@@ -34,6 +35,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,7 +52,7 @@ public class RegistrationForm extends AppCompatActivity {
     private ActivityRegistrationFormBinding binding;
     String Selected_route="",selected_route_id="",selected_route_code="";
     Button submit;
-    EditText vendor_name,vendor_mobile,vendor_email,pincode,address,city,district_name,outlet_name,outlet_code,outlet_address,outlet_id,lat_long;
+    EditText vendor_name,vendor_mobile,vendor_email,pincode,address,city,district_name,outlet_name,outlet_code,outlet_address,outlet_id,lat_long,State;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,9 +74,52 @@ public class RegistrationForm extends AppCompatActivity {
         outlet_id=findViewById(R.id.outletid);
         city=findViewById(R.id.city);
         lat_long=findViewById(R.id.loglat);
+        State=findViewById(R.id.state);
         progressDialog=new ProgressDialog(RegistrationForm.this);
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
+        vendor_email.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+                Pattern pattern;
+                Matcher matcher;
+                String EMAIL_PATTERN = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+                pattern = Pattern.compile(EMAIL_PATTERN);
+                CharSequence cs = (CharSequence) editable;
+                matcher = pattern.matcher(cs);
+                if (!(matcher.matches() == true)) {
+                    vendor_email.setError("Invalid email");
+                }
+            }
+        });
+        vendor_name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+               String input=editable.toString();
+               if(!input.matches("[a-zA-Z]*")){
+                   vendor_name.setText("");
+                   vendor_name.setError("Only Letters are Allowed");
+               }
+            }
+        });
 
         back_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,7 +131,7 @@ public class RegistrationForm extends AppCompatActivity {
        submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(vendor_name.getText().toString().isEmpty()||vendor_email.getText().toString().isEmpty()||vendor_mobile.getText().toString().isEmpty()||outlet_name.getText().toString().isEmpty()||outlet_code.getText().toString().isEmpty()||outlet_id.getText().toString().isEmpty()||pincode.getText().toString().isEmpty()||city.getText().toString().isEmpty()||outlet_code.getText().toString().isEmpty()||district_name.getText().toString().isEmpty()){
+                if(vendor_name.getText().toString().isEmpty()||vendor_email.getText().toString().isEmpty()||vendor_mobile.getText().toString().isEmpty()||outlet_name.getText().toString().isEmpty()||outlet_code.getText().toString().isEmpty()||outlet_id.getText().toString().isEmpty()||pincode.getText().toString().isEmpty()||city.getText().toString().isEmpty()||outlet_code.getText().toString().isEmpty()||district_name.getText().toString().isEmpty()||State.getText().toString().isEmpty()){
                     Toast.makeText(RegistrationForm.this, "Please Fill Required Fields", Toast.LENGTH_SHORT).show();
                     vendor_name.setBackgroundResource(R.drawable.editext);
                     vendor_email.setBackgroundResource(R.drawable.editext);
@@ -96,6 +142,7 @@ public class RegistrationForm extends AppCompatActivity {
                     outlet_id.setBackgroundResource(R.drawable.editext);
                     city.setBackgroundResource(R.drawable.editext);
                     district_name.setBackgroundResource(R.drawable.editext);
+                    State.setBackgroundResource(R.drawable.editext);
                 }
                 else{
                     vendor_name.setBackgroundResource(android.R.drawable.edit_text);
@@ -107,6 +154,7 @@ public class RegistrationForm extends AppCompatActivity {
                     outlet_id.setBackgroundResource(android.R.drawable.edit_text);
                     city.setBackgroundResource(android.R.drawable.edit_text);
                     district_name.setBackgroundResource(android.R.drawable.edit_text);
+                   State.setBackgroundResource(android.R.drawable.edit_text);
                     SubmitApi_call();
                 }
             }
@@ -131,6 +179,7 @@ public class RegistrationForm extends AppCompatActivity {
         jsonObject.addProperty("lat_long",lat_long.getText().toString());
         jsonObject.addProperty("outlet_id",outlet_id.getText().toString());
         jsonObject.addProperty("route_code",selected_route_code);
+        jsonObject.addProperty("state",State.getText().toString());
         ApiInterface apiInterface = ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
         Call<JsonObject> vendor_registration = apiInterface.vendor_registration(jsonObject);
         vendor_registration.enqueue(new Callback<JsonObject>() {
