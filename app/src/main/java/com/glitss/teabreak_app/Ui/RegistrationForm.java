@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.glitss.teabreak_app.ModelClass.UsersRolesModel;
 import com.glitss.teabreak_app.R;
@@ -35,6 +36,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -98,9 +100,16 @@ public class RegistrationForm extends AppCompatActivity {
                 if (!(matcher.matches() == true)) {
                     vendor_email.setError("Invalid email");
                 }
+
+
             }
         });
-        vendor_name.addTextChangedListener(new TextWatcher() {
+
+
+
+
+
+       /* vendor_name.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -114,13 +123,13 @@ public class RegistrationForm extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                String input=editable.toString();
-               if(!input.matches("[a-zA-Z]*")){
+               if(!input.matches("[a-zA-Z ]*")){
                    vendor_name.setText("");
                    vendor_name.setError("Only Letters are Allowed");
                }
             }
         });
-
+*/
         back_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -131,6 +140,7 @@ public class RegistrationForm extends AppCompatActivity {
        submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 if(vendor_name.getText().toString().isEmpty()||vendor_email.getText().toString().isEmpty()||vendor_mobile.getText().toString().isEmpty()||outlet_name.getText().toString().isEmpty()||outlet_code.getText().toString().isEmpty()||outlet_id.getText().toString().isEmpty()||pincode.getText().toString().isEmpty()||city.getText().toString().isEmpty()||outlet_code.getText().toString().isEmpty()||district_name.getText().toString().isEmpty()||State.getText().toString().isEmpty()){
                     Toast.makeText(RegistrationForm.this, "Please Fill Required Fields", Toast.LENGTH_SHORT).show();
                     vendor_name.setBackgroundResource(R.drawable.editext);
@@ -161,6 +171,9 @@ public class RegistrationForm extends AppCompatActivity {
         });
 
     }
+
+
+
     private void SubmitApi_call() {
         progressDialog.show();
         JsonObject jsonObject = new JsonObject();

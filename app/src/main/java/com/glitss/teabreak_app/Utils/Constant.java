@@ -25,16 +25,13 @@ import retrofit2.Response;
 
 public class Constant {
 
- //   public static final String SERVER_BASE_URL = "https://teabreak.digitalrupay.com/webservices/";
+    public static final String SERVER_BASE_URL = "https://teabreak.digitalrupay.com/webservices/";
 
-    public static final String SERVER_BASE_URL = "https://teabreak.digitalrupay.com/dev/webservices/";
-
-
+  //  public static final String SERVER_BASE_URL = "https://teabreak.digitalrupay.com/dev/webservices/";
     public static final String ccavenue_test_url=" https://test.ccavenue.com";
     public static String token_status="";
     public static final String MERCHANT_SERVER_URL = "http://122.182.6.212:8080/";
     public static final String CCAVENUE_URL = "https://qasecure.ccavenue.com/transaction.do?command=initiateTransaction";
-
 
     public static void logout_api_call(Context context) {
         JsonObject object = new JsonObject();
@@ -56,7 +53,6 @@ public class Constant {
                         if(jsonObj.getString("message").equalsIgnoreCase("Successfully Logout")){
                             SaveAppData.saveOperatorLoginData(null);
                             context.startActivity(new Intent(context, MainActivity.class));
-
                         }
 
                     } catch (JSONException e) {
@@ -68,7 +64,6 @@ public class Constant {
                 }else{
                     Toast.makeText(context, "null", Toast.LENGTH_SHORT).show();
                 }
-
             }
 
             @Override
@@ -77,6 +72,7 @@ public class Constant {
             }
         });
     }
+
 
 
     public static void check_token_status_api_call(Context context) {
@@ -112,7 +108,6 @@ public class Constant {
                 else{
                     Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 

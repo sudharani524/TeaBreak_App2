@@ -164,4 +164,14 @@ public interface ApiInterface {
     @POST("apis/get_user_transaction_history")
     Call<JsonObject>transaction_history(@Body JsonObject jsonObject);
 
+
+    @Headers("Content-Type: application/json")
+    @POST("login/insert_payments_test")
+    Call<JsonObject>test_insert_payments(@Body JsonObject jsonObject);
+
+    @Headers("Content-Type: application/json")
+    @POST("login/insert_pymnt_bfr_hit_pymnt_gtwy")
+    Call<JsonObject>insert_payments_bfr_hit(@Body JsonObject jsonObject);
+
+
 }

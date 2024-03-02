@@ -44,6 +44,8 @@ public class TeaBreakViewModel extends ViewModel {
     private MutableLiveData<JsonObject> request_hash_status;
     private MutableLiveData<JsonObject> closed_orders_list_status;
     private MutableLiveData<JsonObject> transaction_history_status;
+    private MutableLiveData<JsonObject> insert_test_payment_status;
+    private MutableLiveData<JsonObject> insert_payment_bfr_hit_status;
 
 
     public LiveData<JsonObject> get_list_items() {
@@ -92,6 +94,15 @@ public class TeaBreakViewModel extends ViewModel {
         insert_order_api_call(jsonObject);
 
         return insert_order_status;
+    }
+
+
+
+    public LiveData<JsonObject> insert_payments_bfr_hit(JsonObject jsonObject) {
+        insert_payment_bfr_hit_status = new MutableLiveData<JsonObject>();
+        insert_payment_bfr_hit_api_call(jsonObject);
+
+        return insert_payment_bfr_hit_status;
     }
 
     public LiveData<JsonObject> get_order_items(JsonObject jsonObject) {
@@ -202,6 +213,11 @@ public class TeaBreakViewModel extends ViewModel {
         return insert_payments_status;
     }
 
+    public LiveData<JsonObject>insert_test_payments(JsonObject jsonObject){
+        insert_test_payment_status = new MutableLiveData<JsonObject>(jsonObject);
+        insert_test_payments_api_call(jsonObject);
+        return insert_test_payment_status;
+    }
 
     public LiveData<JsonObject>get_transport_type(){
         transport_type_status = new MutableLiveData<JsonObject>();
@@ -300,9 +316,29 @@ public class TeaBreakViewModel extends ViewModel {
         });
     }
 
+
+    private void insert_test_payments_api_call(JsonObject jsonObject) {
+        ApiInterface apiInterface=ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
+        Call<JsonObject>insert_paymentss= apiInterface.test_insert_payments(jsonObject);
+        insert_paymentss.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.body()!= null){
+                    insert_test_payment_status.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("TAG_NAME", t.toString());
+            }
+        });
+    }
+
+
     private void insert_payments_api_call(JsonObject jsonObject) {
         ApiInterface apiInterface=ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
-        Call<JsonObject>insert_paymentss= apiInterface.insert_payment(jsonObject);
+        Call<JsonObject>insert_paymentss= apiInterface.test_insert_payments(jsonObject);
         insert_paymentss.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -606,6 +642,28 @@ public class TeaBreakViewModel extends ViewModel {
             }
         });
 
+    }
+
+
+
+
+    private void insert_payment_bfr_hit_api_call(JsonObject jsonObject) {
+        ApiInterface apiInterface = ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
+        Call<JsonObject> insert_api = apiInterface.insert_payments_bfr_hit(jsonObject);
+        insert_api.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                if (response.body()!= null){
+                    insert_payment_bfr_hit_status.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("TAG_NAME", t.toString());
+            }
+        });
     }
 
     private void insert_order_api_call(JsonObject jsonObject) {

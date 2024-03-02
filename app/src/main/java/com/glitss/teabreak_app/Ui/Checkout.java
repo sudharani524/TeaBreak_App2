@@ -335,6 +335,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                     return;
                 }else{
                     create_order_api_call();
+
                 }
             }
         });
@@ -420,8 +421,6 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                         wallet_amount=jsonObject1.getJSONObject("data").getString("wallet_amount");
                         Log.e("wallet_amt_money",wallet_amount);
 
-
-
                     } catch (JSONException e) {
                         //throw new RuntimeException(e);
                         Log.e("Exception", String.valueOf(e));
@@ -430,7 +429,6 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
 
 
                 }else{
-
                     //   Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                     Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
 
@@ -496,6 +494,66 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
         });
     }
 
+
+
+
+
+    private void insert_payment_bfr_hit() {
+        Log.e("create_order","create_order");
+        progressDialog.show();
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("order_id", order_no2);
+        jsonObject.addProperty("trans_date","08/01/2024 18:47:28" );
+        jsonObject.addProperty("user_id",Integer.valueOf(SaveAppData.getLoginData().getLogin_user_id()));
+        jsonObject.addProperty("billing_name",SaveAppData.getLoginData().getName());
+        jsonObject.addProperty("billing_email",SaveAppData.getLoginData().getUser_email());
+        jsonObject.addProperty("billing_city",SaveAppData.getLoginData().getCity());
+        jsonObject.addProperty("billing_tel",Long.valueOf(SaveAppData.getLoginData().getUser_mobile()));
+        jsonObject.addProperty("amount",Float.valueOf(t_amt));
+        jsonObject.addProperty("delivery_zip",Integer.valueOf(SaveAppData.getLoginData().getPincode()));
+
+
+
+        viewModel.insert_payments_bfr_hit(jsonObject).observe(Checkout.this, new Observer<JsonObject>() {
+            @Override
+            public void onChanged(JsonObject jsonObject) {
+
+                if (jsonObject != null){
+
+                    if(progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
+                    Log.d("TAG","complaint_names "+jsonObject);
+
+                    try {
+                        JSONObject jsonObject1=new JSONObject(jsonObject.toString());
+                        String message=jsonObject1.getString("message");
+
+                      Log.e("message",message);
+
+
+                    } catch (JSONException e) {
+                        //throw new RuntimeException(e);
+                        Log.e("Exception", String.valueOf(e));
+                        //  Toast.makeText(Checkout.this, ""+e, Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }else{
+                    if(progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
+                    //     Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
+
+                }
+
+            }
+        });
+    }
+
+
     private void create_order_api_call() {
         Log.e("create_order","create_order");
         progressDialog.show();
@@ -554,6 +612,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                             Log.e("success","success");
                             alertDialog.dismiss();
 
+                            insert_payment_bfr_hit();
                             payment_gateway_details_api_call();
 
                         }
@@ -869,7 +928,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
         Log.e("nameee",SaveAppData.getLoginData().getName());
         orderDetails.setBillingAddress(SaveAppData.getLoginData().getAddress());
         orderDetails.setBillingCountry(SaveAppData.getLoginData().getCountry());
-        orderDetails.setBillingState(SaveAppData.getLoginData().getCountry());
+        orderDetails.setBillingState(SaveAppData.getLoginData().getState());
         orderDetails.setBillingCity(SaveAppData.getLoginData().getCity());
         orderDetails.setBillingZip(SaveAppData.getLoginData().getPincode());
         orderDetails.setBillingTel(SaveAppData.getLoginData().getUser_mobile());
@@ -1161,15 +1220,19 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
         Log.e("jsonObject", String.valueOf(jsonObject));
         return jsonObject;
     }
+
     @Override
     public void onTransactionResponse(Bundle bundle) {
         Log.e("transaction_res","onTransactionResponse"+bundle.toString());
         Log.e("transaction_res","onTransactionResponse22"+bundle);
         //  Log.e("order_status",bundle.getString("order_status"));
 
+
+
         JSONObject jsonObject = convertBundleToJsonObject(bundle);
 
         insert_payment_api_call(jsonObject);
+
 
      /*   Intent intent=new Intent(Checkout.this,StatusActivity.class);
         intent.putExtra("orderno",bundle.getString("orderno"));
@@ -1182,6 +1245,9 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
         startActivity(intent);*/
 
     }
+
+
+
 
     private void
     insert_payment_api_call(JSONObject bundle) {
@@ -1348,6 +1414,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
     public void onErrorOccurred(String s) {
         Log.e("transaction_res","onErrorOccurred "+s);
         insert_payment_api_call2(s);
+
     }
 
 
@@ -1356,6 +1423,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
     public void onCancelTransaction(String s) {
         Log.e("transaction_res","onCancelTransaction"+s);
         insert_payment_api_call2(s);
+
     }
 
     private void insert_payment_api_call2(String s) {
@@ -1403,7 +1471,6 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
         catch (Exception e) {
             Log.e("Exception", String.valueOf(e));
             //  throw new RuntimeException(e);
-
         }
 
 
@@ -1428,14 +1495,12 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
 
                         if(jsonObject1.getString("order_status").equalsIgnoreCase("Success")){
                             Log.e("insert_api","insert_api");
-
                            /* intent.putExtra("tracking_id",bundle.getString("tracking_id"));
                             intent.putExtra("trans_date",bundle.getString("trans_date"));
                             intent.putExtra("billing_name",bundle.getString("billing_name"));
                             intent.putExtra("amount",bundle.getString("amount"));
                             intent.putExtra("bank_ref_no",bundle.getString("bank_ref_no"));
                             intent.putExtra("order_status",bundle.getString("order_status"));*/
-
                         }
 
                     } catch (JSONException e) {
@@ -1455,6 +1520,8 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
             }
         });
     }
+
+
 
 }
 

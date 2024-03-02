@@ -89,6 +89,7 @@ public class Orders_List_Activity extends AppCompatActivity {
         progressDialog=new ProgressDialog(Orders_List_Activity.this);
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
+
         viewModel = ViewModelProviders.of(Orders_List_Activity.this).get(TeaBreakViewModel.class);
 
 
@@ -164,15 +165,14 @@ public class Orders_List_Activity extends AppCompatActivity {
                         progressDialog.dismiss();
                     }
                     Log.d("Logout","logout"+jsonObject);
-
-
                     if (jsonObject.get("message").getAsString().equalsIgnoreCase("Successfully Logout")){
                         SaveAppData.saveOperatorLoginData(null);
                         startActivity(new Intent(Orders_List_Activity.this, MainActivity.class));
                         finish();
                         return;
                     }
-                }else{
+                }
+                else{
                     if(progressDialog.isShowing()){
                         progressDialog.dismiss();
                     }
@@ -650,7 +650,10 @@ public class Orders_List_Activity extends AppCompatActivity {
         viewModel.get_order_items(object).observe(Orders_List_Activity.this, new Observer<JsonObject>() {
             @Override
             public void onChanged(JsonObject jsonObject) {
+
                 if(progressDialog.isShowing()){
+                    Log.e("progresss_dialogue","progress_dialogue");
+
                     progressDialog.dismiss();
                 }
                 if (jsonObject != null){
