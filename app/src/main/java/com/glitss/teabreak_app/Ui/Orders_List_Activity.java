@@ -641,8 +641,6 @@ public class Orders_List_Activity extends AppCompatActivity {
 
 
 
-
-
     private void order_list_api_call() {
         progressDialog.show();
         JsonObject object = new JsonObject();

@@ -67,6 +67,7 @@
                     android:layout_marginRight="5dp"
                     android:src="@drawable/logout_white" />
 -->
+
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
     </LinearLayout>

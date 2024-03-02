@@ -61,7 +61,7 @@ public class Accountant_Orderlist_Adapter extends RecyclerView.Adapter<Accountan
         holder.payment_status.setText(od_list.get(position).getPayment_status());*/
 
         holder.binding.orderId.setText(od_list.get(position).getOrder_id());
-        holder.binding.trackingId.setText(od_list.get(position).getPayment_trans_id());
+        holder.binding.transactionId.setText(od_list.get(position).getPayment_trans_id());
         holder.binding.paymentMode.setText(od_list.get(position).getPayment_mode());
         holder.binding.paidAmount.setText("₹"+od_list.get(position).getPaid_amount());
         holder.binding.walletUsedAmt.setText("₹"+od_list.get(position).getUsed_wallet_amount());

@@ -50,6 +50,8 @@ import org.json.JSONObject;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -78,7 +80,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
     String order_no;
     String order_no2="";
     Float t_amt;
-   static String availability_date="";
+    static String availability_date="";
     ArrayList<String> as_dates;
     TextView delivery_date;
     static String wallet_amount="";
@@ -159,53 +161,53 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                     binding.Proceed.setEnabled(false);
                 }
                 if(selected_delivery_mode_id.equalsIgnoreCase("")){
-                   //  Toast.makeText(Checkout.this, "Please Select the delivery mode", Toast.LENGTH_SHORT).show();
+                    //  Toast.makeText(Checkout.this, "Please Select the delivery mode", Toast.LENGTH_SHORT).show();
                     binding.Proceed.setEnabled(true);
                     Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Please select the delivery mode",Snackbar.LENGTH_LONG).show();
                     return;
                 }
 
-                 if(!selected_delivery_mode_id.equalsIgnoreCase("")){
+                if(!selected_delivery_mode_id.equalsIgnoreCase("")){
 
-                     binding.Proceed.setEnabled(true);
+                    binding.Proceed.setEnabled(true);
 
-                     if(selected_delivery_mode_id.equalsIgnoreCase("2")){
-                         for(int i=0;i<cart_list.size();i++){
-                             if(cart_list.get(i).getLine_item_name().contains("Toast") || cart_list.get(i).getLine_item_name().contains("Cream Roll") || cart_list.get(i).getLine_item_name().contains("Cups")){
-                                 //  Toast.makeText(Checkout.this, "Please Remove the Items Toast,Cream Roll,Cups for courier delivery", Toast.LENGTH_SHORT).show();
+                    if(selected_delivery_mode_id.equalsIgnoreCase("2")){
+                        for(int i=0;i<cart_list.size();i++){
+                            if(cart_list.get(i).getLine_item_name().contains("Toast") || cart_list.get(i).getLine_item_name().contains("Cream Roll") || cart_list.get(i).getLine_item_name().contains("Cups")){
+                                //  Toast.makeText(Checkout.this, "Please Remove the Items Toast,Cream Roll,Cups for courier delivery", Toast.LENGTH_SHORT).show();
 
-                                 AlertDialog.Builder dialog=new AlertDialog.Builder(Checkout.this);
-                                 dialog.setCancelable(false);
-                                 dialog.setMessage("Toast,Cream,Cups are not delivered by courier");
+                                AlertDialog.Builder dialog=new AlertDialog.Builder(Checkout.this);
+                                dialog.setCancelable(false);
+                                dialog.setMessage("Toast,Cream,Cups are not delivered by courier");
 
-                                 dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                     @Override
-                                     public void onClick(DialogInterface dialog, int which) {
-                                         dialog.dismiss();
-                                     }
-                                 });
+                                dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
 
-                                 dialog.create();
-                                 dialog.show();
+                                dialog.create();
+                                dialog.show();
 
-                                 return;
+                                return;
 
-                             }/*else{
+                            }/*else{
                                  pay_method();
                              }*/
-                         }
-                     }
+                        }
+                    }
 
-                     pay_method();
+                    pay_method();
 
 
 
-                 }
+                }
                 else{
-                     binding.Proceed.setEnabled(true);
-                     //   Toast.makeText(Checkout.this, "Please Select the delivery mode", Toast.LENGTH_SHORT).show();
-                     Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Please select the delivery mode",Snackbar.LENGTH_LONG).show();
-                 }
+                    binding.Proceed.setEnabled(true);
+                    //   Toast.makeText(Checkout.this, "Please Select the delivery mode", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Please select the delivery mode",Snackbar.LENGTH_LONG).show();
+                }
 
 
             }
@@ -281,9 +283,9 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                         Log.e("t_amttt", String.valueOf(t_amt));
                         total_amt.setText(String.valueOf( "₹"+df.format(t_amt)));
                     }
-                 //   t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges))-Float.parseFloat(wallet_amount);
+                    //   t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges))-Float.parseFloat(wallet_amount);
                     // Float t_amt_with_wallet=t_amt-Float.parseFloat(wallet_amount);
-                   // total_amt.setText(String.valueOf( "₹"+df.format(t_amt)));
+                    // total_amt.setText(String.valueOf( "₹"+df.format(t_amt)));
                 }else{
                     wallet_status="0";
                     if(selected_delivery_mode_id.equalsIgnoreCase("2")){
@@ -297,8 +299,8 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                         Log.e("t_amt2", String.valueOf(t_amt));
 
                     }
-                //    t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges));
-                  //  total_amt.setText(String.valueOf( "₹"+df.format(t_amt)));
+                    //    t_amt=Float.sum(Float.parseFloat(t_amount),Float.parseFloat(Delivery_charges));
+                    //  total_amt.setText(String.valueOf( "₹"+df.format(t_amt)));
                 }
             }
         });
@@ -311,7 +313,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
             @Override
             public void onClick(View v) {
                 Log.e("close","close");
-               alertDialog.dismiss();
+                alertDialog.dismiss();
             }
         });
 
@@ -327,7 +329,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                 }*/
 
                 if(selected_delivery_mode_id.equalsIgnoreCase("")){
-                //    Toast.makeText(Checkout.this, "Please Select the delivery mode", Toast.LENGTH_SHORT).show();
+                    //    Toast.makeText(Checkout.this, "Please Select the delivery mode", Toast.LENGTH_SHORT).show();
                     Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Please Select the delivery mode",Snackbar.LENGTH_LONG).show();
 
                     return;
@@ -383,13 +385,13 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
 
                         Log.e("Exception", String.valueOf(e));
 
-                      //  Toast.makeText(Checkout.this, ""+e, Toast.LENGTH_SHORT).show();
+                        //  Toast.makeText(Checkout.this, ""+e, Toast.LENGTH_SHORT).show();
                     }
 
 
                 }else{
 
-                 //   Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    //   Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                     Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
 
                 }
@@ -423,13 +425,13 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                     } catch (JSONException e) {
                         //throw new RuntimeException(e);
                         Log.e("Exception", String.valueOf(e));
-                       // Toast.makeText(Checkout.this, ""+e, Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(Checkout.this, ""+e, Toast.LENGTH_SHORT).show();
                     }
 
 
                 }else{
 
-                 //   Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    //   Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                     Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
 
 
@@ -466,7 +468,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
 
                         String message=jsonObject1.getString("message");
 
-                     //   Toast.makeText(Checkout.this, ""+message, Toast.LENGTH_SHORT).show();
+                        //   Toast.makeText(Checkout.this, ""+message, Toast.LENGTH_SHORT).show();
                         for(int i=0;i<jsonArray.length();i++){
                             ListItemsModel listItemsModel = new Gson().fromJson(jsonArray.get(i).toString(), new TypeToken<ListItemsModel>() {
                             }.getType());
@@ -479,13 +481,13 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
 
                     } catch (JSONException e) {
                         Log.e("Exception", String.valueOf(e));
-                     //   Toast.makeText(Checkout.this, ""+e, Toast.LENGTH_SHORT).show();
+                        //   Toast.makeText(Checkout.this, ""+e, Toast.LENGTH_SHORT).show();
                     }
 
 
                 }else{
 
-               //     Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    //     Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                     Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
 
                 }
@@ -544,7 +546,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                         order_no2=data_object.getString("order_no");
 
 
-                   //     Toast.makeText(Checkout.this, "data"+message, Toast.LENGTH_SHORT).show();
+                        //     Toast.makeText(Checkout.this, "data"+message, Toast.LENGTH_SHORT).show();
                         Log.e("message",message);
 
                         if(message.equalsIgnoreCase("success")){
@@ -561,7 +563,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                     } catch (JSONException e) {
                         //throw new RuntimeException(e);
                         Log.e("Exception", String.valueOf(e));
-                      //  Toast.makeText(Checkout.this, ""+e, Toast.LENGTH_SHORT).show();
+                        //  Toast.makeText(Checkout.this, ""+e, Toast.LENGTH_SHORT).show();
                     }
 
 
@@ -569,7 +571,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                     if(progressDialog.isShowing()){
                         progressDialog.dismiss();
                     }
-               //     Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    //     Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                     Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
 
                 }
@@ -632,19 +634,19 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
 
 
 
-                      //  secure_token_api_call();
+                        //  secure_token_api_call();
 
                         genearate_request_hash();
 
                     } catch (JSONException e) {
                         //throw new RuntimeException(e);
                         Log.e("Exception", String.valueOf(e));
-                       //  Toast.makeText(Checkout.this, ""+e, Toast.LENGTH_SHORT).show();
+                        //  Toast.makeText(Checkout.this, ""+e, Toast.LENGTH_SHORT).show();
                     }
 
                 }else{
 
-                   // Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                     Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
 
                 }
@@ -652,7 +654,6 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
             }
         });
     }
-
 
   /*  private void secure_token_api_call() {
         Log.e("secure_token","secure_token_mthd");
@@ -719,14 +720,14 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
 
     private void genearate_request_hash() {
         Log.e("generate_hash","generate_hash");
-         JsonObject object = new JsonObject();
-         object.addProperty("order_no", order_no2);
-         object.addProperty("currency", "INR");
-     //    object.addProperty("amount","1.00");
-         object.addProperty("amount",df.format(t_amt));
+        JsonObject object = new JsonObject();
+        object.addProperty("order_no", order_no2);
+        object.addProperty("currency", "INR");
+        object.addProperty("amount","1.00");
+        //   object.addProperty("amount",df.format(t_amt));
 
 
-          viewModel.get_request_hash(object).observe(Checkout.this, new Observer<JsonObject>() {
+        viewModel.get_request_hash(object).observe(Checkout.this, new Observer<JsonObject>() {
             @Override
             public void onChanged(JsonObject jsonObject) {
 
@@ -744,23 +745,22 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                                 initiatePayment1();
 
                             }else{
-                              //  Toast.makeText(mContext, "RequestHash is null...please try again", Toast.LENGTH_SHORT).show();
+                                //  Toast.makeText(mContext, "RequestHash is null...please try again", Toast.LENGTH_SHORT).show();
                                 Snackbar.make(Checkout.this,findViewById(android.R.id.content),"RequestHash is null...please try again",Snackbar.LENGTH_LONG).show();
                             }
-
                         }
 
 
                     } catch (JSONException e) {
                         //throw new RuntimeException(e);
                         Log.e("Exception", String.valueOf(e));
-                       // Toast.makeText(Checkout.this, "Exception"+e, Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(Checkout.this, "Exception"+e, Toast.LENGTH_SHORT).show();
                     }
 
 
                 }else{
 
-                 //   Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    //   Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                     Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
 
                 }
@@ -851,8 +851,6 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
         AvenuesApplication.startTransaction(Checkout.this, orderDetails);
 */
 
-
-
         AvenueOrder orderDetails = new AvenueOrder();
         orderDetails.setOrderId(order_no2);
         Log.e("order",order_no2);
@@ -860,8 +858,8 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
         orderDetails.setAccessCode(accessCode);
         orderDetails.setMerchantId(merchantId);
         orderDetails.setCurrency("INR");
-        orderDetails.setAmount(df.format(t_amt));
-     //   orderDetails.setAmount("1.00");
+        //  orderDetails.setAmount(df.format(t_amt));
+        orderDetails.setAmount("1.00");
         orderDetails.setRedirectUrl(Constant.SERVER_BASE_URL+"response_handler_url.php");
         orderDetails.setCancelUrl(Constant.SERVER_BASE_URL+"response_handler_url.php");
         orderDetails.setCustomerId(SaveAppData.getLoginData().getUser_mobile());
@@ -918,6 +916,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
 
     private void delivery_mode_api_call() {
         progressDialog.show();
+
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("user_token", SaveAppData.getLoginData().getToken());
         jsonObject.addProperty("user_id",SaveAppData.getLoginData().getUser_id() );
@@ -947,7 +946,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
 
                         JSONArray jsonArray=jsonObj.getJSONArray("data");
 
-                       // Toast.makeText(Checkout.this, ""+message, Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(Checkout.this, ""+message, Toast.LENGTH_SHORT).show();
 
                         order_list.clear();
                         order_type.clear();
@@ -961,13 +960,13 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                         order_list.add(order_delivery_type2);
 
                         if(message.equalsIgnoreCase("success")){
-                           for(int i=0;i<jsonArray.length();i++){
-                               Order_delivery_type order_delivery_type = new Gson().fromJson(jsonArray.getJSONObject(i).toString(), new TypeToken<Order_delivery_type>() {
-                               }.getType());
+                            for(int i=0;i<jsonArray.length();i++){
+                                Order_delivery_type order_delivery_type = new Gson().fromJson(jsonArray.getJSONObject(i).toString(), new TypeToken<Order_delivery_type>() {
+                                }.getType());
 
-                               order_list.add(order_delivery_type);
-                               order_type.add(order_delivery_type.getSub_cat_name());
-                           }
+                                order_list.add(order_delivery_type);
+                                order_type.add(order_delivery_type.getSub_cat_name());
+                            }
 
                         }
                         order_type_adapter=new ArrayAdapter(Checkout.this,R.layout.spinner_text,order_type);
@@ -982,7 +981,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                                 Selected_deliverymode  = binding.deliverymode.getSelectedItem().toString();
                                 selected_delivery_mode_id  =order_list.get(i).getSub_cat_id();
                                 if(Selected_deliverymode.equalsIgnoreCase("Vehicle Delivery")){
-                               // if(selected_delivery_mode_id.equalsIgnoreCase("1")){
+                                    // if(selected_delivery_mode_id.equalsIgnoreCase("1")){
 
                                     Log.e("vehicle_delivery","vehicle_delivery");
                                     AlertDialog.Builder dialog=new AlertDialog.Builder(Checkout.this);
@@ -1021,7 +1020,6 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                                   /*  if(cart_list.get(i).getLine_item_name().contains("Toast") || cart_list.get(i).getLine_item_name().contains("Cream Roll") || cart_list.get(i).getLine_item_name().contains("Cups")){
                                         Toast.makeText(Checkout.this, "Please Remove the Items(Toast) for courier", Toast.LENGTH_SHORT).show();
                                     }*/
-
                                 }
                                 else {
                                     binding.type.setVisibility(View.GONE);
@@ -1046,7 +1044,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                     }
 
                 }else{
-                 //   Toast.makeText(Checkout.this, "null", Toast.LENGTH_SHORT).show();
+                    //   Toast.makeText(Checkout.this, "null", Toast.LENGTH_SHORT).show();
                     Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
 
                 }
@@ -1060,7 +1058,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                 if (progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
-             //   Toast.makeText(Checkout.this, ""+t, Toast.LENGTH_SHORT).show();
+                //   Toast.makeText(Checkout.this, ""+t, Toast.LENGTH_SHORT).show();
                 Snackbar.make(Checkout.this,findViewById(android.R.id.content),""+t,Snackbar.LENGTH_LONG).show();
 
             }
@@ -1090,18 +1088,18 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                     progressDialog.dismiss();
                 }
 
-              if(response.body()!=null){
-                  try {
-                      JSONObject jsonObject1=new JSONObject(response.body().toString());
-                      String message=jsonObject1.getString("message");
+                if(response.body()!=null){
+                    try {
+                        JSONObject jsonObject1=new JSONObject(response.body().toString());
+                        String message=jsonObject1.getString("message");
 
-                      JSONArray jsonArray=new JSONArray();
-                      jsonArray=jsonObject1.getJSONArray("availability_date");
+                        JSONArray jsonArray=new JSONArray();
+                        jsonArray=jsonObject1.getJSONArray("availability_date");
 
 
-                      // availability_date=jsonObject1.getJSONArray("availability_date").toString();
-                      Log.e("dates_array",""+jsonArray.length());
-                      as_dates=new ArrayList<>();
+                        // availability_date=jsonObject1.getJSONArray("availability_date").toString();
+                        Log.e("dates_array",""+jsonArray.length());
+                        as_dates=new ArrayList<>();
 
 
                    /*   for(int i=0;i<=jsonArray.length();i++){
@@ -1110,24 +1108,24 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                           Log.e("availability_date",availability_date);
                       }*/
 
-                      availability_date= jsonArray.get(0).toString();
+                        availability_date= jsonArray.get(0).toString();
 
-                      delivery_date.setText(availability_date);
-
-
-                      Log.e("availability_dateeeee",availability_date);
-                      Log.e("dates",""+as_dates.size());
+                        delivery_date.setText(availability_date);
 
 
-                  } catch (JSONException e) {
-                      //throw new RuntimeException(e);
-                      Log.e("Exception", String.valueOf(e));
-                    // Toast.makeText(Checkout.this, "Exception"+e, Toast.LENGTH_SHORT).show();
+                        Log.e("availability_dateeeee",availability_date);
+                        Log.e("dates",""+as_dates.size());
 
-                  }
-              }else{
-                  Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
-              }
+
+                    } catch (JSONException e) {
+                        //throw new RuntimeException(e);
+                        Log.e("Exception", String.valueOf(e));
+                        // Toast.makeText(Checkout.this, "Exception"+e, Toast.LENGTH_SHORT).show();
+
+                    }
+                }else{
+                    Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                }
 
 
             }
@@ -1138,7 +1136,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
                 if (progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
-              //  Toast.makeText(Checkout.this, ""+t, Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(Checkout.this, ""+t, Toast.LENGTH_SHORT).show();
                 Snackbar.make(Checkout.this,findViewById(android.R.id.content),""+t,Snackbar.LENGTH_LONG).show();
 
             }
@@ -1167,7 +1165,7 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
     public void onTransactionResponse(Bundle bundle) {
         Log.e("transaction_res","onTransactionResponse"+bundle.toString());
         Log.e("transaction_res","onTransactionResponse22"+bundle);
-      //  Log.e("order_status",bundle.getString("order_status"));
+        //  Log.e("order_status",bundle.getString("order_status"));
 
         JSONObject jsonObject = convertBundleToJsonObject(bundle);
 
@@ -1183,18 +1181,15 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
         intent.putExtra("order_status",bundle.getString("order_status"));
         startActivity(intent);*/
 
-
-
     }
 
     private void
     insert_payment_api_call(JSONObject bundle) {
-
         progressDialog.show();
         JsonObject object = new JsonObject();
 
-
         object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
+
         try {
             object.addProperty("trans_date", bundle.getString("trans_date"));
             object.addProperty("delivery_state", bundle.getString("delivery_state"));
@@ -1281,15 +1276,14 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
 
                     } catch (JSONException e) {
                         Log.e("Exception","Exception"+e.toString());
-                     //   throw new RuntimeException(e);
+                        //   throw new RuntimeException(e);
                     }
 
                 }else{
                     if(progressDialog.isShowing()){
                         progressDialog.dismiss();
                     }
-               //     Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
-
+                    //     Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                     Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
 
                 }
@@ -1353,13 +1347,118 @@ public class Checkout extends AppCompatActivity  implements AvenuesTransactionCa
     @Override
     public void onErrorOccurred(String s) {
         Log.e("transaction_res","onErrorOccurred "+s);
-       // insert_payment_api_call(s);
+        insert_payment_api_call2(s);
     }
+
+
 
     @Override
     public void onCancelTransaction(String s) {
         Log.e("transaction_res","onCancelTransaction"+s);
-      //  insert_payment_api_call(s);
-
+        insert_payment_api_call2(s);
     }
+
+    private void insert_payment_api_call2(String s) {
+        progressDialog.show();
+        JsonObject object = new JsonObject();
+
+        object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+
+
+        try {
+            object.addProperty("trans_date",""+dtf.format(now) );
+            object.addProperty("delivery_state",SaveAppData.getLoginData().getState());
+            object.addProperty("delivery_country",SaveAppData.getLoginData().getCountry());
+            object.addProperty("billing_city",SaveAppData.getLoginData().getCity());
+            object.addProperty("amount",t_amt);
+            object.addProperty("billing_name",SaveAppData.getLoginData().getName());
+            object.addProperty("bin_country",SaveAppData.getLoginData().getCountry() );
+            object.addProperty("billing_email","");
+            object.addProperty("billing_notes","");
+            object.addProperty("billing_state", "");
+            object.addProperty("status_code","");
+            object.addProperty("billing_address",SaveAppData.getLoginData().getAddress());
+            object.addProperty("payment_mode","" );
+            object.addProperty("delivery_city",SaveAppData.getLoginData().getCity());
+            object.addProperty("delivery_name", SaveAppData.getLoginData().getName());
+            object.addProperty("card_name","" );
+            object.addProperty("status_message",s);
+            object.addProperty("billing_tel",SaveAppData.getLoginData().getUser_mobile() );
+            object.addProperty("billing_zip", SaveAppData.getLoginData().getPincode());
+            object.addProperty("mer_amount","" );
+            object.addProperty("bank_ref_no","" );
+            object.addProperty("delivery_address",SaveAppData.getLoginData().getAddress());
+            object.addProperty("currency","INR" );
+            object.addProperty("delivery_tel",SaveAppData.getLoginData().getUser_mobile());
+            object.addProperty("delivery_zip",SaveAppData.getLoginData().getPincode());
+            object.addProperty("order_status","");
+            object.addProperty("order_id",order_no2 );
+            object.addProperty("billing_country",SaveAppData.getLoginData().getCountry());
+            object.addProperty("tracking_id","" );
+
+        }
+        catch (Exception e) {
+            Log.e("Exception", String.valueOf(e));
+            //  throw new RuntimeException(e);
+
+        }
+
+
+      /*  String s=String.valueOf(bundle).replace("\"","");
+        object.addProperty("msg", s.replace(":","="));
+*/
+
+        viewModel.insert_payments(object).observe(Checkout.this, new Observer<JsonObject>() {
+            @Override
+            public void onChanged(JsonObject jsonObject) {
+
+                if (jsonObject != null){
+                    if(progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
+                    Log.d("Checkout","logout"+jsonObject);
+
+                    try {
+                        JSONObject jsonObject1=new JSONObject(jsonObject.toString());
+                        Log.e("insrt_message",jsonObject1.getString("message"));
+                        Log.e("order_status",jsonObject1.getString("order_status"));
+
+                        if(jsonObject1.getString("order_status").equalsIgnoreCase("Success")){
+                            Log.e("insert_api","insert_api");
+
+                           /* intent.putExtra("tracking_id",bundle.getString("tracking_id"));
+                            intent.putExtra("trans_date",bundle.getString("trans_date"));
+                            intent.putExtra("billing_name",bundle.getString("billing_name"));
+                            intent.putExtra("amount",bundle.getString("amount"));
+                            intent.putExtra("bank_ref_no",bundle.getString("bank_ref_no"));
+                            intent.putExtra("order_status",bundle.getString("order_status"));*/
+
+                        }
+
+                    } catch (JSONException e) {
+                        Log.e("Exception","Exception"+e.toString());
+                        //   throw new RuntimeException(e);
+                    }
+
+                }else{
+                    if(progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
+                    //     Toast.makeText(Checkout.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(Checkout.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
+
+                }
+
+            }
+        });
+    }
+
 }
+
+
+
+
+

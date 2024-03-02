@@ -25,7 +25,7 @@ import retrofit2.Response;
 
 public class Constant {
 
-  //  public static final String SERVER_BASE_URL = "https://teabreak.digitalrupay.com/webservices/";
+ //   public static final String SERVER_BASE_URL = "https://teabreak.digitalrupay.com/webservices/";
 
     public static final String SERVER_BASE_URL = "https://teabreak.digitalrupay.com/dev/webservices/";
 
@@ -36,13 +36,10 @@ public class Constant {
     public static final String CCAVENUE_URL = "https://qasecure.ccavenue.com/transaction.do?command=initiateTransaction";
 
 
-
     public static void logout_api_call(Context context) {
-
         JsonObject object = new JsonObject();
         object.addProperty("user_id",SaveAppData.getLoginData().getUser_id());
         object.addProperty("user_token",SaveAppData.getLoginData().getToken());
-
 
         ApiInterface apiInterface = ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
         Call<JsonObject> logout = apiInterface.logout(object);
@@ -66,7 +63,6 @@ public class Constant {
                         //throw new RuntimeException(e);
                         //Snackbar.make(context,findViewById(android.R.id.content),""+e,Snackbar.LENGTH_LONG).show();
                         Toast.makeText(context, "Exception"+e, Toast.LENGTH_SHORT).show();
-
                     }
 
                 }else{
@@ -86,9 +82,7 @@ public class Constant {
     public static void check_token_status_api_call(Context context) {
 
         Log.e("check_tokens","check_token_status");
-
         TeaBreakViewModel viewModel= ViewModelProviders.of((FragmentActivity) context).get(TeaBreakViewModel.class);
-
         JsonObject object = new JsonObject();
         object.addProperty("user_id", SaveAppData.getLoginData().getUser_id());
         object.addProperty("user_token",SaveAppData.getLoginData().getToken());
@@ -96,25 +90,18 @@ public class Constant {
         viewModel.check_token_status_api(object).observe((LifecycleOwner) context, new Observer<JsonObject>() {
             @Override
             public void onChanged(JsonObject jsonObject) {
-
                 if (jsonObject != null){
                     Log.d("TAG","password "+jsonObject);
-
                     JSONObject jsonObject1= null;
                     try {
                         jsonObject1 = new JSONObject(jsonObject.toString());
                         String message=jsonObject1.getString("message");
-
                         token_status=jsonObject1.getString("token_status");
-
                         if(token_status.equalsIgnoreCase("0")){
-
                             logout_api_call(context);
-
                             Log.e("token_status","token_status_0");
                             context.startActivity(new Intent(context, MainActivity.class));
                             ((FragmentActivity) context).finish();
-
                         }
                     }
                     catch (JSONException e) {

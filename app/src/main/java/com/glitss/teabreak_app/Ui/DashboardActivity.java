@@ -114,7 +114,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         }
 
      //   checkForAppUpdate();
-
      //   checkfor_App_update();
 
 
@@ -165,6 +164,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                wallet_amount_api_call();
                 binding.drawerLayout.openDrawer(GravityCompat.START);
             }
         });
@@ -186,7 +186,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(DashboardActivity.this, ListItems_Activity.class));
-
             }
         });
         binding.newDashboarddd.bottomNavigation.setSelectedItemId(R.id.home);
@@ -253,7 +252,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                             // Or pass 'AppUpdateType.FLEXIBLE' to newBuilder() for
                             // flexible updates.
                             this,101);
-
                   /*  appUpdateManager.startUpdateFlowForResult(
                             // Pass the intent that is returned by 'getAppUpdateInfo()'.
                             appUpdateInfo,
@@ -264,9 +262,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                             AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE)
                                     .setAllowAssetPackDeletion(true)
                                     .build());*/
-
-
-
 
                 } catch (IntentSender.SendIntentException e) {
                     Log.e("Exception","Exception");
@@ -342,7 +337,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                         JSONArray jsonArray=new JSONArray();
                         jsonArray=jsonObject1.getJSONArray("data");
 
-
                     //    Toast.makeText(DashboardActivity.this, ""+text, Toast.LENGTH_SHORT).show();
 
                         if(message.equalsIgnoreCase("success")){
@@ -382,16 +376,13 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                         binding.newDashboarddd.rvListItems.setAdapter(listItemsAdapter);
                         listItemsAdapter.notifyDataSetChanged();
 
-
                     } catch (JSONException e) {
                         //throw new RuntimeException(e);
                         Log.e("Excption", String.valueOf(e));
                         //Toast.makeText(DashboardActivity.this, ""+e, Toast.LENGTH_SHORT).show();
                     }
 
-
                 }else{
-
                 //    Toast.makeText(DashboardActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                     Snackbar.make(DashboardActivity.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
                 }
@@ -452,7 +443,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
                  //   Toast.makeText(DashboardActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                     Snackbar.make(DashboardActivity.this,findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_LONG).show();
-
                 }
 
             }
@@ -469,8 +459,11 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         else if (id == R.id.orders){
             startActivity(new Intent(DashboardActivity.this, Orders_List_Activity.class));
             //finish();
-
         }
+        else if(id==R.id.transaction_history){
+            startActivity(new Intent(DashboardActivity.this,TransactionHistoryActivity.class));
+        }
+
         else if (id == R.id.wallet) {
             startActivity(new Intent(DashboardActivity.this, Mywallet.class));
         //    finish();

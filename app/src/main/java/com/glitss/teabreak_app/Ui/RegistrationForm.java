@@ -55,6 +55,7 @@ public class RegistrationForm extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration_form);
+
         back_btn=findViewById(R.id.back_btn);
         RouteId=findViewById(R.id.Route_id);
         vendor_name=findViewById(R.id.FName);
@@ -208,11 +209,9 @@ public class RegistrationForm extends AppCompatActivity {
                             for(int i=0;i<jsonArray.length();i++){
                                 UsersRolesModel usersRolesModel = new Gson().fromJson(jsonArray.getJSONObject(i).toString(), new TypeToken<UsersRolesModel>() {
                                 }.getType());
-
                                 Route_list.add(usersRolesModel);
                                 route_type.add(usersRolesModel.getRoute_name());
                             }
-
                         }
                         route_type_adapter=new ArrayAdapter(RegistrationForm.this,R.layout.spinner_text,route_type);
                         route_type_adapter.setDropDownViewResource(R.layout.spinner_text);

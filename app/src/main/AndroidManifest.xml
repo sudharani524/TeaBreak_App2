@@ -36,6 +36,11 @@
         <activity
             android:name=".Ui.AdminDashBoard"
             android:exported="false" />
+
+        <activity
+            android:name=".Ui.TransactionHistoryActivity"
+            android:exported="false" />
+
         <activity
             android:name=".Ui.ClosedOrdersListActivity"
             android:exported="false" />

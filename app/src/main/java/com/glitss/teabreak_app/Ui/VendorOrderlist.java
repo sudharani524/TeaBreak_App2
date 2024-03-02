@@ -61,7 +61,6 @@ public class VendorOrderlist extends AppCompatActivity {
     AlertDialog alertDialog;
     LinearLayout ll_change_pswd,ll_logout;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -164,8 +163,6 @@ public class VendorOrderlist extends AppCompatActivity {
             }
         });*/
 
-
-
      /*   binding.logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -239,7 +236,11 @@ public class VendorOrderlist extends AppCompatActivity {
 
     }
 
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Orderlist_api_call();
+    }
 
     private void Orderlist_api_call() {
         progressDialog.show();
@@ -297,6 +298,7 @@ public class VendorOrderlist extends AppCompatActivity {
                                 intent.putExtra("order_date",list.get(position).getOrder_date_time());
                                 intent.putExtra("orderid",list.get(position).getOrder_id());
                                 startActivity(intent);
+                                finish();
                             }
                         });
 
@@ -439,5 +441,6 @@ public class VendorOrderlist extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
     }
+
 
 }

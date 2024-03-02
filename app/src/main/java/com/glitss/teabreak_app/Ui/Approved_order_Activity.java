@@ -28,7 +28,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Approved_order_Activity extends AppCompatActivity {
+public class
+Approved_order_Activity extends AppCompatActivity {
     RecyclerView rv_pending_orders_list;
     private TeaBreakViewModel viewModel;
     LinearLayoutManager linearLayoutManager;

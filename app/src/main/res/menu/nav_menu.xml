@@ -13,6 +13,11 @@
             android:icon="@drawable/orders"
             android:title="@string/my_orders"/>
         <item
+            android:id="@+id/transaction_history"
+            android:icon="@drawable/orders"
+            android:title="Transaction History"/>
+
+        <item
             android:id="@+id/wallet"
             android:icon="@drawable/wallet"
             android:title="@string/my_wallet"/>

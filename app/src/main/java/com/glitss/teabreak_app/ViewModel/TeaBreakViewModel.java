@@ -43,6 +43,7 @@ public class TeaBreakViewModel extends ViewModel {
     private MutableLiveData<JsonObject> transport_type_status;
     private MutableLiveData<JsonObject> request_hash_status;
     private MutableLiveData<JsonObject> closed_orders_list_status;
+    private MutableLiveData<JsonObject> transaction_history_status;
 
 
     public LiveData<JsonObject> get_list_items() {
@@ -220,6 +221,31 @@ public class TeaBreakViewModel extends ViewModel {
         return closed_orders_list_status;
     }
 
+    public LiveData<JsonObject>get_transaction_history(JsonObject jsonObject){
+        transaction_history_status = new MutableLiveData<JsonObject>(jsonObject);
+        transaction_history_api_call(jsonObject);
+        return transaction_history_status;
+    }
+
+    private void transaction_history_api_call(JsonObject jsonObject) {
+        ApiInterface apiInterface= ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
+        Call<JsonObject>transaction_historyy= apiInterface.transaction_history(jsonObject);
+        transaction_historyy.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.body()!= null){
+                    transaction_history_status.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("TAG_NAME", t.toString());
+            }
+        });
+    }
+
+
     private void closed_orders_list_api_call(JsonObject jsonObject) {
         ApiInterface apiInterface= ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);
         Call<JsonObject>closed_order= apiInterface.closed_orders_list(jsonObject);
@@ -237,7 +263,6 @@ public class TeaBreakViewModel extends ViewModel {
             }
         });
     }
-
 
     private void request_hash_api_call(JsonObject jsonObject) {
         ApiInterface apiInterface= ApiClient.getClient(Constant.SERVER_BASE_URL).create(ApiInterface.class);

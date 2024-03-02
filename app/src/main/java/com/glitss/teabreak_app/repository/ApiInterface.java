@@ -159,4 +159,9 @@ public interface ApiInterface {
     @POST("apis/create_new_vendor_user")
     Call<JsonObject>vendor_registration(@Body JsonObject jsonObject);
 
+
+    @Headers("Content-Type: application/json")
+    @POST("apis/get_user_transaction_history")
+    Call<JsonObject>transaction_history(@Body JsonObject jsonObject);
+
 }
